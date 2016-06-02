@@ -1,0 +1,24 @@
+{
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "c805546d-4a17-3c83-90df-8c1db2d3a7b7++2769" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "c805546d-4a17-3c83-90df-8c1db2d3a7b7++2769" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "01CCB855-6070-4B1B-B8CD-721510918B76",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "c805546d-4a17-3c83-90df-8c1db2d3a7b7++2769" : "MotherMoney\/MotherMoney\/ThirdPart\/AFNetworking\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MotherMoney",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MotherMoney.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/vip.svnspot.com\/ideathink.tv",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "c805546d-4a17-3c83-90df-8c1db2d3a7b7++2769"
+    }
+  ]
+}

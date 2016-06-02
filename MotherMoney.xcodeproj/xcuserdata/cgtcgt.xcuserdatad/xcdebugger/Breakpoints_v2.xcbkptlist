@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/QMRechargeViewController.m"
+            timestampString = "485941102.549797"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
+            landmarkName = "-commitBtnClicked:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/QMDealDetailViewController.m"
+            timestampString = "485658792.556128"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "-gotoRealNameAuthenticateViewController"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/Register/QMIdentityAuthenticationViewController.m"
+            timestampString = "485684277.44654"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "-setUpSubViews"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/QMDealDetailViewController.m"
+            timestampString = "485941041.88817"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "-gotoRechargeController"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/QMRechargeViewController.m"
+            timestampString = "485941257.172827"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
+            landmarkName = "-commitBtnClicked:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/NetService/NetServiceManager.m"
+            timestampString = "485941482.041723"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1620"
+            endingLineNumber = "1620"
+            landmarkName = "-getRechargeRouteWithUserBankCardId:amount:productChannelId:delegate:success:failure:"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[NetServiceManager getRechargeRouteWithUserBankCardId:amount:productChannelId:delegate:success:failure:]"
+                  moduleName = "MotherMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/NetService/NetServiceManager.m"
+                  timestampString = "486530874.775442"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1620"
+                  endingLineNumber = "1620"
+                  offsetFromSymbolStart = "860">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__105-[NetServiceManager getRechargeRouteWithUserBankCardId:amount:productChannelId:delegate:success:failure:]_block_invoke"
+                  moduleName = "MotherMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/NetService/NetServiceManager.m"
+                  timestampString = "486530874.775611"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1620"
+                  endingLineNumber = "1620"
+                  offsetFromSymbolStart = "219">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__copy_helper_block_.807"
+                  moduleName = "MotherMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/NetService/NetServiceManager.m"
+                  timestampString = "486530874.775751"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1620"
+                  endingLineNumber = "1620"
+                  offsetFromSymbolStart = "163">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__destroy_helper_block_.808"
+                  moduleName = "MotherMoney"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/NetService/NetServiceManager.m"
+                  timestampString = "486530874.775895"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1620"
+                  endingLineNumber = "1620"
+                  offsetFromSymbolStart = "99">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

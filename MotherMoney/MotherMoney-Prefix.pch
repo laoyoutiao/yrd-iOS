@@ -1,0 +1,46 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import "QMCoreMacros.h"
+    #import <Foundation/Foundation.h>
+    #import "QMNavigationController.h"
+    #import "QMViewController.h"
+    #import "QMTabBarController.h"
+    #import "QMNavigationBarItemFactory.h"
+    #import "QMLogUtil.h"
+    #import "SDImageCache.h"
+    #import "AFHTTPClient.h"
+    #import "Constants.h"
+    #import "JSONKit.h"
+    #import "CMMUtility.h"
+    #import "QMImageFactory.h"
+    #import "QMControlFactory.h"
+    #import "QMPreferenceUtil.h"
+    #import "AppDelegate.h"
+    #import "QMWebViewController.h"
+    #import "SVProgressHUD.h"
+    #import "QMLoginManagerUtil.h"
+    #import "NetServiceManager.h"
+    #import "QMOrderModel.h"
+    #import "QMAccountUtil.h"
+    #import "QMStringUtil.h"
+    #import "QMUMTookKitManager.h"
+    #import "QMCheckPointMacros.h"
+    #import "PSTAlertController.h"
+    #import "VENTouchLock.h"
+
+#define MAS_SHORTHAND_GLOBALS
+    #import "Masonry.h"
+
+#endif

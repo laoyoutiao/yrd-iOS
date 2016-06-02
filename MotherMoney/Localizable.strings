@@ -1,0 +1,629 @@
+/* 
+  Localizable.strings
+  MotherMoney
+
+  Created by on 14-8-3.
+  Copyright (c) 2014年. All rights reserved.
+*/
+
+// tab bar titles
+"qm_tab_title_recommendation" = "精品推荐";
+
+"qm_tab_title_finance" = "理财产品";
+
+"qm_tab_title_myfund" = "我的资产";
+
+"qm_tab_title_more" = "更多";
+
+"qm_navigation_title_recommendation" = "精品推荐";
+
+"qm_navigation_title_finance" = "理财产品";
+
+"qm_navigation_title_myfund" = "我的资产";
+
+"qm_navigation_title_myprize" = "我的奖励";
+
+"qm_navigation_title_mycoupon" = "代金券明细";
+
+"qm_navigation_title_more" = "更多";
+
+"qm_navigation_back_title" = "返回";
+"qm_navigation_close_title" = "关闭";
+
+// alert title
+"qm_alertview_cancel_title" = "取消";
+
+"qm_alertview_ok_title" = "确定";
+
+// 精品推荐
+"qm_recommendation_cannot_buy_text" = "不能购买";
+
+"qm_recommendation_buy_btn_title" = "立即抢购";
+
+"qm_recommendation_expected_year_earnings" = "预期年化 %.2f%%";
+
+"qm_recommendation_investmentPeriod" = "限%d个月";
+
+"qm_recommendation_purchaseAmountLimit" = "%d元起购";
+
+"qm_recommendation_finance_already" = "已经融资";
+
+"qm_recommendation_buyed_people_count" = "已售份数:%d份";
+
+"qm_recommendation_refresh_btn_title" = "刷新";
+
+"qm_recommendation_login_btn_title" = "登录";
+"qm_recommendation_login_btn_right" = "取消使用";
+
+// 产品列表
+"qm_product_list_expected_year_earnings" = "预期年化率";
+
+"qm_product_list_investmentPeriod" = "期限%@";
+
+"qm_product_list_purchaseAmountLimit" = "%d元起购";
+
+"qm_product_list_buy_people_count" = "已售份数 %d";
+
+"qm_product_list_finance_rate" = "已融资 %.2f%%";
+
+// 产品信息
+"qm_product_info_page_product_detail_info" = "查看产品详细信息";
+
+//"qm_product_info_page_secure_btn_title" = "账户资金安全由平安保险全额承保";
+
+"qm_product_info_page_purchaseAmountLimit_title" = "起购金额";
+
+"qm_product_infO_page_investmentPeriod" = "理财期限";
+
+"qm_product_infO_page_investmentPeriod_format" = "理财期限:%@";
+
+"qm_product_info_page_expectedYearEarning_title" = "预期年化收益";
+
+"qm_product_info_page_buy_number_title" = "购买人数";
+
+"qm_product_info_finance_money" = "融资金额";
+
+// 我的资产
+"qm_myfund_total_fund_title" = "总资产";
+
+"qm_myfund_product_name_title" = "产品名称";
+
+"qm_myfund_product_principal_title" = "本金";
+
+"qm_myfund_product_earnings_title" = "收益";
+
+"qm_myfund_product_bank_title" = "银行卡";
+
+"qm_myfund_view_trade_list_title" = "查看交易记录>";
+
+"qm_myfund_total_fund" = "总资产（元）";
+
+"qm_myfund_total_earnings" = "累计收益（元）";
+
+"qm_myfund_day_earings" = "今日收益(元)";
+
+// 交易记录
+"qm_trade_list_nav_title" = "交易记录";
+
+// 账户中心
+"qm_account_center_nav_title" = "账户中心";
+
+"qm_account_center_cell_title" = "账户";
+
+"qm_account_center_realname" = "实名认证";
+
+"qm_account_center_idcard" = "身份认证";
+
+"qm_account_center_bank_card" = "银行卡管理";
+
+"qm_account_center_modify_login_pwd" = "修改登录密码";
+
+"qm_account_center_change_pwd_success" = "修改成功";
+
+"qm_account_center_modify_trade_pwd" = "修改交易密码";
+
+"qm_account_center_set_trade_pwd" = "设置交易密码";
+
+"qm_account_center_open_gesture_pwd" = "开启手势";
+
+"qm_account_center_close_gesture_pwd" = "关闭手势";
+
+// 更多
+"qm_more_activity_center_title" = "活动中心";
+
+"qm_more_message_center_title" = "消息中心";
+
+"qm_more_assist_center_title" = "帮助中心";
+
+"qm_more_assist_center_sub_title" = "产品的申购赎回流程?";
+
+"qm_more_forward_friends_title" = "邀请好友";
+
+"qm_more_notice_us_title" = "关注我们";
+
+"qm_more_feedback_title" = "意见反馈";
+
+"qm_more_encourage_title" = "给我鼓励";
+
+"qm_more_update_title" = "检查更新";
+
+"qm_more_update_sub_title" = "当前版本v%@";
+
+"qm_more_about_us_title" = "关于粤融贷";
+
+"qm_more_quit_btn_title" = "退出登录";
+
+// 意见反馈
+"qm_feedback_placeholder_text" = "感谢您对 粤融贷 的支持，我们期待您的宝贵意见";
+
+"qm_feedback_contact_text" = "客服热线:%@";
+
+"qm_feedback_send_feedback_btn_title" = "发送";
+
+// 产品详情
+"qm_product_detail_nav_title" = "详情";
+
+"qm_product_detail_html_nav_title" = "产品详情";
+
+"qm_product_more_detail_nav_title" = "详细信息";
+
+"qm_product_buy_amount_placeholder" = "购买金额";
+
+"qm_product_buy_copy_placeholder" = "购买份额";
+
+"qm_next_action_btn_title" = "下一步";
+
+// register
+"qm_register_input_phone_number_nav_title" = "填写手机号";
+
+"qm_register_input_phone_number_placeholder" = "请您输入手机号码";
+
+"qm_register_phone_number_secure_text" = "粤融贷不会在任何地方泄漏您的号码";
+
+"qm_register_phone_number_agree" = "我同意";
+
+"qm_register_phone_number_user_principle" = "<<粤融贷用户使用协议>>";
+
+"qm_register_phone_number_principle" = "<<使用条款和隐私政策协议>>";
+
+"qm_register_input_password_nav_title" = "填写登录密码";
+
+"qm_register_input_password_placeholder" = "请填写登录密码";
+
+"qm_register_forget_password_btn_title" = "忘记密码";
+
+"qm_register_forget_pay_password_title" = "忘记支付密码";
+
+"qm_register_switch_account_btn_title" = "切换账户";
+
+
+// 手势密码
+"qm_gesture_password_reset_nav_title" = "设置手势密码";
+
+"qm_gesture_password_draw_gesture" = "绘制手势密码";
+
+"qm_gesture_password_diff_prompt_text" = "与上次绘制不一致，请重新绘制";
+
+"qm_gesture_password_too_short" = "输入的密码不能少于4位";
+
+"qm_gesture_password_draw_again" = "再次绘制手势密码";
+
+"qm_gesture_password_prompt_text" = "设置手势密码，防止他人未经授权查看";
+
+"qm_pull_up_load_more" = "上拉获取更多";
+
+"qm_page_foot_view_loading" = "正在读取";
+
+"qm_page_foot_view_nomore" = "没有更多了";
+
+"qm_account_secure_detail" = "了解详情";
+
+"qm_account_secure_known" = "知道了";
+
+"qm_account_secure_text" = "账户资金安全由平安保险全额承保，发生风险100%赔付，赔付金额无上限";
+
+"qm_safe_Insurance_title" = "平安保险";
+
+// 计算器
+"qm_calculator_header_title" = "计算预期收益";
+
+"qm_calculator_finance_value" = "理财金额(元)";
+
+"qm_calculator_finance_date" = "理财期限(天)";
+
+"qm_calculator_btn_title" = "计算";
+
+"qm_expected_earning_title" = "预计收益";
+
+"qm_bank_earning_title" = "银行活期收益";
+
+"qm_expect_bank_compare_title" = "产品预期收益是银行活期收益的%.2f倍";
+
+"qm_expect_bank_compare_sub_title" = "此收益结果仅供参考，不代表实际收益";
+
+// check update
+"qm_check_update_loading" = "检查更新中...";
+
+"qm_check_update_alert_title" = "提示";
+
+"qm_check_update_no_update_message" = "当前已是最新版本!";
+
+"qm_check_update_has_new_version" = "有新版本，前去更新!";
+
+"qm_ok_alert_btn_title" = "确定";
+
+"qm_cancel_alert_btn_title" = "取消";
+
+// about
+"qm_about_page_welcome_title" = "欢迎页";
+
+"qm_about_page_hotline_title" = "客服热线:%@";
+
+"qm_about_page_qq_qun_title" = "客服QQ群:%@";
+
+"qm_about_page_email_title" = "客服邮箱:%@";
+
+"qm_about_page_website_title" = "网站:%@";
+
+"qm_about_page_header_info" = "    \"粤融贷\"APP及\"粤融贷www.yrdloan.com\"隶属于于佛山市华融创投投资有限公司（注册资金3000万），立足于互联网金融领域，致力于打造高品质金融服务平台。为您提供专业、高效、安全的资金融通服务平台。给热衷抵御通胀压力的您，一个靠谱的投资理由！ ";
+
+// 获取验证码
+"qm_passcode_sent_prompt" = "已向%@发送短信，\n请在输入框中填写验证码完成注册";
+
+"qm_resent_passcode_time_out" = "剩余%d秒";
+
+"qm_resent_passcode_btn_title" = "获取验证码";
+
+"qm_login_password_placeholder" = "登录密码";
+
+"qm_login_password_rule_prompt" = "密码由6-12个字符组成，字母区分大小写";
+
+"qm_login_password_confirm_placeholder" = "登录密码确认";
+
+"qm_finish_btn_title" = "完成";
+
+"am_principle_not_checked_alert_message" = "在进行下一步操作之前，请先同意相关协议";
+
+// 身份信息确认
+"qm_identify_nav_title" = "身份信息确认";
+
+"qm_identify_prompt_text" = "监管部门规定,购买理财产品需提供实名信息以确保投资安全";
+
+"qm_identify_realname_field_text" = "请填写您的真实姓名";
+
+"qm_identify_idcard_field_text" = "请填写身份证号码";
+
+"qm_idcard_number_invalid" = "身份证号码不合法";
+
+"qm_identify_identity_btn_title" = "认证";
+
+// 添加银行卡
+"qm_add_bankcard_prompt_text" = "确认银行卡信息，如需修改请直接编辑";
+
+"qm_add_bankcard_selectbank_text" = "请选择银行";
+
+"qm_add_bankcard_selectbank_id_text" = "请输入您的银行卡";
+
+"qm_add_bankcard_selectprovince_text" = "请选择省份";
+
+"qm_add_bankcard_selectcity_text" = "请选择城市";
+
+"qm_add_bankcard_no_bank_alert_message" = "请先选择银行";
+
+"qm_add_bankcard_nav_title" = "绑定银行卡";
+
+"qm_add_bankcard_btn_tite" = "绑定";
+
+"qm_search_item_placeholder" = "请输入关键字";
+
+"qm_select_state_nav_title" = "选择省份";
+
+"qm_select_city_nav_title" = "选择城市";
+
+"qm_add_bank_card_nav_title" = "添加银行卡";
+
+"qm_confirm_buy_product_nav_title" = "购买";
+
+"qm_confirm_buy_btn_title" = "确认购买";
+
+"qm_product_buy_money" = "购买金额(元)";
+
+"qm_product_buy_principle_ok" = "已阅读并同意";
+
+"qm_product_buy_principle_rule" = "<<联动优势扣款协议>>";
+
+"qm_product_base_money" = "产品本金(元)";
+
+"qm_product_total_earnings" = "产品累计收益(元)";
+
+"qm_product_buy_date_title" = "购买时间";
+
+"qm_product_buy_base_money_title" = "本金(元)";
+
+"qm_product_buy_earning_title" = "收益(元)";
+
+"qm_product_buy_state_title" = "状态";
+
+"qm_phone_number_invalid" = "手机号不合法，请重新输入";
+
+"qm_money_rate_error" = "购买金额必须是%d元的整数倍";
+
+"qm_money_less_minamount_error" = "购买金额必须不少于%d元";
+
+"qm_find_pay_pwd_nav_title" = "找回支付密码";
+
+"qm_pay_password_error_text" = "支付密码错误，请重试或找回密码";
+
+"qm_set_pay_password_error_text" = "支付密码设置失败";
+
+"qm_product_buy_success_nav_title" = "购买下单成功";
+
+"qm_product_buy_failure_nav_title" = "购买下单失败";
+
+"qm_network_error_message" = "请检查网络原因";
+
+"qm_product_buy_error_text" = "下单%@失败";
+
+"qm_confirm_btn_title" = "确认";
+
+"qm_product_buy_success_text" = "成功下单%@";
+
+"qm_product_buy_success_detail" = "交易已提交，稍等10秒，此笔资金可以在我的资产列表中查看";
+
+"qm_product_begin_earning" = "开始计算收益";
+
+"qm_product_begin_earning_detail" = "募集成功后次日开始计算收益，以实际情况为准";
+
+"qm_product_view_earning" = "查看收益";
+
+"qm_product_view_earning_detail" = "计算收益日次日可以查看收益，以实际情况为准";
+
+"qm_feedback_success" = "发送成功";
+
+"qm_feedback_failure" = "发送失败";
+
+"qm_forget_rec_pwd" = "忘记手势密码";
+
+"qm_login_with_other_account" = "其他账号登陆";
+
+"qm_register_success_text" = "注册成功";
+
+"qm_register_failure_text" = "注册失败";
+
+"qm_register_item_empty" = "请将信息填写完整";
+
+"qm_first_welcom_btn_title" = "开始使用";
+
+"qm_review_welcome_btn_title" = "关闭";
+
+"qm_default_empty_text" = "列表为空";
+
+"qm_no_message_empty_text" = "没有消息";
+
+"qm_loading_state_text" = "正在刷新...";
+
+"qm_pull_down_to_refresh_text" = "下拉刷新";
+
+"qm_release_to_refresh" = "松开更新";
+
+"qm_last_update_text" = "上次更新%@";
+
+"qm_user_use_nav_title" = "粤融贷用户使用协议";
+
+"qm_privacy_principle_nav_title" = "使用条款和隐私政策协议";
+
+"qm_not_login_alert_message" = "您还没有登录，请先登录";
+
+"qm_share_text" = "分享";
+
+"qm_input_registered_phone_number_text" = "输入您注册的手机号";
+
+"qm_input_registered_phone_number_prompt" = "获取验证信息";
+
+"qm_input_passcode_placeholder" = "请输入验证码";
+
+"qm_get_pass_code_btn_title" = "获取验证码";
+
+"qm_reset_pwd_text" = "重设密码";
+
+"qm_input_pwd_text" = "请输入6-12位密码";
+
+"qm_input_confirm_pwd_text" = "请再次输入密码";
+
+"qm_confirm_logout_title" = "确定退出登录";
+
+"qm_real_name_auth_prompt" = "您还没有实名认证，现在实名认证?";
+
+"qm_pay_password_set_prompt" = "您还没设置支付密码，现在设置?";
+
+"qm_modify_pay_password_btn_title" = "确定";
+
+"qm_real_name_auth_failure" = "实名认证失败";
+
+"qm_input_pay_password" = "请输入支付密码";
+
+"qm_input_pay_password_confirm" = "请再次输入支付密码";
+
+"qm_input_old_pay_password" = "请输入旧的支付密码";
+
+"qm_pay_password_set" = "设置";
+
+"qm_pay_password_not_equal" = "两次输入的密码不一致，请重新输入";
+
+"qm_select_bank_title" = "请选择银行";
+
+"qm_add_new_bank_title" = "请添加银行";
+
+"qm_input_resevered_phone_number_text" = "请输入预留手机号码";
+
+"qm_bank_card_bind_success" = "绑定成功";
+
+"qm_bank_card_bind_failure" = "绑定失败";
+
+"qm_bank_card_tail_text" = "(尾号为%@)";
+
+"qm_buy_produt_success" = "购买成功";
+
+"qm_buy_produt_failure" = "购买失败";
+
+"qm_get_product_detail_failed" = "获取产品详情失败";
+
+"qm_remain_money_amount_text" = "剩余金额:%@元";
+
+"qm_remain_money_copies_text" = "剩余份额:%@份";
+
+"qm_calculator_finance_date_title" = "理财期限";
+
+"qm_min_money_format" = "起购金额:%d元";
+
+"qm_min_copy_format" = "起购份额:%d份";
+
+"qm_remaining_copy_format" = "剩余份额:%d份";
+
+"qm_get_my_asset_info_failed" = "资产信息获取失败";
+
+"qm_not_authorized_user" = "未认证用户";
+
+"qm_tail_bank_card_format" = "尾号为%@的银行卡";
+
+"qm_inaccount_text" = "收入";
+
+"qm_outaccount_text" = "支出";
+
+"qm_input_bank_detail_info_text" = "请输入支行信息";
+
+"qm_product_rate_format" = "起购金额:%@元,%@元递增";
+
+"qm_product_rate_copy_format" = "起购份额:%@份,每份%@元";
+"qm_product_rate_money" = "实付金额:%@元";
+
+"qm_phone_number_not_legal" = "请输入正确的手机号";
+
+"qm_password_not_equal" = "两次密码不一致";
+
+"qm_password_reset_success" = "密码设置成功";
+
+"Your contact information" = "您的联系方式";
+
+"Send" = "发送";
+
+"Close" = "关闭";
+
+"Your contact information" = "您的联系方式";
+
+"Fill in the Contact2" = "请留下您的QQ，邮箱，电话等联系方式";
+
+"Fill in the Contact1" = "填写联系信息";
+
+"qm_modify_gesture_pwd" = "修改手势密码";
+
+"qm_forget_pay_pwd_title" = "忘记交易密码";
+
+"qm_pay_pwd_reset_nav_title" = "重置支付密码";
+
+"qm_pay_pwd_reset_success" = "支付密码重置成功";
+
+"qm_input_6_pay_pwd" = "请输入6位支付密码";
+
+"qm_earning_money_start" = "财富积累从这开始";
+
+"qm_start_earning_money" = "开始赚钱";
+
+"qm_my_score_title" = "我的金币";
+
+"qm_integral_exchange_list" = "兑换记录";
+
+"qm_goods_list_title" = "礼品列表";
+
+"qm_exchange_btn_title" = "兑换";
+
+"qm_exchange_success_title" = "兑换成功";
+
+"qm_input_initial_pwd" = "请输入密码";
+
+"qm_input_new_pwd" = "请输入新密码";
+
+"qm_input_new_pwd_again" = "请再次输入密码";
+
+"qm_exchange_integral_format" = "%@金币起兑";
+
+"qm_my_integral_nav_title" = "我的金币";
+
+"qm_bank_card_detail_text" = "尾号%@";
+
+"qm_goods_trade_checked" = "已处理";
+
+"qm_goods_trade_unchecked" = "处理中";
+
+"qm_name_title" = "名称";
+
+"qm_time_title" = "操作时间";
+
+"qm_state_title" = "状态";
+
+"qm_confirm_exchange_goods" = "您是否确定兑换?";
+
+"qm_product_wind_control" = "风控措施";
+
+"qm_product_contract_template" = "合同模版";
+
+"qm_buyed_product_contract_template" = "合同";
+
+"qm_product_introduction" = "项目描述";
+
+"qm_open_channel_account_nav_title" = "开通渠道账户";
+
+"qm_open_channel_account_prompt_text" = "只有开通渠道账户才能进行理财,请点击开通按钮进行开通";
+
+"qm_product_buy_status_success" = "点击查看购买合同";
+
+"qm_product_buy_status_failure" = "点击查看订单失败原因";
+
+"qm_system_message_title" = "系统消息";
+
+"qm_pay_pwd_modify_success" = "支付密码修改成功";
+
+"qm_input_old_pay_pwd" = "请输入旧的支付密码";
+
+"qm_input_new_pay_pwd" = "请输入新的支付密码";
+
+"qm_input_new_pay_pwd_again" = "请再次输入新的支付密码";
+
+"qm_app_title_text" = "粤融贷";
+
+"qm_app_comment_text" = "感谢您使用粤融贷理财APP,\n如果喜欢我们，就鼓励一下吧";
+
+"qm_app_comment_refuse_title" = "下次再说";
+
+"qm_app_comment_confirm_title" = "五星鼓励";
+
+"qm_no_network_error" = "未检测到网络，请检查网络配置";
+
+"qm_withdraw_record_list" = "提现记录";
+
+"qm_recharge_record_list" = "充值记录";
+
+"qm_bank_branch_info_nav_title" = "支行信息";
+
+"qm_account_balance_left_format" = "可用余额（元）";
+
+"qm_account_balance_left_title" = "账户余额";
+
+"qm_account_balance_nav_title" = "账户余额";
+
+
+// 绑定银行卡提示信息
+"qm_bind_card_no_id" = "请选择银行卡";
+
+"qm_bind_card_no_card_number" = "请输入银行卡号";
+
+"qm_bind_card_no_province" = "请选择省份";
+
+"qm_bind_card_no_city" = "请选择城市";
+
+"qm_bind_card_no_branchName" = "请输入支行名称";
+
+"qm_bind_card_right_bankCardNumber" = "请输入正确格式的银行卡号";
+
+
+

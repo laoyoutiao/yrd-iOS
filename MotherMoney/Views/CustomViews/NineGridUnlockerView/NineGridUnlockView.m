@@ -1,0 +1,225 @@
+
+#import "NineGridUnlockView.h"
+
+@interface NineGridUnlockView (Private)
+
+- (CGPoint)_centerOfButton:(NSInteger)index;
+- (NSInteger)_nearButton:(CGPoint)point;
+- (void)_drawLines:(BOOL)withlast;
+- (NSInteger)_centerIndexBetween:(NSInteger)p1 and:(NSInteger)p2;
+- (BOOL)_addPath:(NSInteger)index;
+- (BOOL)_checked:(NSInteger)index;
+- (void)_handlePoint:(CGPoint)point;
+- (void)_initView;
+
+@end
+
+
+
+@implementation NineGridUnlockView
+
+@synthesize imageView = _imageView;
+@synthesize checkImage = _checkImage;
+@synthesize uncheckImage = _uncheckImage;
+@synthesize buttons = _buttons;
+@synthesize paths = _paths;
+@synthesize strokeColor = _strokeColor;
+@synthesize delegate = _delegate;
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self _initView];
+    }
+    return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self _initView];
+    }
+    return self;
+}
+
+- (NSInteger)_centerIndexBetween:(NSInteger)p1 and:(NSInteger)p2{
+    NSInteger p1x = p1%3;
+    NSInteger p1y = p1/3;
+    NSInteger p2x = p2%3;
+    NSInteger p2y = p2/3;
+    NSInteger retx = -1;
+    NSInteger rety = -1;
+    if ((p1x + p2x)%2 == 0) {
+        retx = (p1x + p2x)/2;
+    }
+    if ((p1y + p2y)%2 == 0) {
+        rety = (p1y + p2y)/2;
+    }
+    if (retx !=-1 && rety != -1) {
+        return rety*3 + retx;
+    }
+    return -1;
+}
+
+- (BOOL)_addPath:(NSInteger)index{
+    UIImageView* bt = [_buttons objectAtIndex:index];
+    if (![self _checked:index]) {
+        [self.paths addObject:[NSNumber numberWithInteger:index]];
+        bt.image = _checkImage;
+        return YES;
+    }
+    return NO;
+}
+
+- (CGPoint)_centerOfButton:(NSInteger)index{
+    CGSize size = self.checkImage.size;
+    CGFloat padding = (CGRectGetWidth(self.frame) - 3 * size.width) / 2.0f;
+    NSInteger x = index%3;
+    NSInteger y = index/3;
+    CGPoint p = CGPointMake(size.width / 2.0f + x * (padding + size.width), size.width / 2.0f + y * (padding + size.width));
+    return p;
+}
+
+- (NSInteger)_nearButton:(CGPoint)point{
+    NSInteger xpos = (NSInteger)point.x;
+    NSInteger ypos = (NSInteger)point.y;
+    NSInteger gridWidth = (NSInteger)self.frame.size.width/3;
+    NSInteger x = xpos/gridWidth;
+    NSInteger y = ypos/gridWidth;
+    if (x > 2 || y > 2 || x< 0 || y<0) {
+        return -1;
+    }
+    NSInteger index = y*3 + x;
+    CGPoint center = [self _centerOfButton:index];
+    CGFloat lx = point.x - center.x;
+    CGFloat ly = point.y - center.y;
+    CGFloat inWidth = _uncheckImage.size.width/2;
+    CGFloat inHeigh = _uncheckImage.size.height/2;
+    if (lx >inWidth || lx < -inWidth) {
+        return -1;
+    }
+    
+    if (ly > inHeigh || ly < -inHeigh) {
+        return -1;
+    }
+    return index;
+}
+
+- (void)_drawLines:(BOOL)withlast{
+    UIGraphicsBeginImageContext(self.imageView.frame.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineWidth(context, 6.0);
+    CGContextSetAllowsAntialiasing(context, YES);
+    CGContextSetStrokeColorWithColor(context, _strokeColor.CGColor);
+    //CGContextSetRGBStrokeColor(context, 1.0, 0.0, 0.0, 1.0);
+    CGContextBeginPath(context);
+    for (NSInteger i=0; i<[_paths count]; i++) {
+        NSInteger index = [[_paths objectAtIndex:i] intValue];
+        CGPoint p = [self _centerOfButton:index];
+        if (i!=0) {
+            CGContextAddLineToPoint(context, p.x, p.y);
+        }
+        CGContextMoveToPoint(context, p.x, p.y);
+    }
+    if (withlast) {
+        CGContextAddLineToPoint(context, _currentPoint.x, _currentPoint.y);
+    }
+    CGContextStrokePath(context);
+    self.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+}
+
+- (BOOL)_checked:(NSInteger)index{
+    UIImageView* bt = [_buttons objectAtIndex:index];
+    if (bt.image == _checkImage) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)_initView{
+    if (!_checkImage) {
+        self.checkImage = [UIImage imageNamed:@"gesture_button_correct.png"];
+    }
+    
+    if (!_uncheckImage) {
+        self.uncheckImage = [UIImage imageNamed:@"gesture_cipher_button.png"];
+    }
+    if (!_strokeColor) {
+        self.strokeColor = [UIColor colorWithRed:84.0f / 255.0f green:160.0f / 255.0f blue:10.0f / 255.0f alpha:1.0f];
+    }
+    self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    [self addSubview:_imageView];
+    self.buttons = [NSMutableArray arrayWithCapacity:9];
+    for(NSInteger i=0;i<9;i++){
+        UIImageView* btImageView = [[UIImageView alloc] initWithImage:_uncheckImage];
+        btImageView.frame = CGRectMake(0, 0, 58, 58);
+        btImageView.center = [self _centerOfButton:i];
+        [self addSubview:btImageView];
+//        [btImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            
+//        }];
+        [_buttons addObject:btImageView];
+    }
+    [self resetView];
+}
+
+- (void)resetView{
+    self.paths = [NSMutableArray arrayWithCapacity:9];
+    for (UIImageView* button in _buttons) {
+        button.image = _uncheckImage;
+    }
+    [self _drawLines:NO];
+}
+
+- (void)_handlePoint:(CGPoint)point{
+    _currentPoint = point;
+    NSInteger index = [self _nearButton:point];
+    if (index != -1 && ![self _checked:index]) {
+        NSInteger cindex = -1;
+        if ([_paths count] > 0) {
+            cindex = [self _centerIndexBetween:[[_paths lastObject] intValue] and:index];
+        }
+        if (cindex != -1) {
+            [self _addPath:cindex];
+        }
+        [self _addPath:index];
+    }
+    
+    if ([_paths count] > 0) {
+        [self _drawLines:YES];
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self resetView];
+    UITouch* touch = [touches anyObject];
+    CGPoint p = [touch locationInView:self];
+    [self _handlePoint:p];
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+    UITouch* touch = [touches anyObject];
+    CGPoint p = [touch locationInView:self];
+    [self _handlePoint:p];
+
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    if ([self.paths count] > 0) {
+        [self _drawLines:NO];
+    }
+    NSMutableArray* delegateArray = [NSMutableArray arrayWithCapacity:9];
+    for (NSNumber* index in _paths) {
+        [delegateArray addObject:index];
+    }
+    if (delegateArray.count > 0) {
+        if ([self.delegate respondsToSelector:@selector(unlockerView:didFinished:)]) {
+            [self.delegate unlockerView:self didFinished:delegateArray];
+        }
+    }
+}
+
+@end
