@@ -9,7 +9,6 @@
 #import "FinanceViewController.h"
 #import "QMProductInfo.h"
 #import "QMProductListCell.h"
-#import "WYQBannerView.h"
 #define PRODUCT_LIST_CELL_IDENTIFIER  @"product_list_cell_identifier"
 #define LOADMORE_PAGE_FOOTER_VIEW_IDENTIFIER @"loadmore_page_footer_view_identifier"
 #define LOADMORE_PAGE_HEADER_VIEW_IDENTIFIER @"loadmore_page_header_view_identifier"
@@ -183,7 +182,6 @@
     productListTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [productListTable registerClass:[QMProductListCell class] forCellWithReuseIdentifier:PRODUCT_LIST_CELL_IDENTIFIER];
     [productListTable registerClass:[QMPageFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:LOADMORE_PAGE_FOOTER_VIEW_IDENTIFIER];
-    [productListTable registerClass:[WYQBannerView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:LOADMORE_PAGE_HEADER_VIEW_IDENTIFIER];
     productListTable.delegate = self;
     productListTable.dataSource = self;
     

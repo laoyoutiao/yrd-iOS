@@ -19,9 +19,9 @@
 #define ON_LINE 1
 
 #if ON_LINE
-#define URL_BASE @"http://yrdloan.com/mobile"
+//#define URL_BASE @"http://yrdloan.com/mobile"
 
-//#define URL_BASE @"http://192.168.11.81:7080/mobile"
+#define URL_BASE @"http://192.168.11.81:7080/mobile"
 
 //#define URL_BASE @"http://112.124.113.236/mobile/"
 
