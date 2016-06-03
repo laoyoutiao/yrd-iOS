@@ -293,7 +293,7 @@
 
 "qm_identify_idcard_field_text" = "请填写身份证号码";
 
-"qm_idcard_number_invalid" = "身份证号码不合法";
+"qm_idcard_number_invalid" = "身份证号码或手机号码不合法";
 
 "qm_identify_identity_btn_title" = "认证";
 

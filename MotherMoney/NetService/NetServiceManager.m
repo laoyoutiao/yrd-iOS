@@ -535,6 +535,7 @@
 //    NSMutableDictionary *param = [self buildParametersDic];
     NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithDictionary:dict];
     [_httpRequest xsPostPath:kRealNameAuthenticate delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@",(NSDictionary *)[responseObject objectFromJSONData]);
         
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kRealNameAuthenticate];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

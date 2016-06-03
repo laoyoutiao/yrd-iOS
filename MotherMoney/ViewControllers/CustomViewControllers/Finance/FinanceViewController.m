@@ -16,7 +16,7 @@
 
 #define PREFERENCE_BANNER_CLOSED @"preference_banner_closed"
 
-@interface FinanceViewController ()<UICollectionViewDataSource, UICollectionViewDelegate,WYQBannerViewDelegate>
+@interface FinanceViewController ()<UICollectionViewDataSource, UICollectionViewDelegate>
 
 @end
 
@@ -27,19 +27,10 @@
     NSMutableArray *productList;
     //是否完全下载完
     BOOL isAllDataLoaded;
-    //广告条是否显示
-    BOOL showBanner;
-    BOOL bannerViewColsed;
     NSString *mChannelId;
-    WYQBannerView *baiduBanner;
     //
     UIView* pushView;
     UITextField* pushTextField;
-}
-
-- (void)bannerDataDidLoadSuccess:(WYQBannerView *)banner
-{
-    
 }
 
 - (id)initViewControllerWithChannelId:(NSString *)channelId {
@@ -52,21 +43,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    showBanner = NO;
     
-//    bannerViewColsed = [QMPreferenceUtil getGlobalBoolKey:PREFERENCE_BANNER_CLOSED];
-    
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *show = [MobClick getConfigParams:version];
-    
-    if ([@"1" isEqualToString:show]) {
-        
-        bannerViewColsed = NO;
-    }else {
-        
-        
-        bannerViewColsed = YES;
-    }
     [self initDataSource];
     
     if (ON_LINE==0) {
@@ -299,14 +276,7 @@
         footView = footer;
         
         return footer;
-    }else if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
-     //headerView
-        WYQBannerView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:LOADMORE_PAGE_HEADER_VIEW_IDENTIFIER forIndexPath:indexPath];
-        header.delegate = self;
-        baiduBanner = header;
-        return baiduBanner;
     }
-    
     return nil;
 }
 //返回footerView的高度
@@ -316,22 +286,6 @@
     }else {
         return CGSizeZero;
     }
-}
-//返回headerView的高度
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout*)collectionViewLayout
-referenceSizeForHeaderInSection:(NSInteger)section {
-    if (bannerViewColsed==YES
-        ) {
-        
-        return CGSizeZero;
-    }else if (showBanner==YES) {
-        return CGSizeMake(CGRectGetWidth(collectionView.frame), 50);
-    }else{
-        return CGSizeMake(CGRectGetWidth(collectionView.frame), 0);
-    }
-
-    
 }
 
 - (void)gotoProductDetailInfoViewController:(QMProductInfo *)productInfo {
@@ -343,17 +297,6 @@ referenceSizeForHeaderInSection:(NSInteger)section {
     [self.navigationController pushViewController:con animated:YES];
 }
 
-#pragma mark -
-#pragma mark BaiduBannerDelegate
-- (void)bannerDataDidLoadFailed:(WYQBannerView *)banner{
-    showBanner = NO;
-    [productListTable reloadData];
-}
-- (void)bannerViewClosed:(WYQBannerView *)banner {
-    bannerViewColsed = YES;
-    [QMPreferenceUtil setGlobalBoolKey:PREFERENCE_BANNER_CLOSED value:bannerViewColsed syncWrite:YES];
-    [productListTable reloadData];
-}
 #pragma mark -
 #pragma mark Override
 - (NSString *)title {

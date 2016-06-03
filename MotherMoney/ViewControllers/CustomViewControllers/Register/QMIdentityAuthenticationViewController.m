@@ -287,7 +287,7 @@
 }
 
 - (NSString *)getIdCardString {
-    return [realNameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    return [idCardField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 - (NSString *)getPhoneString {
@@ -405,13 +405,14 @@
 
 - (BOOL)isIDCardValid {
     NSString *idCard = [idCardField text];
+    
     BOOL result = [CMMUtility checkIdNumber:idCard] && [self getPhoneString].length == 11;
     
     return result;
 }
 
 - (void)identifyBtnClicked:(UIButton *)btn {
-    // 验证身份证是否合法
+    // 验证身份证和手机号码是否合法
     
     if ([self isIDCardValid]) {
         // 请求服务器接口
@@ -429,15 +430,22 @@
         
         [self checkUserValidate:dict];
     }else {
-        // 身份证号码不合法
-        [CMMUtility showNote:QMLocalizedString(@"qm_idcard_number_invalid", @"身份证号码不合法")];
+        // 身份证号码或手机号码不合法
+        [CMMUtility showNote:QMLocalizedString(@"qm_idcard_number_invalid", @"身份证号码或手机号码不合法")];
     }
 }
 
 - (void)checkUserValidate:(NSDictionary *)dict {
-//    if (QM_IS_STR_NIL(name) || QM_IS_STR_NIL(cardId)) {
-//        return;
-//    }
+    if (QM_IS_STR_NIL(currentBankInfo.bankCardId)
+        || QM_IS_STR_NIL([self getBankCardNumber])
+        || QM_IS_STR_NIL(provinceItem.itemCode)
+        || QM_IS_STR_NIL([self getCityString])
+        || QM_IS_STR_NIL(bankDetailInfoField.text)
+        || QM_IS_STR_NIL([self getPhoneString])
+        )
+    {
+        return;
+    }
     
     [[NetServiceManager sharedInstance] authDictionary:dict
                                             delegate:self success:^(id responseObject) {
