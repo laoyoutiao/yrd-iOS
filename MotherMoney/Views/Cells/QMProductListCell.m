@@ -63,7 +63,7 @@ CGFloat selledProductRateViewRightPadding = 30;
         [mProductNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(superView.mas_left).offset(15.0f);
             make.bottom.equalTo(superView.mas_bottom);
-            make.size.equalTo(CGSizeMake(200.0f, 35.0f));
+            make.size.equalTo(CGSizeMake([UIApplication sharedApplication].keyWindow.frame.size.width > 320? 200.0f:170.0f, 35.0f));
         }];
         
         // 购买人数

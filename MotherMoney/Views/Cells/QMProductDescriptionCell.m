@@ -55,7 +55,7 @@
         [self.contentView addSubview:productdetailedTextLabel];
         [productdetailedTextLabel mas_makeConstraints:^(MASConstraintMaker *make){
             make.left.equalTo(productIconImageView.mas_left);
-            make.top.equalTo(productIconImageView.mas_bottom).offset(5.0f);
+            make.top.equalTo(productIconImageView.mas_bottom).offset(10.0f);
             make.width.equalTo(200);
 //            make.height.equalTo(40.0f);
         }];

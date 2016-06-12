@@ -202,14 +202,14 @@
         return;
     }
     
-//#if ON_LINE
-//    if ([amount doubleValue] < 50.0f) {
-//        [CMMUtility showNote:@"充值金额必须大于等于50元"];
-//        return;
-//    }
-//#else
+#if ON_LINE
+    if ([amount doubleValue] < 50.0f) {
+        [CMMUtility showNote:@"充值金额必须大于等于50元"];
+        return;
+    }
+#else
     
-//#endif
+#endif
     
     // 禁掉按钮，防止多次点击
     footerView.actionBtn.enabled = NO;

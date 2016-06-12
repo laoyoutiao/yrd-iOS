@@ -18,7 +18,7 @@
 #import "QMMSplashViewController.h"
 #import "NetServiceManager.h"
 #import "QMTokenInfo.h"
-
+#import "QMDealDetailViewController.h"
 
 #define SHOW_RECT_PWD_MIN_TIME_INTERVAL 30
 
@@ -199,9 +199,50 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    NSLog(@"%@",userInfo);
+    
     [UMessage didReceiveRemoteNotification:userInfo];
     
+    NSString *str = [userInfo objectForKey:@"test"];
+    if ([str isEqualToString:@"helloworld"]) {
+        QMDealDetailViewController *detailViewController = [[QMDealDetailViewController alloc] init];
+        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:detailViewController];
+        [[self getCurrentVC].navigationController presentViewController:nav animated:YES completion:nil];
+        if (![[QMAccountUtil sharedInstance] userHasLogin]) {
+//            tabbarController.selectedIndex = 0;
+//            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:tabbarController animated:YES completion:nil];
+            [QMLoginManagerUtil showLoginViewControllerFromViewController:[self getCurrentVC]];
+        }
+    }
+    
     [[QMFrameUtil sharedInstance] parsePush:userInfo];
+}
+
+- (UIViewController *)getCurrentVC
+{
+    UIViewController *result = nil;
+    UIWindow * window = [[UIApplication sharedApplication] keyWindow];
+    if (window.windowLevel != UIWindowLevelNormal)
+    {
+        NSArray *windows = [[UIApplication sharedApplication] windows];
+        for(UIWindow * tmpWin in windows)
+        {
+            if (tmpWin.windowLevel == UIWindowLevelNormal)
+            {
+                window = tmpWin;
+                break;
+            }
+        }
+    }
+    UIView *frontView = [[window subviews] objectAtIndex:0];
+    id nextResponder = [frontView nextResponder];
+    
+    if ([nextResponder isKindOfClass:[UIViewController class]])
+        result = nextResponder;
+    else
+        result = window.rootViewController;
+    return result;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {

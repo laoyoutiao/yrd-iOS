@@ -152,8 +152,9 @@
             self.productDescription = activityDescription;
         }
         
-        NSString *productDetail = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"bankAcceptanceBillDepositBank"]];
+        NSString *productDetail = [NSString stringWithFormat:@"%@", [dictionary objectForKey:@"remark"]];
         if ([CMMUtility isStringOk:productDetail]) {
+//            NSLog(@"%@",productDetail);
             self.productDetailText = productDetail;
         }
         

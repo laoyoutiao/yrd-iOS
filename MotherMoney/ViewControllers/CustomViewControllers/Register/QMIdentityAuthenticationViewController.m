@@ -413,7 +413,7 @@
 
 - (void)identifyBtnClicked:(UIButton *)btn {
     // 验证身份证和手机号码是否合法
-    
+    btn.enabled = NO;
     if ([self isIDCardValid]) {
         // 请求服务器接口
         NSDictionary *dict = @{@"idCardNumber":[self getIdCardString],
@@ -431,6 +431,7 @@
         [self checkUserValidate:dict];
     }else {
         // 身份证号码或手机号码不合法
+        btn.enabled = YES;
         [CMMUtility showNote:QMLocalizedString(@"qm_idcard_number_invalid", @"身份证号码或手机号码不合法")];
     }
 }
@@ -464,6 +465,7 @@
 }
 
 - (void)handleRealNameAuthFailure:(NSError *)error {
+    identifyBtn.enabled = YES;
     [CMMUtility showNoteWithError:error];
 }
 

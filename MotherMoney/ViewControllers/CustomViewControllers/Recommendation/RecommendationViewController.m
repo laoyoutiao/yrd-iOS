@@ -82,7 +82,7 @@
 - (void)postAdvertisementInterface
 {
     NSString *mobile =[NSString stringWithFormat:kAdvertisement];
-    NSString *base_string = @"http://192.168.11.81:7080/mobile";
+    NSString *base_string = [NSString stringWithFormat:@"%@",URL_BASE];
     NSString *urlString = [NSString stringWithFormat:@"%@/%@",base_string,mobile];
     AFHTTPClient *httpClient = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:base_string]];
     __weak __typeof(self) bself = self;
@@ -151,7 +151,8 @@
         [self updataView];
     }else
     {
-        NSString *idstr = [pictureArray objectAtIndex:!([pictureArray count] - 1)? 0:(rand() % ([pictureArray count]))];
+        NSInteger randnum = arc4random() % [pictureArray count];
+        NSString *idstr = [pictureArray objectAtIndex:!([pictureArray count] - 1)? 0:(randnum > 0? randnum:0)];
         NSString *fullPath = [[documentsDirectory stringByAppendingPathComponent:@"test"] stringByAppendingPathComponent:idstr];
         UIImage *savedImage = [[UIImage alloc] initWithContentsOfFile:fullPath];
         [self showAdvertisementPicture:savedImage];
