@@ -207,8 +207,8 @@
     NSString *str = [userInfo objectForKey:@"test"];
     if ([str isEqualToString:@"helloworld"]) {
         QMDealDetailViewController *detailViewController = [[QMDealDetailViewController alloc] init];
-        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:detailViewController];
-        [[self getCurrentVC].navigationController presentViewController:nav animated:YES completion:nil];
+//        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:detailViewController];
+        [[self getCurrentVC].navigationController pushViewController:detailViewController animated:YES];
         if (![[QMAccountUtil sharedInstance] userHasLogin]) {
 //            tabbarController.selectedIndex = 0;
 //            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:tabbarController animated:YES completion:nil];
