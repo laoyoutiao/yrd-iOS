@@ -19,6 +19,7 @@
 #import "QMAdvertisementModel.h"
 #import "QMWebViewAdvertisementViewController.h"
 #import "QMTokenInfo.h"
+#import "QMDealDetailViewController.h"
 #define PRODUCT_GUIDE_HAS_SHOW_KEY @"PRODUCT_GUIDE_HAS_SHOW_KEY"
 
 @interface RecommendationViewController ()<KIImagePagerDelegate, KIImagePagerDataSource, UITableViewDataSource, UITableViewDelegate>
@@ -134,17 +135,20 @@
     NSMutableArray *pictureArray = [NSMutableArray array];
     
     BOOL havePicture = NO;
+    NSInteger picturenumber = 0;
     for (int i = 0;i < [file count];i ++) {
         for (int m = 0;m < [advertArray count]; m ++)
         {
             QMAdvertisementModel *model = [advertArray objectAtIndex:m];
             if ([[file objectAtIndex:i] isEqualToString:[NSString stringWithFormat:@"%ld",model.AdverID]]) {
-                havePicture = YES;
+                picturenumber ++;
                 [pictureArray addObject:[file objectAtIndex:i]];
             }
         }
     }
-    
+    if (picturenumber == [advertArray count]) {
+        havePicture = YES;
+    }
     
     if (!havePicture) {
         [self downAdvertisementPicture:advertArray];
@@ -230,6 +234,7 @@
     [self updataView];
     [distimer invalidate];
 }
+
 
 - (void)updataView
 {

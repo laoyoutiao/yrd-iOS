@@ -7,6 +7,7 @@
 #define MotherMoney_Constants_h
 
 #define UMKey  @"564467a567e58e6e9d003500"
+//#define UMKey  @"575e520e67e58ece650023af"
 
 // 网络访问baseURL
 
