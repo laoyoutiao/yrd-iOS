@@ -11,8 +11,10 @@
 @interface QMTokenInfo : NSObject
 
 @property (nonatomic, strong) NSString *tokenString;
+@property (nonatomic, strong) NSString *phoneNumber;
 
 - (void)setMobileToken:(NSData *)mobileToken;
+- (void)setAccountPhoneNumber:(NSString *)phoneNumber;
 
 +(QMTokenInfo *)sharedInstance;
 

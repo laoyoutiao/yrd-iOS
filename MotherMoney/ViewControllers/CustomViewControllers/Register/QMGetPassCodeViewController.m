@@ -6,6 +6,7 @@
 #import "QMGetPassCodeViewController.h"
 #import "UIImage+Gradient.h"
 #import "QMGestureWindow.h"
+#import "QMTokenInfo.h"
 
 @interface QMGetPassCodeViewController ()
 
@@ -258,6 +259,8 @@
                                                              pwd:[self passwordText]
                                                         delegate:self
                                                          success:^(id responseObject) {
+                                                             QMTokenInfo *tokeninfo = [QMTokenInfo sharedInstance];
+                                                             [tokeninfo setPhoneNumber:mAccountInfo.phoneNumber];
                                                              NSLog(@"登录成功");
                                                          } failure:^(NSError *error) {
                                                              NSLog(@"登录失败");

@@ -212,9 +212,8 @@ typedef enum {
 //    QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
 //        [con configureRealName:myFundInfo.realName];
 //        [self.navigationController pushViewController:con animated:YES];
-    if (myFundInfo.realNameAuthed) {
-        
     
+    if (myFundInfo.realNameAuthed) {
     QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
     [con configureRealName:myFundInfo.realName];
     [self.navigationController pushViewController:con animated:YES];

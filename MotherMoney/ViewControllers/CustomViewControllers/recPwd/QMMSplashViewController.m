@@ -7,6 +7,7 @@
 #import "QMInputPhoneNumberViewController.h"
 #import "QMInputPasswordViewController.h"
 #import "QMGesturePasswordViewController.h"
+#import "QMTokenInfo.h"
 
 @interface QMMSplashViewController ()<QMGesturePasswordViewControllerDelegate, QMInputPasswordViewControllerDelegate>
 
@@ -130,6 +131,8 @@
                                                         delegate:self
                                                          success:^(id responseObject) {
                                                              // 登录成功
+                                                             QMTokenInfo *tokeninfo = [QMTokenInfo sharedInstance];
+                                                             [tokeninfo setPhoneNumber:accountName];
                                                              [self dismissWithUnlockSuccess:YES unlockType:VENTouchLockSplashViewControllerUnlockTypePasscode animated:YES];
                                                          } failure:^(NSError *error) {
                                                              // 登录失败

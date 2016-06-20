@@ -557,6 +557,7 @@
                        provinceCode:(NSString *)provinceCode
                            cityCode:(NSString *)cityCode
                          branchName:(NSString *)branchName
+                        phoneNumber:(NSString *)phoneNumber
                            delegate:(id)delegate
                             success:(void (^)(id responseObject))success
                             failure:(void(^)(NSError *error))failure;

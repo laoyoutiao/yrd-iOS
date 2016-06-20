@@ -15,8 +15,9 @@
 #import "QMNumberFormatPromptView.h"
 #import "QMSelectLocationViewControllerV2.h"
 #import "QMBankBranchInfoViewController.h"
+#import "QMTokenInfo.h"
 
-@interface QMAddBankCardViewControllerV2 ()<UITextFieldDelegate, QMSelectItemViewControllerDelegate, QMBankBranchInfoViewControllerDelegate>
+@interface QMAddBankCardViewControllerV2 ()<UITextFieldDelegate, QMSelectItemViewControllerDelegate>
 
 @end
 
@@ -25,7 +26,7 @@
     
     UIButton *selectBankBtn; // 选择银行
     UITextField *bankCardIdField; // 输入银行卡
-    
+    UITextField *reseveredPhoneField; //预留手机号
     UIButton *selectProvinceBtn;//省选择按钮
     UIButton *selectCityBtn;//市选择按钮
     
@@ -38,6 +39,8 @@
     UIScrollView *containerView;
     
     QMNumberFormatPromptView *bankCardIdPromptView;
+    
+    QMNumberFormatPromptView *phoneNumberPromptView;
     
     QMSearchItem *provinceItem;
     QMSearchItem *cityitem;
@@ -101,24 +104,27 @@
         
         bankCardIdPromptView.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame), CGRectGetWidth(bankCardIdField.frame), 40.0f);
         
-        // 选择省市
-        selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(bankCardIdPromptView.frame), CGRectGetMaxY(bankCardIdPromptView.frame) + 10, CGRectGetWidth(bankCardIdPromptView.frame), CGRectGetHeight(bankCardIdPromptView.frame));
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdPromptView.frame), CGRectGetMaxY(bankCardIdPromptView.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
         
     }else {
-        // 选择省市
-        selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame));
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
        
     }
+    
+    // 选择省市
+    selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    
     selectCityBtn.frame = CGRectMake(CGRectGetMinX(selectProvinceBtn.frame), CGRectGetMaxY(selectProvinceBtn.frame), CGRectGetWidth(selectProvinceBtn.frame), CGRectGetHeight(selectProvinceBtn.frame));
     
     // 支行信息
-    bankDetailInfoField.frame = CGRectMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 10, CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame));
+    bankDetailInfoField.frame = CGRectMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
     
     // 绑定
     CGRect frame = nextStepBtn.frame;
     frame.origin = CGPointMake(CGRectGetMinX(bankDetailInfoField.frame), CGRectGetMaxY(bankDetailInfoField.frame) + 20);
     nextStepBtn.frame = frame;
 }
+
 //更新添加银行卡界面的布局
 - (void)updateSubViewsFrameAnimated:(BOOL)animated {
     if (animated) {
@@ -141,7 +147,8 @@
         !QM_IS_STR_NIL([self getBankCardNumber]) &&
         !QM_IS_STR_NIL([self getProvinceString]) &&
         !QM_IS_STR_NIL([self getCityString]) &&
-        !QM_IS_STR_NIL([self getBankLocationString])) {
+        !QM_IS_STR_NIL([self getBankLocationString]) &&
+        !QM_IS_STR_NIL([self getPhoneNumber])) {
         nextStepBtn.enabled = YES;
     }else {
         nextStepBtn.enabled = NO;
@@ -235,12 +242,33 @@
     bankCardIdPromptView.hidden = YES;
     [containerView addSubview:bankCardIdPromptView];
     
+    reseveredPhoneField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame))];
+    reseveredPhoneField.delegate = self;
+    reseveredPhoneField.keyboardType = UIKeyboardTypeNumberPad;
+    reseveredPhoneField.textColor = QM_COMMON_TEXT_COLOR;
+    [reseveredPhoneField setBackground:[QMImageFactory commonTextFieldImage]];
+    reseveredPhoneField.font = [UIFont systemFontOfSize:13];
+    reseveredPhoneField.placeholder = QMLocalizedString(@"qm_input_resevered_phone_number_text", @"请输入预留手机号码");
+    QMTokenInfo *tokenInfo = [QMTokenInfo sharedInstance];
+    reseveredPhoneField.text = tokenInfo.phoneNumber;
+    
+    leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(bankCardIdField.frame))];
+    reseveredPhoneField.leftView = leftView;
+    reseveredPhoneField.leftViewMode = UITextFieldViewModeAlways;
+//    [reseveredPhoneField addTarget:self action:@selector(upPhoneslope) forControlEvents:UIControlEventEditingDidBegin];
+//    [reseveredPhoneField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
+    [containerView addSubview:reseveredPhoneField];
+    
+    phoneNumberPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(reseveredPhoneField.frame), 40.0f)];
+    phoneNumberPromptView.hidden = YES;
+    [containerView addSubview:phoneNumberPromptView];
+    
     //选择省按钮
     selectProvinceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [selectProvinceBtn setImage:[UIImage imageNamed:@"shearhead.png"] forState:UIControlStateNormal];
     [selectProvinceBtn setBackgroundImage:[QMImageFactory commonTextFieldImageTopPart] forState:UIControlStateNormal];
     [selectProvinceBtn setBackgroundImage:[QMImageFactory commonTextFieldImageTopPart] forState:UIControlStateHighlighted];
-    selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame));
+    selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
     selectProvinceBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [selectProvinceBtn setTitleColor:QM_COMMON_TEXT_COLOR forState:UIControlStateNormal];
     selectProvinceBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0);
@@ -440,6 +468,10 @@
     return [bankDetailInfoField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
+- (NSString *)getPhoneNumber {
+    return [reseveredPhoneField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
 // 绑定
 - (void)nextStepBtnClicked:(UIButton *)btn {
      // 打点
@@ -453,6 +485,7 @@
     NSString *productChannelId = @"2";
 //    NSString *prcptcd = branchInfo.prcpct;
     NSString *branchName = bankDetailInfoField.text;
+    NSString *phoneNumber = reseveredPhoneField.text;
     
     NSString *errorMsg = nil;
     
@@ -466,20 +499,20 @@
         errorMsg = QMLocalizedString(@"qm_bind_card_no_city", @"请选择城市");
     }else if (QM_IS_STR_NIL(branchName)) {
         errorMsg = QMLocalizedString(@"qm_bind_card_no_branchName", @"请输入支行名称");
-    }else if (bankCardNumber.length<=10){
-        
+    }else if (bankCardNumber.length <= 10){
         errorMsg = QMLocalizedString(@"qm_bind_card_right_bankCardNumber", @"请输入正确格式的银行卡号");
+    }else if (phoneNumber.length != 11)
+    {
+        errorMsg = QMLocalizedString(@"qm_bind_card_right_bankCardNumber", @"请输入正确格式的手机号码");
     }
 
-    
     if (!QM_IS_STR_NIL(errorMsg)) {
-        
         
         [CMMUtility showNote:errorMsg];
         return;
     }
 
-     [[NetServiceManager sharedInstance] newAddBankCardWithChannelId:productChannelId bankId:bankId bankCardNumber:bankCardNumber provinceCode:bankProvinceCode cityCode:bankCityCode branchName:branchName delegate:self success:^(id responseObject) {
+    [[NetServiceManager sharedInstance] newAddBankCardWithChannelId:productChannelId bankId:bankId bankCardNumber:bankCardNumber provinceCode:bankProvinceCode cityCode:bankCityCode branchName:branchName phoneNumber:phoneNumber delegate:self success:^(id responseObject) {
          // 打点
          [QMUMTookKitManager event:USER_BIND_CARD_SUCCESS_KEY label:@"绑卡成功"];
          

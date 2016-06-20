@@ -8,6 +8,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "QMInputPhoneNumberViewController.h"
 #import "QMInputPasswordViewController.h"
+#import "QMTokenInfo.h"
 
 @interface QMPAGesturePasswordViewController ()<NinGridUnlockViewDelegate>
 
@@ -113,7 +114,8 @@
                                                              pwd:pwd
                                                         delegate:self
                                                          success:^(id responseObject) {
-
+                                                             QMTokenInfo *tokeninfo = [QMTokenInfo sharedInstance];
+                                                             [tokeninfo setPhoneNumber:accountName];
                                                          } failure:^(NSError *error) {
 
                                                          }];

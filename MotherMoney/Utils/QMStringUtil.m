@@ -34,7 +34,8 @@
     }
 }
 
-+ (NSString *)formattedBankCardIdFromCardId:(NSString *)cardId; {
++ (NSString *)formattedBankCardIdFromCardId:(NSString *)cardId
+{
     if (QM_IS_STR_NIL(cardId)) {
         return nil;
     }
@@ -56,6 +57,25 @@
     }
     
     return [components componentsJoinedByString:@" "];
+}
+
++ (NSString *)formattedIdCardIdFromCardId:(NSString *)cardId
+{
+    if (QM_IS_STR_NIL(cardId)) {
+        return nil;
+    }
+    
+    NSInteger length = [cardId length];
+    if (length <= 6)
+    {
+        return cardId;
+    }else if(length <= 14)
+    {
+        return [NSString stringWithFormat:@"%@ %@",[cardId substringWithRange:NSMakeRange(0, 6)],[cardId substringWithRange:NSMakeRange(6, length - 6)]];
+    }else
+    {
+        return [NSString stringWithFormat:@"%@ %@ %@",[cardId substringWithRange:NSMakeRange(0, 6)],[cardId substringWithRange:NSMakeRange(6, 8)],[cardId substringWithRange:NSMakeRange(14, length - 14)]];
+    }
 }
 
 @end

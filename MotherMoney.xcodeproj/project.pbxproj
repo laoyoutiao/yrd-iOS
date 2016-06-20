@@ -2423,7 +2423,7 @@
 				ORGANIZATIONNAME = "___FULLUSERNAME___";
 				TargetAttributes = {
 					185FB615198E754F00F538FF = {
-						DevelopmentTeam = 9QWFK7YU37;
+						DevelopmentTeam = MY6HP6CP23;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -2925,7 +2925,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2967,7 +2967,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
