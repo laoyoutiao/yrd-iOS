@@ -44,13 +44,13 @@
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     
     [self initDataSource];
-    if ([exchangeLists count] == 0) {
-        UIAlertView *alert =  [ [UIAlertView alloc] initWithTitle:nil message:@"我们正在精心帮您挑选礼品,敬请期待" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-        [alert show];
-        [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:1.5];
-        
-        
-    }
+//    if ([exchangeLists count] == 0) {
+//        UIAlertView *alert =  [ [UIAlertView alloc] initWithTitle:nil message:@"我们正在精心帮您挑选礼品,敬请期待" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+//        [alert show];
+//        [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:1.5];
+//        
+//        
+//    }
 
 }
 - (void)dimissAlert:(UIAlertView *)alert {

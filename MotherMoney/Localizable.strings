@@ -529,7 +529,7 @@
 
 "qm_start_earning_money" = "开始赚钱";
 
-"qm_my_score_title" = "我的金币";
+"qm_my_score_title" = "我的积分";
 
 "qm_integral_exchange_list" = "兑换记录";
 
@@ -537,7 +537,7 @@
 
 "qm_exchange_btn_title" = "兑换";
 
-"qm_exchange_success_title" = "兑换成功";
+"qm_exchange_success_title" = "兑换成功礼品将于两个工作日内发放。";
 
 "qm_input_initial_pwd" = "请输入密码";
 
@@ -545,9 +545,9 @@
 
 "qm_input_new_pwd_again" = "请再次输入密码";
 
-"qm_exchange_integral_format" = "%@金币起兑";
+"qm_exchange_integral_format" = "%@积分起兑";
 
-"qm_my_integral_nav_title" = "我的金币";
+"qm_my_integral_nav_title" = "我的积分";
 
 "qm_bank_card_detail_text" = "尾号%@";
 
@@ -561,7 +561,7 @@
 
 "qm_state_title" = "状态";
 
-"qm_confirm_exchange_goods" = "您是否确定兑换?";
+"qm_confirm_exchange_goods" = "您是否确定兑换";
 
 "qm_product_wind_control" = "风控措施";
 

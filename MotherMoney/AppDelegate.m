@@ -50,7 +50,6 @@
     self.window.rootViewController = tabbarController;
     [self.window makeKeyAndVisible];
     
-    
 //    QMTestImageViewViewController *testview = [[QMTestImageViewViewController alloc] init];
 //    self.window.rootViewController = testview;
 //    [self.window makeKeyAndVisible];
@@ -205,13 +204,10 @@
     [UMessage didReceiveRemoteNotification:userInfo];
     
     NSString *str = [userInfo objectForKey:@"test"];
-    if ([str isEqualToString:@"helloworld"]) {
+    if ([str isEqualToString:@"test"]) {
         QMDealDetailViewController *detailViewController = [[QMDealDetailViewController alloc] init];
-//        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:detailViewController];
         [[self getCurrentVC].navigationController pushViewController:detailViewController animated:YES];
         if (![[QMAccountUtil sharedInstance] userHasLogin]) {
-//            tabbarController.selectedIndex = 0;
-//            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:tabbarController animated:YES completion:nil];
             [QMLoginManagerUtil showLoginViewControllerFromViewController:[self getCurrentVC]];
         }
     }
@@ -266,6 +262,7 @@
     [gesWindow handleWindowDidBecomeKeyNotification:notification];
 }
 
+//手势密码 or 动画？
 - (void)prepareGesturePwdWindow {
     if (gesWindow == nil) {
         gesWindow = [[QMGestureWindow alloc] initWithFrame:self.window.frame];

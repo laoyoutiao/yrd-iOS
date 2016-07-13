@@ -89,6 +89,7 @@
     __weak __typeof(self) bself = self;
     [httpClient xsPostPath:urlString delegate:self params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *dic = (NSDictionary *)[responseObject objectFromJSONData];
+        NSLog(@"%@",dic);
         NSArray *advertArray = [QMAdvertisementModel instanceArrayDictFromArray:[[dic objectForKey:@"data"] objectForKey:@"list"]];;
         [bself getPictures:advertArray];
         
@@ -237,6 +238,17 @@
 
 - (void)updataView
 {
+    //检测后台更新接口
+    NSInteger statusnum = 0;
+    if (statusnum == 2) {
+        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护中" message:@"维护时间:xx-xx" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+        [alertview show];
+    }else if (statusnum == 1)
+    {
+        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护通知" message:@"预计维护时间:xx-xx" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertview show];
+    }
+    
     //实现上部分子view
     [self setUpSubViews];
     [[NSNotificationCenter defaultCenter] addObserverForName:QM_ACCOUNT_INFO_DID_SAVE
@@ -337,8 +349,14 @@
         NSString *bannerTitle = [banner objectForKey:@"htmlTitle"];
         
         NSString *requestURL = [CMMUtility isStringOk:bannerURL] ? bannerURL : bannerHtmlURL;
-        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
-        [QMWebViewController showWebViewWithRequest:request navTitle:bannerTitle isModel:YES from:self];
+//        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
+        
+        QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
+        advertwebview.advertUrlString = requestURL;
+        [advertwebview setHidesBottomBarWhenPushed:YES];
+        [self.navigationController pushViewController:advertwebview animated:YES];
+        
+//        [QMWebViewController showWebViewWithRequest:request navTitle:bannerTitle isModel:YES from:self];
         }
 }
 

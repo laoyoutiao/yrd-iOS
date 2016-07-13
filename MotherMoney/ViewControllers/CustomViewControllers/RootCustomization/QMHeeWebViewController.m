@@ -106,7 +106,7 @@
 {
     NSString *url = [[request URL] absoluteString];
     NSLog(@"%@",url);
-    if ([url isEqualToString:@"http://m.yrdloan.com/wap/product4bid"]) {
+    if ([url rangeOfString:@"http://m.yrdloan.com/wap/product4bid"].location != NSNotFound) {
         [self presentToMyFundView];
         return NO;
     }

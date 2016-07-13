@@ -249,8 +249,8 @@
     [reseveredPhoneField setBackground:[QMImageFactory commonTextFieldImage]];
     reseveredPhoneField.font = [UIFont systemFontOfSize:13];
     reseveredPhoneField.placeholder = QMLocalizedString(@"qm_input_resevered_phone_number_text", @"请输入预留手机号码");
-    QMTokenInfo *tokenInfo = [QMTokenInfo sharedInstance];
-    reseveredPhoneField.text = tokenInfo.phoneNumber;
+//    QMTokenInfo *tokenInfo = [QMTokenInfo sharedInstance];
+//    reseveredPhoneField.text = tokenInfo.phoneNumber;
     
     leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(bankCardIdField.frame))];
     reseveredPhoneField.leftView = leftView;

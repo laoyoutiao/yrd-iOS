@@ -227,8 +227,6 @@
     reseveredPhoneField.font = [UIFont systemFontOfSize:13];
     reseveredPhoneField.placeholder = QMLocalizedString(@"qm_input_resevered_phone_number_text", @"请输入预留手机号码");
     leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(bankCardIdField.frame))];
-    QMTokenInfo *tokenInfo = [QMTokenInfo sharedInstance];
-    reseveredPhoneField.text = tokenInfo.phoneNumber;
     
     reseveredPhoneField.leftView = leftView;
     reseveredPhoneField.leftViewMode = UITextFieldViewModeAlways;
@@ -495,6 +493,7 @@
     [idCardField resignFirstResponder];
     [bankDetailInfoField resignFirstResponder];
     [reseveredPhoneField resignFirstResponder];
+    [bankCardIdField resignFirstResponder];
 }
 
 - (void)handleTapGesture:(UIGestureRecognizer *)tap {
@@ -502,6 +501,8 @@
     [idCardField resignFirstResponder];
     [reseveredPhoneField resignFirstResponder];
     [bankDetailInfoField resignFirstResponder];
+    [bankCardIdField resignFirstResponder];
+
 }
 
 #pragma mark -- 

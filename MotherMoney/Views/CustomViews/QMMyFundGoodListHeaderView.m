@@ -45,7 +45,7 @@
         }];
         
         currentScoreTitleLabel=[[UILabel alloc] init];
-        currentScoreTitleLabel.text=@"当前金币";
+        currentScoreTitleLabel.text=@"当前积分";
         currentScoreTitleLabel.textColor=[UIColor colorWithRed:95.0f/255.0f green:95.0f/255.0f blue:95.0f/255.0f alpha:1];
         currentScoreTitleLabel.textAlignment=NSTextAlignmentLeft;
         currentScoreTitleLabel.font=[UIFont systemFontOfSize:15];

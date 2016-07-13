@@ -23,7 +23,7 @@
 typedef enum {
     
     QMPrizeTableSection_goodList=0,
-    QMPrizeTableSection_packet,
+//    QMPrizeTableSection_packet,
     QMPrizeTableSection_coupon,
     QMPrizeTableSection_Count
 }QMPrizeTableSection;
@@ -90,7 +90,7 @@ typedef enum {
     return 1;
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return 3;
+    return 2;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.item==QMPrizeTableSection_goodList) {
@@ -101,11 +101,12 @@ typedef enum {
         QMPrizeCouponCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELL_COUPON_IDENTIFIER forIndexPath:indexPath];
         cell.userDjqTicketCount = userDjqTicketCount;
         return cell;
-    }else if (indexPath.item==QMPrizeTableSection_packet){
-        QMPrizePacketCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELL_PACKET_IDENTIFIER forIndexPath:indexPath];
-        cell.userTicketCount = userTicketCount;
-        return cell;
     }
+//    else if (indexPath.item==QMPrizeTableSection_packet){
+//        QMPrizePacketCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CELL_PACKET_IDENTIFIER forIndexPath:indexPath];
+//        cell.userTicketCount = userTicketCount;
+//        return cell;
+//    }
     return nil;
 }
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -135,18 +136,19 @@ typedef enum {
         
         [self.navigationController pushViewController:con animated:YES];
         
-    }if (indexPath.item==QMPrizeTableSection_packet) {
-
-        NSString *str = @"/myDoTicket?showNav=0";
-        NSString *packetUrl = [NSString stringWithFormat:@"%@%@",URL_BASE,str];
-        
-        NSURL* url1=[NSURL URLWithString:packetUrl];
-        NSURLRequest* request=[NSURLRequest requestWithURL:url1];
-        
-        [QMWebViewController showWebViewWithRequest:request navTitle:@"我的红包" isModel:NO from:self];
-
-
     }
+//    if (indexPath.item==QMPrizeTableSection_packet) {
+//
+//        NSString *str = @"/myDoTicket?showNav=0";
+//        NSString *packetUrl = [NSString stringWithFormat:@"%@%@",URL_BASE,str];
+//        
+//        NSURL* url1=[NSURL URLWithString:packetUrl];
+//        NSURLRequest* request=[NSURLRequest requestWithURL:url1];
+//        
+//        [QMWebViewController showWebViewWithRequest:request navTitle:@"我的红包" isModel:NO from:self];
+//
+//
+//    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

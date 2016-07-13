@@ -6,8 +6,8 @@
 #ifndef MotherMoney_Constants_h
 #define MotherMoney_Constants_h
 
-#define UMKey  @"564467a567e58e6e9d003500"
-//#define UMKey  @"575e520e67e58ece650023af"
+//#define UMKey  @"564467a567e58e6e9d003500"
+#define UMKey  @"575e520e67e58ece650023af"
 
 // 网络访问baseURL
 
@@ -20,11 +20,11 @@
 #define ON_LINE 1
 
 #if ON_LINE
-//#define URL_BASE @"http://yrdloan.com/mobile" 
+#define URL_BASE @"http://yrdloan.com/mobile" 
 
 //#define URL_BASE @"http://192.168.11.81:7080/mobile"
 
-#define URL_BASE @"http://112.124.113.236/mobile/"
+//#define URL_BASE @"http://112.124.113.236/mobile/"
 
 //#define URL_BASE @"http://cgt.vicp.net:7080/mobile"
 #else
