@@ -91,9 +91,9 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 {
     
     NSString *urlPath = [[request URL] path];
-    
+    NSString *url = [[request URL] absoluteString];
     NSLog(@"web view request urlPath:%@",urlPath);
-    
+    NSLog(@"web view request urlPath:%@",url);
     if([urlPath rangeOfString:kShareInWebView].location !=NSNotFound){
         NSLog(@"need share");
         

@@ -54,6 +54,7 @@
     [super viewWillAppear:animated];
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     [self updateLeftBarButtonItem];
+    [(UITableView *)self.scrollView reloadData];
 }
 
 - (void)reloadData {
@@ -349,14 +350,14 @@
         NSString *bannerTitle = [banner objectForKey:@"htmlTitle"];
         
         NSString *requestURL = [CMMUtility isStringOk:bannerURL] ? bannerURL : bannerHtmlURL;
-//        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
+        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
+//
+//        QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
+//        advertwebview.advertUrlString = requestURL;
+//        [advertwebview setHidesBottomBarWhenPushed:YES];
+//        [self.navigationController pushViewController:advertwebview animated:YES];
         
-        QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
-        advertwebview.advertUrlString = requestURL;
-        [advertwebview setHidesBottomBarWhenPushed:YES];
-        [self.navigationController pushViewController:advertwebview animated:YES];
-        
-//        [QMWebViewController showWebViewWithRequest:request navTitle:bannerTitle isModel:YES from:self];
+        [QMWebViewController showWebViewWithRequest:request navTitle:bannerTitle isModel:YES from:self];
         }
 }
 
@@ -364,14 +365,21 @@
 - (void)buyProductBtnClicked:(UIButton *)btn {
     [self hideGuideView];
     
-    // 打点
-    [QMUMTookKitManager event:USER_CLICK_BUY_IN_RECOMMENDVIEW_KEY label:@"首页点击购买"];
-    
-    // 可以购买，进入详情页面
-    QMProductInfoViewController *con = [[QMProductInfoViewController alloc] initViewControllerWithProductInfo:recommendationData.productionInfo];
-    con.isModel = NO;
-    
-    [self.navigationController pushViewController:con animated:YES];
+    if (![[QMAccountUtil sharedInstance] userHasLogin]) {
+        [QMLoginManagerUtil showLoginViewControllerFromViewController:self];
+    }else
+    {
+        // 打点
+        [QMUMTookKitManager event:USER_CLICK_BUY_IN_RECOMMENDVIEW_KEY label:@"首页点击购买"];
+        // 可以购买，进入详情页面
+        QMProductInfoViewController *con = [[QMProductInfoViewController alloc] initViewControllerWithProductInfo:recommendationData.productionInfo];
+        con.isModel = NO;
+        [self.navigationController pushViewController:con animated:YES];
+    }
+}
+
+- (void)nobuyProductBtnClicked:(UIButton *)btn {
+    [QMLoginManagerUtil showLoginViewControllerFromViewController:self];
 }
 
 - (void)refreshBtnClicked:(id)sender {
@@ -499,10 +507,19 @@
         cell = [[QMRecommendProductInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         [cell.actionBtn addTarget:self action:@selector(buyProductBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
+    
+    if (![[QMAccountUtil sharedInstance] userHasLogin]) {
+        [cell.actionBtn setTitle:QMLocalizedString(@"qm_recommendation_nobuy_btn_title", @"注册登录") forState:UIControlStateNormal];
+    }else
+    {
+        [cell.actionBtn setTitle:QMLocalizedString(@"qm_recommendation_buy_btn_title", @"购买") forState:UIControlStateNormal];
+    }
+    
     [cell configureCellWithProductionInfo:recommendationData.productionInfo];
     
     return cell;
 }
+
 
 #pragma mark -
 #pragma mark UITableViewDelegate
@@ -524,8 +541,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLoginStatusNotification:) name:QM_LOGIN_SUCCESS_NOTIFICATION_KEY object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLoginStatusNotification:) name:QM_REGISTER_SUCCESS_NOTIFICATION_KEY object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLoginStatusNotification:) name:QM_LOGOUT_SUCCESS_NOTIFICATION_KEY object:nil];
-    
-    
 }
 
 - (void)unRegisterNotification {

@@ -12,7 +12,6 @@
                              title:(NSString *)title
                             target:(id)target
                           selector:(SEL)selector {
-    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.titleLabel.font = [UIFont systemFontOfSize:14];
     btn.frame = CGRectMake(0, 0, size.width, size.height);

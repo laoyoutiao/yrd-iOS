@@ -40,6 +40,8 @@
 
 "qm_recommendation_buy_btn_title" = "立即抢购";
 
+"qm_recommendation_nobuy_btn_title" = "注册登录";
+
 "qm_recommendation_expected_year_earnings" = "预期年化 %.2f%%";
 
 "qm_recommendation_investmentPeriod" = "限%d个月";
