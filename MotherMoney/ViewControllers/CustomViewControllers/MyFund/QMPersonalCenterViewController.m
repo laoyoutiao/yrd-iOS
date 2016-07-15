@@ -223,15 +223,14 @@
 }
 //我的银行卡
 - (void)gotoBankCardViewController {
-//    if(accountInfo.realName)
-//    {
+    if(accountInfo.realName)
+    {
         QMMyBankCardViewController *con = [[QMMyBankCardViewController alloc] init];
         [self.navigationController pushViewController:con animated:YES];
-//    }else
-//    {
-//        [self gotoRealNameAuthenticateViewController];
-//    }
-
+    }else
+    {
+        [self gotoRealNameAuthenticateViewController];
+    }
 }
 //我的钱豆
 - (void)gotoBeanValueViewController {
