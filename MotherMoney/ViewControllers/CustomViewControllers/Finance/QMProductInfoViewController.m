@@ -295,6 +295,7 @@ typedef enum {
 #pragma mark action
 - (void)buyProductBtnClicked:(UIButton *)btn {
     // 打点
+    btn.enabled = NO;
     [QMUMTookKitManager event:USER_CLICK_BUY_INDETAILVIEW_KEY label:@"用户在详情点击购买"];
 
     [[NetServiceManager sharedInstance] checkProductCanBuyWithProductId:mProductInfo.product_id
@@ -302,9 +303,11 @@ typedef enum {
                                                                 success:^(id responseObject) {
                                                                     // 可以购买
                                                                     [self handleCheckResult:responseObject];
+                                                                    btn.enabled = YES;
                                                                 } failure:^(NSError *error) {
                                                                     // 不可以购买
                                                                     [CMMUtility showNoteWithError:error];
+                                                                    btn.enabled = YES;
                                                                 }];
 }
 

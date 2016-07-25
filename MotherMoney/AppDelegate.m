@@ -74,7 +74,6 @@
     
     [QMUMTookKitManager UMShareConfigure:nil];
     
-    
 //    NSString *bundleID = [[[NSBundle bundleForClass:[self class]] infoDictionary] objectForKey:(NSString*)kCFBundleIdentifierKey];
 //    [[VENTouchLock sharedInstance] setKeychainService:bundleID
 //                                      keychainAccount:bundleID

@@ -107,7 +107,7 @@
 #define kBindBankCard @"userBankCard/bindBankCard"
 
 //@new 注册账号
-#define kRegister @"registerForIos"
+#define kRegister @"registerForIos" 
 
 //@new 开通渠道账户
 #define kOpenProductAccount @"account/openProductAccount"

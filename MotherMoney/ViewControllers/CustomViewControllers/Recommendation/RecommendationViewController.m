@@ -351,11 +351,14 @@
         
         NSString *requestURL = [CMMUtility isStringOk:bannerURL] ? bannerURL : bannerHtmlURL;
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
-//
+        
+//      http://m.yrdloan.com/wap/active/app02
 //        QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
 //        advertwebview.advertUrlString = requestURL;
 //        [advertwebview setHidesBottomBarWhenPushed:YES];
 //        [self.navigationController pushViewController:advertwebview animated:YES];
+        
+//        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://yrdloan.com/mobile/active/app02"]];
         
         [QMWebViewController showWebViewWithRequest:request navTitle:bannerTitle isModel:YES from:self];
         }

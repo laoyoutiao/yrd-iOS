@@ -89,11 +89,17 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+//    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    
+//    NSArray *cookies = [storage cookies];
+//    NSHTTPCookie * cookie = [cookies lastObject];
+//    NSLog(@"sessionId-----------------[%@]-------------%@------------",cookie.value,cookies);
     
     NSString *urlPath = [[request URL] path];
     NSString *url = [[request URL] absoluteString];
     NSLog(@"web view request urlPath:%@",urlPath);
     NSLog(@"web view request urlPath:%@",url);
+    
     if([urlPath rangeOfString:kShareInWebView].location !=NSNotFound){
         NSLog(@"need share");
         

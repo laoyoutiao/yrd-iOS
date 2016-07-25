@@ -579,16 +579,16 @@
                                @"city":[self getCityString],
                                @"branch":bankDetailInfoField.text,
                                @"productChannelId":@"2",};
-        
-        [self checkUserValidate:dict];
+        [self checkUserValidate:dict btn:btn];
     }else {
         // 身份证号码或手机号码不合法
-        btn.enabled = YES;
         [CMMUtility showNote:QMLocalizedString(@"qm_idcard_number_invalid", @"身份证号码或手机号码不合法")];
+        btn.enabled = YES;
     }
 }
 
-- (void)checkUserValidate:(NSDictionary *)dict {
+- (void)checkUserValidate:(NSDictionary *)dict btn:(UIButton *)btn
+{
     if (QM_IS_STR_NIL(currentBankInfo.bankCardId)
         || QM_IS_STR_NIL([self getBankCardNumber])
         || QM_IS_STR_NIL(provinceItem.itemCode)
@@ -603,8 +603,10 @@
     [[NetServiceManager sharedInstance] authDictionary:dict
                                             delegate:self success:^(id responseObject) {
                                                 [self handleRealNameAuthSuccess:responseObject];
+                                                btn.enabled = YES;
                                             } failure:^(NSError *error) {
                                                 [self handleRealNameAuthFailure:error];
+                                                btn.enabled = YES;
                                             }];
 }
 
