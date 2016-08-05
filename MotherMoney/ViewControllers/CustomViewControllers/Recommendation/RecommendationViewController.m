@@ -19,6 +19,7 @@
 #import "QMAdvertisementModel.h"
 #import "QMWebViewAdvertisementViewController.h"
 #import "QMTokenInfo.h"
+#import "QMDealDetailViewController.h"
 #define PRODUCT_GUIDE_HAS_SHOW_KEY @"PRODUCT_GUIDE_HAS_SHOW_KEY"
 
 @interface RecommendationViewController ()<KIImagePagerDelegate, KIImagePagerDataSource, UITableViewDataSource, UITableViewDelegate>
@@ -53,6 +54,7 @@
     [super viewWillAppear:animated];
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     [self updateLeftBarButtonItem];
+    [(UITableView *)self.scrollView reloadData];
 }
 
 - (void)reloadData {
@@ -82,12 +84,13 @@
 - (void)postAdvertisementInterface
 {
     NSString *mobile =[NSString stringWithFormat:kAdvertisement];
-    NSString *base_string = @"http://192.168.11.81:7080/mobile";
+    NSString *base_string = [NSString stringWithFormat:@"%@",URL_BASE];
     NSString *urlString = [NSString stringWithFormat:@"%@/%@",base_string,mobile];
     AFHTTPClient *httpClient = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:base_string]];
     __weak __typeof(self) bself = self;
     [httpClient xsPostPath:urlString delegate:self params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *dic = (NSDictionary *)[responseObject objectFromJSONData];
+        NSLog(@"%@",dic);
         NSArray *advertArray = [QMAdvertisementModel instanceArrayDictFromArray:[[dic objectForKey:@"data"] objectForKey:@"list"]];;
         [bself getPictures:advertArray];
         
@@ -139,19 +142,22 @@
         {
             QMAdvertisementModel *model = [advertArray objectAtIndex:m];
             if ([[file objectAtIndex:i] isEqualToString:[NSString stringWithFormat:@"%ld",model.AdverID]]) {
-                havePicture = YES;
                 [pictureArray addObject:[file objectAtIndex:i]];
             }
         }
     }
     
+    if ([pictureArray count] == [advertArray count] && [pictureArray count] != 0) {
+        havePicture = YES;
+    }
     
     if (!havePicture) {
         [self downAdvertisementPicture:advertArray];
         [self updataView];
     }else
     {
-        NSString *idstr = [pictureArray objectAtIndex:!([pictureArray count] - 1)? 0:(rand() % ([pictureArray count]))];
+        NSInteger randnum = arc4random() % [pictureArray count];
+        NSString *idstr = [pictureArray objectAtIndex:!([pictureArray count] - 1)? 0:(randnum > 0? randnum:0)];
         NSString *fullPath = [[documentsDirectory stringByAppendingPathComponent:@"test"] stringByAppendingPathComponent:idstr];
         UIImage *savedImage = [[UIImage alloc] initWithContentsOfFile:fullPath];
         [self showAdvertisementPicture:savedImage];
@@ -230,8 +236,20 @@
     [distimer invalidate];
 }
 
+
 - (void)updataView
 {
+    //检测后台更新接口
+    NSInteger statusnum = 0;
+    if (statusnum == 2) {
+        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护中" message:@"维护时间:xx-xx" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+        [alertview show];
+    }else if (statusnum == 1)
+    {
+        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护通知" message:@"预计维护时间:xx-xx" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+        [alertview show];
+    }
+    
     //实现上部分子view
     [self setUpSubViews];
     [[NSNotificationCenter defaultCenter] addObserverForName:QM_ACCOUNT_INFO_DID_SAVE
@@ -333,6 +351,15 @@
         
         NSString *requestURL = [CMMUtility isStringOk:bannerURL] ? bannerURL : bannerHtmlURL;
         NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:requestURL]];
+        
+//      http://m.yrdloan.com/wap/active/app02
+//        QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
+//        advertwebview.advertUrlString = requestURL;
+//        [advertwebview setHidesBottomBarWhenPushed:YES];
+//        [self.navigationController pushViewController:advertwebview animated:YES];
+        
+//        NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://yrdloan.com/mobile/active/app02"]];
+        
         [QMWebViewController showWebViewWithRequest:request navTitle:bannerTitle isModel:YES from:self];
         }
 }
@@ -341,14 +368,21 @@
 - (void)buyProductBtnClicked:(UIButton *)btn {
     [self hideGuideView];
     
-    // 打点
-    [QMUMTookKitManager event:USER_CLICK_BUY_IN_RECOMMENDVIEW_KEY label:@"首页点击购买"];
-    
-    // 可以购买，进入详情页面
-    QMProductInfoViewController *con = [[QMProductInfoViewController alloc] initViewControllerWithProductInfo:recommendationData.productionInfo];
-    con.isModel = NO;
-    
-    [self.navigationController pushViewController:con animated:YES];
+    if (![[QMAccountUtil sharedInstance] userHasLogin]) {
+        [QMLoginManagerUtil showLoginViewControllerFromViewController:self];
+    }else
+    {
+        // 打点
+        [QMUMTookKitManager event:USER_CLICK_BUY_IN_RECOMMENDVIEW_KEY label:@"首页点击购买"];
+        // 可以购买，进入详情页面
+        QMProductInfoViewController *con = [[QMProductInfoViewController alloc] initViewControllerWithProductInfo:recommendationData.productionInfo];
+        con.isModel = NO;
+        [self.navigationController pushViewController:con animated:YES];
+    }
+}
+
+- (void)nobuyProductBtnClicked:(UIButton *)btn {
+    [QMLoginManagerUtil showLoginViewControllerFromViewController:self];
 }
 
 - (void)refreshBtnClicked:(id)sender {
@@ -476,10 +510,19 @@
         cell = [[QMRecommendProductInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
         [cell.actionBtn addTarget:self action:@selector(buyProductBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
+    
+    if (![[QMAccountUtil sharedInstance] userHasLogin]) {
+        [cell.actionBtn setTitle:QMLocalizedString(@"qm_recommendation_nobuy_btn_title", @"注册登录") forState:UIControlStateNormal];
+    }else
+    {
+        [cell.actionBtn setTitle:QMLocalizedString(@"qm_recommendation_buy_btn_title", @"购买") forState:UIControlStateNormal];
+    }
+    
     [cell configureCellWithProductionInfo:recommendationData.productionInfo];
     
     return cell;
 }
+
 
 #pragma mark -
 #pragma mark UITableViewDelegate
@@ -501,8 +544,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLoginStatusNotification:) name:QM_LOGIN_SUCCESS_NOTIFICATION_KEY object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLoginStatusNotification:) name:QM_REGISTER_SUCCESS_NOTIFICATION_KEY object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleLoginStatusNotification:) name:QM_LOGOUT_SUCCESS_NOTIFICATION_KEY object:nil];
-    
-    
 }
 
 - (void)unRegisterNotification {

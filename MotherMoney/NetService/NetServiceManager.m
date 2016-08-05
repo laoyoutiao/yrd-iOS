@@ -535,6 +535,7 @@
 //    NSMutableDictionary *param = [self buildParametersDic];
     NSMutableDictionary *param = [[NSMutableDictionary alloc] initWithDictionary:dict];
     [_httpRequest xsPostPath:kRealNameAuthenticate delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"%@",(NSDictionary *)[responseObject objectFromJSONData]);
         
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kRealNameAuthenticate];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -640,9 +641,9 @@
     [param setObject:reservePhoneNumber forKey:@"reservePhoneNumber"];
     [param setObject:productChannelId forKey:@"productChannelId"];
     
-    [_httpRequest xsPostPath:kBindBankCard delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [_httpRequest xsPostPath:kRealNameAuthenticate delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kBindBankCard];
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kRealNameAuthenticate];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         failure(error);
@@ -1333,6 +1334,7 @@
                        provinceCode:(NSString *)provinceCode
                            cityCode:(NSString *)cityCode
                          branchName:(NSString *)branchName
+                        phoneNumber:(NSString *)phoneNumbaer
                            delegate:(id)delegate
                             success:(void (^)(id responseObject))success
                             failure:(void(^)(NSError *error))failure {
@@ -1346,17 +1348,17 @@
     
     NSMutableDictionary *param = [self buildParametersDic];
     [param setObject:bankId forKey:@"bankId"];
-    [param setObject:cardNumber forKey:@"bankCardNumber"];
-    [param setObject:provinceCode forKey:@"branchProviceCode"];
-    
-    [param setObject:cityCode forKey:@"branchCityCode"];
-    [param setObject:branchName forKey:@"branchName"];
+    [param setObject:cardNumber forKey:@"bankCardNum"];
+    [param setObject:provinceCode forKey:@"provinceCode"];
+    [param setObject:phoneNumbaer forKey:@"mobile"];
+    [param setObject:cityCode forKey:@"cityCode"];
+    [param setObject:branchName forKey:@"branch"];
     [param setObject:channelId forKey:@"productChannelId"];
 //    [param setObject:prcptcd forKey:@"prcptcd"];
     
-    [_httpRequest xsPostPath:kBankCardAdd delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [_httpRequest xsPostPath:kRealNameAuthenticate delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
-        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kBankCardAdd];
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kRealNameAuthenticate];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failure(error);
     }];

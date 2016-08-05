@@ -12,5 +12,7 @@
 
 + (NSString *)formattedBankCardIdFromCardId:(NSString *)cardId;
 
++ (NSString *)formattedIdCardIdFromCardId:(NSString *)cardId;
+
 @end
 

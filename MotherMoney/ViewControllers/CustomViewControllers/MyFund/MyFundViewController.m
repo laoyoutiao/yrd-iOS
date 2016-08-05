@@ -181,17 +181,6 @@ typedef enum {
 //充值
 -(void)gotoRechargeController
 {
-//    NSString *mobile =[NSString stringWithFormat:@"/V2/updateCustomerMobileToken"];
-//    NSString *base_string = @"http://192.168.11.32:7080/mobile";
-//    NSString *urlString = [NSString stringWithFormat:@"%@%@",base_string,mobile];
-//    NSDictionary *dict = @{@"token":@"<b97353cf aecdcb3b f6122c5f 3e0718d4 880f1312 de3ed2ec a4429d60 303069ae>"};
-//    AFHTTPClient *httpClient = [AFHTTPClient clientWithBaseURL:[NSURL URLWithString:base_string]];
-//    [httpClient xsPostPath:urlString delegate:self params:dict success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSDictionary *dic = (NSDictionary *)[responseObject objectFromJSONData];
-//        NSLog(@"Test Mobile -------  %@",dic);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//    }];
-    
 //    [self gotoRealNameAuthenticateViewController];
     
     if (myFundInfo.realNameAuthed) {
@@ -223,9 +212,8 @@ typedef enum {
 //    QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
 //        [con configureRealName:myFundInfo.realName];
 //        [self.navigationController pushViewController:con animated:YES];
-    if (myFundInfo.realNameAuthed) {
-        
     
+    if (myFundInfo.realNameAuthed) {
     QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
     [con configureRealName:myFundInfo.realName];
     [self.navigationController pushViewController:con animated:YES];

@@ -18,11 +18,12 @@
 #import "QMBankInfoCell.h"
 #import "QMAddBankCardViewControllerV2.h"
 #import "QMWebViewController2.h"
+#import "QMHeeWebViewController.h"
 #define QMSINGLELINECOLLECTIONCELLIDENTIFIER1 @"QMSINGLELINECOLLECTIONCELLIDENTIFIER"
 #define QMTEXTFIELDCOLLECTIONCELLIDENTIFIER1 @"QMTEXTFIELDCOLLECTIONCELLIDENTIFIER"
 #define MORE_ITEM_TABLE_FOOTER_IDENTIFIER1 @"MORE_ITEM_TABLE_FOOTER_IDENTIFIER"
 
-@interface QMRechargeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, QMSelectBankViewControllerV2Delegate, LLPaySdkDelegate>
+@interface QMRechargeViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, QMSelectBankViewControllerV2Delegate, LLPaySdkDelegate, UIWebViewDelegate>
 
 @end
 
@@ -217,7 +218,8 @@
         NSLog(@"支付方式:%@",[responseObject objectForKey:@"payWay"]);
         NSString *payWay = [responseObject objectForKey:@"payWay"];
         if ([payWay isEqualToString:@"WAP"]) {
-            [self gotoLLWapWithURL:[responseObject objectForKey:@"url"]];
+//            [self gotoLLWapWithURL:[responseObject objectForKey:@"url"]];
+            [self gotoHeeWapWithURL:[responseObject objectForKey:@"url"]];
         }else{
             //发起支付请求
             [[NetServiceManager sharedInstance] rechargeRequestWithDelegate:self userBankCardId:bankCardId amount:amount success:^(id responseObject) {
@@ -249,12 +251,20 @@
     
 
 }
+
 - (void)gotoLLWapWithURL:(NSString *)url{
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [QMWebViewController2 showWebViewWithRequest:request navTitle:@"认证支付" isModel:NO from:self];
-    
-    
 }
+
+- (void)gotoHeeWapWithURL:(NSString *)url
+{
+    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [QMHeeWebViewController showWebViewWithRequest:request navTitle:@"认证支付" isModel:NO from:self];
+}
+
+
+
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     if (section == 1) {
         // 最后一个

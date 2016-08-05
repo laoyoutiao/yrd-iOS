@@ -27,4 +27,9 @@
     _tokenString = [[[[mobileToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
 }
 
+- (void)setAccountPhoneNumber:(NSString *)phoneNumber
+{
+    _phoneNumber = phoneNumber;
+}
+
 @end

@@ -242,14 +242,17 @@
     NSString *bankCardId = cardModel.bankCardId;
     NSString *pwd = [pwdCell.textField text];
     NSString *amount = [amountCell.detailField text];
-    
+    UIButton *btn = (UIButton *)sender;
+    btn.enabled = NO;
     if (QM_IS_STR_NIL(bankCardId)) {
         [CMMUtility showNote:@"请选择银行卡"];
+        btn.enabled = YES;
         return;
     }
     
     if ([amount doubleValue] <= 0) {
         [CMMUtility showNote:@"请输入提现金额"];
+        btn.enabled = YES;
         return;
     }
     
@@ -267,8 +270,10 @@
                                                                        [self.navigationController popViewControllerAnimated:YES];
                                                                    }
                                                                    [CMMUtility showNote:@"提现申请提交成功"];
+                                                                   btn.enabled = YES;
                                                                } failure:^(NSError *error) {
                                                                    [CMMUtility showNoteWithError:error];
+                                                                   btn.enabled = YES;
                                                                }];
 }
 

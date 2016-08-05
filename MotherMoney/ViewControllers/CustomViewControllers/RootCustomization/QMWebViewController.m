@@ -131,7 +131,7 @@
     
     NSString *url = [[request URL] parameterString];
     
-    
+    NSLog(@"%@",url);
     
     return YES;
 }

@@ -7,6 +7,7 @@
 #import "QMInputPhoneNumberViewController.h"
 #import "QMGestureWindow.h"
 #import "QMResetPwdForPhoneViewController.h"
+#import "QMTokenInfo.h"
 
 @implementation QMInputPasswordViewController {
     QMAccountInfo *accountInfo;
@@ -157,6 +158,8 @@
                                                         delegate:self
                                                          success:^(id responseObject) {
                                                              [self handleLoginSuccess:responseObject];
+                                                             QMTokenInfo *tokeninfo = [QMTokenInfo sharedInstance];
+                                                             [tokeninfo setPhoneNumber:accountInfo.phoneNumber];
                                                          } failure:^(NSError *error) {
                                                              [self handleLoginFailure:error];
                                                          }];

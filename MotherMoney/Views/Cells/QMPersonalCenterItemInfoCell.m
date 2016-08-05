@@ -47,13 +47,14 @@
         itemSubNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetWidth(self.frame) - 20 - 110, 0, 85, CGRectGetHeight(self.frame))];
         itemSubNameLabel.textAlignment = NSTextAlignmentRight;
         itemSubNameLabel.font = [UIFont systemFontOfSize:12];
+        itemSubNameLabel.numberOfLines = 2;
         itemSubNameLabel.textColor = QM_COMMON_TEXT_COLOR;
         itemSubNameLabel.highlightedTextColor = QM_COMMON_CELL_HIGHLIGHTED_COLOR;
         itemSubNameLabel.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         [self.contentView addSubview:itemSubNameLabel];
         [itemSubNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.mas_right).offset(-28);
-            make.width.equalTo(120.0f);
+            make.width.equalTo(200.0f);
             make.top.equalTo(self.contentView.mas_top);
             make.bottom.equalTo(self.contentView.mas_bottom);
         }];

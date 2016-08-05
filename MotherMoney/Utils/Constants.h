@@ -6,7 +6,8 @@
 #ifndef MotherMoney_Constants_h
 #define MotherMoney_Constants_h
 
-#define UMKey  @"564467a567e58e6e9d003500"
+//#define UMKey  @"564467a567e58e6e9d003500"
+#define UMKey  @"575e520e67e58ece650023af"
 
 // 网络访问baseURL
 
@@ -19,7 +20,7 @@
 #define ON_LINE 1
 
 #if ON_LINE
-//#define URL_BASE @"http://yrdloan.com/mobile"
+//#define URL_BASE @"http://www.yrdloan.com/mobile"
 
 #define URL_BASE @"http://192.168.11.32:7080/mobile"
 
@@ -28,7 +29,7 @@
 //#define URL_BASE @"http://cgt.vicp.net:7080/mobile"
 #else
 //#define URL_BASE @"http://cgt.vicp.net:7080/mobile"
-#define URL_BASE @"http://yrdloan.com/mobile"
+#define URL_BASE @"http://www.yrdloan.com/mobile"
 //#define URL_BASE @"http://192.168.168.163:8081/mobile"
 ////http://123.57.51.29:7080/mobile
 //http://121.43.159.168:7080/mobile
@@ -81,8 +82,8 @@
 #define CMMRegexIdNumber      @"\\d{17}x|\\d{17}X|\\d{18}|\\d{15}"
 
 
+#define kCustomerServer    @"/rest/customerservice/target"
 
-#define kCustomerServer @"/rest/customerservice/target"
 
 // 用户分享的标示
 #define kShareInWebView @"appshareInWebview"

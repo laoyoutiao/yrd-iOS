@@ -9,6 +9,9 @@
 #import "QMWebViewAdvertisementViewController.h"
 
 @interface QMWebViewAdvertisementViewController ()<UIWebViewDelegate>
+{
+    UIWebView *webview;
+}
 
 @end
 
@@ -17,12 +20,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIWebView *webview = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
+    webview = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 64)];
     [webview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:_advertUrlString]]];
     //    NSLog(@"%@",advertUrlString);
+    webview.delegate = self;
     [self.view addSubview:webview];
     
     // Do any additional setup after loading the view.
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    
+    NSString *url = [[request URL] absoluteString];
+    
+    NSLog(@"%@",url);
+    
+    if ([url rangeOfString:@"http://www.baidu.com"].location != NSNotFound) {
+        NSLog(@"跳入百度");
+        [QMLoginManagerUtil showLoginViewControllerFromViewController:self];
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    NSLog(@"出现");
+    [webview reload];
 }
 
 - (void)didReceiveMemoryWarning {

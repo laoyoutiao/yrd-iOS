@@ -108,7 +108,6 @@
     }else {
         [self updateSubViewsFrameAnimated:NO];
     }
-    
 }
 
 - (void)updateFrames {

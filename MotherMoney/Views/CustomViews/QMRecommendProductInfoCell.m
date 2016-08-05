@@ -165,6 +165,7 @@
         
         // 购买按钮
         self.actionBtn = [QMControlFactory commonButtonWithSize:CGSizeZero title:QMLocalizedString(@"qm_recommendation_buy_btn_title", @"购买") target:nil selector:nil];
+        
         [backgroundImageView addSubview:_actionBtn];
         [_actionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(horizontalLine.mas_left);

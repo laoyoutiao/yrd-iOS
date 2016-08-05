@@ -121,7 +121,7 @@
         goodDetailTitle=[[NSMutableAttributedString alloc] initWithString:str];
     
     if (!QM_IS_STR_NIL(item.prizeName)) {
-        goodNameLabel.text =[NSString stringWithFormat:@"%@金币",item.needScore];
+        goodNameLabel.text =[NSString stringWithFormat:@"%@积分",item.needScore];
         
     }else {
         goodNameLabel.text = @"";

@@ -31,13 +31,13 @@
     
     [self initDataSource];
 //    [self setUpBottomBar];
-    if ([goodsList count] == 0) {
-        UIAlertView *alert =  [ [UIAlertView alloc] initWithTitle:nil message:@"我们正在精心帮您挑选礼品,敬请期待" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
-        [alert show];
-        [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:1.5];
-        
-        
-    }
+//    if ([goodsList count] == 0) {
+//        UIAlertView *alert =  [ [UIAlertView alloc] initWithTitle:nil message:@"我们正在精心帮您挑选礼品,敬请期待" delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+//        [alert show];
+//        [self performSelector:@selector(dimissAlert:) withObject:alert afterDelay:1.5];
+//        
+//        
+//    }
 
 }
 - (void)initDataSource {
@@ -127,7 +127,7 @@
     
     self.buyMoneybeanBtn=[UIButton buttonWithType:UIButtonTypeCustom];
     self.buyMoneybeanBtn.backgroundColor=[UIColor colorWithRed:236.0f/255.0f green:34.0f/255.0f blue:49.0f/255.0f alpha:1];
-    [self.buyMoneybeanBtn setTitle:@"去赚金币" forState:UIControlStateNormal];
+    [self.buyMoneybeanBtn setTitle:@"去赚积分" forState:UIControlStateNormal];
     [self.buyMoneybeanBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.buyMoneybeanBtn addTarget:self action:@selector(gotoEarningMoneyBeanController) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem* leftItem=[[UIBarButtonItem alloc] initWithCustomView:self.buyMoneybeanBtn];
@@ -202,7 +202,7 @@
                     [[NetServiceManager sharedInstance] addIntegralExchangeWithGoodId:selectedItem.prizeId
                                                                              delegate:self
                                                                               success:^(id responseObject) {
-                                                                                  [CMMUtility showNote:QMLocalizedString(@"qm_exchange_success_title", @"兑换成功")];
+                                                                                  [CMMUtility showNote:QMLocalizedString(@"qm_exchange_success_title", @"兑换成功礼品将于两个工作日内发放。")];
                                                                                   
                                                                                   [self reloadData];
                                                                               } failure:^(NSError *error) {
@@ -220,8 +220,9 @@
 - (void)exchangeGoods:(UIButton *)btn {
     QMGoodsListItemCell *cell = (QMGoodsListItemCell *)[self recursionToCell:btn];
     selectedItem = cell.goodsItem;
+    NSString *string = [NSString stringWithFormat:@"%@%@?",NSLocalizedString(@"qm_confirm_exchange_goods", @"您是否确定兑换"),selectedItem.prizeName];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:QMLocalizedString(@"qm_check_update_alert_title", @"提示")
-                                                        message:QMLocalizedString(@"qm_confirm_exchange_goods", @"您是否确定兑换?")
+                                                        message:string
                                                        delegate:self
                                               cancelButtonTitle:QMLocalizedString(@"qm_cancel_alert_btn_title", @"取消")
                                               otherButtonTitles:QMLocalizedString(@"qm_ok_alert_btn_title", @"确定"), nil];
@@ -290,7 +291,7 @@
 #pragma mark -
 #pragma mark Override
 - (NSString *)title {
-    return QMLocalizedString(@"qm_my_integral_nav_title", @"我的金币");
+    return QMLocalizedString(@"qm_my_integral_nav_title", @"我的积分");
 }
 
 

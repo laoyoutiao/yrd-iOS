@@ -30,14 +30,14 @@
            failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
    // [self setAuthorizationHeaderWithUsername:authBasicUserName password:authBasicPassword];
-#ifdef DBUG
-    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    
-    NSArray *cookies = [storage cookies];
-    NSHTTPCookie * cookie = [cookies lastObject];
+//#ifdef DBUG
+//    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+//    
+//    NSArray *cookies = [storage cookies];
+//    NSHTTPCookie * cookie = [cookies lastObject];
 //    NSLog(@"sessionId-----------------[%@]-------------------------",cookie.value);
-#endif
-//    NSLog(@"请求发送数据【%@】",params);
+//#endif
+////    NSLog(@"请求发送数据【%@】",params);
     NSURLRequest *request = [self requestWithMethod:@"POST" path:path parameters:params];
     
 	AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];

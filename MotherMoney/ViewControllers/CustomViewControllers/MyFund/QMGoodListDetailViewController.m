@@ -51,7 +51,7 @@
     
     UILabel* remaningValueLabel = [[UILabel alloc] initWithFrame:heartView.frame];
     
-    NSString *str = [NSString stringWithFormat:@"当前金币   %@",self.currentScore];
+    NSString *str = [NSString stringWithFormat:@"当前积分   %@",self.currentScore];
     NSMutableAttributedString* remainningStr=[[NSMutableAttributedString alloc] initWithString:str];
     remaningValueLabel.textColor=[UIColor colorWithRed:236.0f/255.0f green:71.0f/255.0f blue:59.0f/255.0f alpha:1];
     remaningValueLabel.font=[UIFont systemFontOfSize:18];
@@ -203,7 +203,7 @@
 
          headerView=[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:DETAIL_HEADER_IDETIFIER forIndexPath:indexPath];
        
-        NSString *str = [NSString stringWithFormat:@"当前金币   %@",self.currentScore];
+        NSString *str = [NSString stringWithFormat:@"当前积分   %@",self.currentScore];
         NSMutableAttributedString* remainningStr=[[NSMutableAttributedString alloc] initWithString:str];
         headerView.remaningValueLabel.textColor=[UIColor colorWithRed:236.0f/255.0f green:71.0f/255.0f blue:59.0f/255.0f alpha:1];
         headerView.remaningValueLabel.font=[UIFont systemFontOfSize:18];
@@ -257,7 +257,7 @@
 //}
 #pragma override
 - (NSString *)title {
-    NSString* titleName=@"金币明细";
+    NSString* titleName=@"积分明细";
     return titleName;
 }
 - (void)didReceiveMemoryWarning {

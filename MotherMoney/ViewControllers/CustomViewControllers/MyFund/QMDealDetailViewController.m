@@ -228,8 +228,6 @@
 }
 -(void)configureRealName:(BOOL)hasRealName
 {
-    
-    
     self.hasRealName=hasRealName;
 }
 //实名验证

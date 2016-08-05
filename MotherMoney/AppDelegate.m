@@ -18,7 +18,7 @@
 #import "QMMSplashViewController.h"
 #import "NetServiceManager.h"
 #import "QMTokenInfo.h"
-
+#import "QMDealDetailViewController.h"
 
 #define SHOW_RECT_PWD_MIN_TIME_INTERVAL 30
 
@@ -50,7 +50,6 @@
     self.window.rootViewController = tabbarController;
     [self.window makeKeyAndVisible];
     
-    
 //    QMTestImageViewViewController *testview = [[QMTestImageViewViewController alloc] init];
 //    self.window.rootViewController = testview;
 //    [self.window makeKeyAndVisible];
@@ -74,7 +73,6 @@
     }
     
     [QMUMTookKitManager UMShareConfigure:nil];
-    
     
 //    NSString *bundleID = [[[NSBundle bundleForClass:[self class]] infoDictionary] objectForKey:(NSString*)kCFBundleIdentifierKey];
 //    [[VENTouchLock sharedInstance] setKeychainService:bundleID
@@ -199,9 +197,42 @@
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    NSLog(@"%@",userInfo);
+    
     [UMessage didReceiveRemoteNotification:userInfo];
     
+    NSString *str = [userInfo objectForKey:@"test"];
+    if ([str isEqualToString:@"test"]) {
+        QMDealDetailViewController *detailViewController = [[QMDealDetailViewController alloc] init];
+        [[self getCurrentVC].navigationController pushViewController:detailViewController animated:YES];
+        if (![[QMAccountUtil sharedInstance] userHasLogin]) {
+            [QMLoginManagerUtil showLoginViewControllerFromViewController:[self getCurrentVC]];
+        }
+    }
+    
     [[QMFrameUtil sharedInstance] parsePush:userInfo];
+}
+
+- (UIViewController *)getCurrentVC
+{
+    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIViewController *vc = keyWindow.rootViewController;
+    if ([vc isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tab = (UITabBarController *)vc;
+        if ([tab.selectedViewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *nav = (UINavigationController *)tab.selectedViewController;
+            return [nav.viewControllers lastObject];
+        } else {
+            return tab.selectedViewController;
+        }
+    } else if ([vc isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *nav = (UINavigationController *)vc;
+        return [nav.viewControllers lastObject];
+    } else {
+        return vc;
+    }
+    return nil;
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
@@ -230,6 +261,7 @@
     [gesWindow handleWindowDidBecomeKeyNotification:notification];
 }
 
+//手势密码 or 动画？
 - (void)prepareGesturePwdWindow {
     if (gesWindow == nil) {
         gesWindow = [[QMGestureWindow alloc] initWithFrame:self.window.frame];

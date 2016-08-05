@@ -98,7 +98,16 @@
     realNameItem.accessoryType = UITableViewCellAccessoryNone;
     realNameItem.selectionStyle = UITableViewCellSelectionStyleNone;
     if (!QM_IS_STR_NIL(accountInfo.realName)) {
-        realNameItem.itemSubName = [accountInfo.realName stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@"*"];
+        
+        NSString *idStr;
+        if (accountInfo.identifierCardId.length == 18) {
+            idStr = [NSString stringWithFormat:@"%@****%@",[accountInfo.identifierCardId substringToIndex:5],[accountInfo.identifierCardId substringFromIndex:15]];
+        }else if(accountInfo.identifierCardId.length <18 && accountInfo.identifierCardId.length >= 14) {
+            idStr = [NSString stringWithFormat:@"%@****%@",[accountInfo.identifierCardId substringToIndex:4],[accountInfo.identifierCardId substringFromIndex:12]];
+        }
+
+        realNameItem.itemSubName = [NSString stringWithFormat:@"%@\n%@", [accountInfo.realName stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:@"*"], idStr];
+
         realNameItem.accessoryType = UITableViewCellAccessoryNone;
         realNameItem.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -111,37 +120,7 @@
     }
 
     [itemList addObject:realNameItem];
-    
-    // 身份认证
-    QMPersonalCenterItemInfo *idCardItem = [[QMPersonalCenterItemInfo alloc] init];
-    idCardItem.iconImageName = @"identity_authentication.png";
-    idCardItem.itemName = QMLocalizedString(@"qm_account_center_idcard", @"身份认证");
-    
-    NSLog(@"%u",accountInfo.hasRealName);
-    
-    if (accountInfo.hasRealName) {
-        idCardItem.accessoryType = UITableViewCellAccessoryNone;
-        idCardItem.selectionStyle = UITableViewCellSelectionStyleNone;
-        NSString *idStr = nil;
-        
-        if (accountInfo.identifierCardId.length == 18) {
-            
-            
-            
-            idStr = [NSString stringWithFormat:@"%@****%@",[accountInfo.identifierCardId substringToIndex:5],[accountInfo.identifierCardId substringFromIndex:15]];
-        }else if(accountInfo.identifierCardId.length <18 && accountInfo.identifierCardId.length >= 14) {
-            idStr = [NSString stringWithFormat:@"%@****%@",[accountInfo.identifierCardId substringToIndex:4],[accountInfo.identifierCardId substringFromIndex:12]];
-        }
-        idCardItem.itemSubName = idStr;
-    }else {
-        // 加上箭头
-        idCardItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        idCardItem.selectionStyle = UITableViewCellSelectionStyleDefault;
-    }
-    if (NO == accountInfo.hasRealName) {
-        idCardItem.selectorName = @"gotoRealNameAuthenticateViewController";
-    }
-    [itemList addObject:idCardItem];
+
     
     // 我的银行卡
     QMPersonalCenterItemInfo *myBandCardItem = [[QMPersonalCenterItemInfo alloc] init];
@@ -193,7 +172,7 @@
     myBeanValueItem.iconImageName = @"bean_password.png";
     myBeanValueItem.itemSubName = intergral;
     myBeanValueItem.selectorName = @"gotoBeanValueViewController";
-    myBeanValueItem.itemName = QMLocalizedString(@"qm_my_score_title", @"我的金币");
+    myBeanValueItem.itemName = QMLocalizedString(@"qm_my_score_title", @"我的积分");
     myBeanValueItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     myBeanValueItem.selectionStyle = UITableViewCellSelectionStyleDefault;
     [itemList addObject:myBeanValueItem];
@@ -244,8 +223,14 @@
 }
 //我的银行卡
 - (void)gotoBankCardViewController {
-    QMMyBankCardViewController *con = [[QMMyBankCardViewController alloc] init];
-    [self.navigationController pushViewController:con animated:YES];
+    if(accountInfo.realName)
+    {
+        QMMyBankCardViewController *con = [[QMMyBankCardViewController alloc] init];
+        [self.navigationController pushViewController:con animated:YES];
+    }else
+    {
+        [self gotoRealNameAuthenticateViewController];
+    }
 }
 //我的钱豆
 - (void)gotoBeanValueViewController {
@@ -261,6 +246,8 @@
     
     [itemList replaceObjectAtIndex:[itemList count] - 1 withObject:info];
 }
+
+
 
 //- (NSString *)touchIDPasswordText {
 ////    if ([VENTouchLock shouldUseTouchID]) {

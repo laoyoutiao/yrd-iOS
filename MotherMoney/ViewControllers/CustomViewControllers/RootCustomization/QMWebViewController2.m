@@ -139,17 +139,13 @@
     
     
     if([urlPath rangeOfString:kBackAppURL].location !=NSNotFound){
-        
-        
         [self dismissViewControllerAnimated:YES
                                  completion:^{
-                                     
                                  }];
-
         return NO;
-    }else{
-    return YES;
     }
+    
+    return YES;
 }
 //
 - (void)webViewDidStartLoad:(UIWebView *)webView {
