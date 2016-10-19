@@ -16,6 +16,8 @@
 #import "QMWebViewController.h"
 #import "NSString+url.h"
 #import "JSONKit.h"
+
+
 NSString *completeRPCURL = @"webviewprogressproxy:///complete";
 
 static const float initialProgressValue = 0.1;
@@ -89,16 +91,40 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-//    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-//    
+    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    
 //    NSArray *cookies = [storage cookies];
 //    NSHTTPCookie * cookie = [cookies lastObject];
 //    NSLog(@"sessionId-----------------[%@]-------------%@------------",cookie.value,cookies);
+    
     
     NSString *urlPath = [[request URL] path];
     NSString *url = [[request URL] absoluteString];
     NSLog(@"web view request urlPath:%@",urlPath);
     NSLog(@"web view request urlPath:%@",url);
+    
+    if([url rangeOfString:@"product_"].location != NSNotFound)
+    {
+        NSRange range = [url rangeOfString:@"#"];
+        NSString *product = [url substringFromIndex:range.location];
+        NSString *productid = [product substringWithRange:NSMakeRange(9, product.length - 9)];
+        [[NetServiceManager sharedInstance] getProductDetailWithProductId:productid
+                                                                 delegate:self
+                                                                  success:^(id responseObject) {
+                                                                      // 更新产品信息
+                                                                      if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                                          NSDictionary *dict = [responseObject objectForKey:@"product"];
+                                                                          if (QM_IS_DICT_NIL(dict)) {
+                                                                              return;
+                                                                          }
+                                                                          QMProductInfo *productInfo = [[QMProductInfo alloc] initWithDictionary:dict];
+                                                                          [_pushdelegate pushView:productInfo];
+                                                                      }
+                                                                  } failure:^(NSError *error) {
+                                                                      [SVProgressHUD showErrorWithStatus:QMLocalizedString(@"qm_get_product_detail_failed", @"获取产品详情失败")];
+                                                                  }];
+        return NO;
+    }
     
     if([urlPath rangeOfString:kShareInWebView].location !=NSNotFound){
         NSLog(@"need share");
@@ -213,12 +239,29 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 
     _loadingCount++;
     _maxLoadCount = fmax(_maxLoadCount, _loadingCount);
-
+    webView.scrollView.delegate = self;
+    _webviewP = webView;
     [self startProgress];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (_scrollviewcontentoffsetY == 0 && scrollView.contentOffset.y < -50) {
+        [_webViewProxyDelegate webViewDidStartLoad:_webviewP];
+        _scrollviewcontentoffsetY = -1;
+    }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    _scrollviewcontentoffsetY = scrollView.contentOffset.y;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
+
+    NSLog(@"UserAgent = %@", [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"]);
+    
     if ([_webViewProxyDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [_webViewProxyDelegate webViewDidFinishLoad:webView];
     }

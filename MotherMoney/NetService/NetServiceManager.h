@@ -107,7 +107,7 @@
 #define kBindBankCard @"userBankCard/bindBankCard"
 
 //@new 注册账号
-#define kRegister @"registerForIos" 
+#define kRegister @"registerForIos"
 
 //@new 开通渠道账户
 #define kOpenProductAccount @"account/openProductAccount"
@@ -318,22 +318,22 @@
 
 // 帮助中心
 - (void)helpCenterListWithPageSize:(NSNumber *)pageSize
-                            pageNumber:(NSNumber *)pageNumber
-                              delegate:(id)delegate
-                               success:(void (^)(id responseObject))success
-                               failure:(void(^)(NSError *error))failure;
+                        pageNumber:(NSNumber *)pageNumber
+                          delegate:(id)delegate
+                           success:(void (^)(id responseObject))success
+                           failure:(void(^)(NSError *error))failure;
 
 // 实名认证
 - (void)authDictionary:(NSDictionary *)dict
-            delegate:(id)delegate
-             success:(void (^)(id responseObject))success
-             failure:(void(^)(NSError *error))failure;
+              delegate:(id)delegate
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure;
 
 // 我的银行卡
 - (void)getMyBankCardWithProductId:(NSString *)productId
                           delegate:(id)delegate
-                          success:(void (^)(id responseObject))success
-                          failure:(void(^)(NSError *error))failure;
+                           success:(void (^)(id responseObject))success
+                           failure:(void(^)(NSError *error))failure;
 
 // 可用银行列表
 - (void)getAvailableBankListWithProductChannelId:(NSString *)channelId
@@ -376,8 +376,8 @@
 
 // 发送支付密码验证码
 - (void)getResetPayPwdPassCodeWithDelegate:(id)delegate
-                       success:(void (^)(id responseObject))success
-                       failure:(void(^)(NSError *error))failure;
+                                   success:(void (^)(id responseObject))success
+                                   failure:(void(^)(NSError *error))failure;
 
 // 设置新的支付密码
 - (void)setNewPayPasswordWithNewPayPassword:(NSString *)newPayPassword
@@ -403,8 +403,8 @@
 // 使用积分兑换礼品
 - (void)addIntegralExchangeWithGoodId:(NSString *)goodId
                              delegate:(id)delegate
-                                success:(void (^)(id responseObject))success
-                                failure:(void(^)(NSError *error))failure;
+                              success:(void (^)(id responseObject))success
+                              failure:(void(^)(NSError *error))failure;
 
 // 得到我的礼品兑换记录
 - (void)myIntegralExchangeListWithPageSize:(NSNumber *)pageSize
@@ -502,8 +502,8 @@
 // 获取城市列表
 - (void)getCityListWithProvinceCode:(NSString *)code
                            delegate:(id)delegate
-                        success:(void (^)(id responseObject))success
-                        failure:(void(^)(NSError *error))failure;
+                            success:(void (^)(id responseObject))success
+                            failure:(void(^)(NSError *error))failure;
 
 // 获取支行信息
 - (void)getBankBranchInfoWithCardNumber:(NSString *)cardNumber
@@ -617,13 +617,13 @@
 
 //我的已使用代金券列表
 - (void)getDidUseCouponListWithdelegate:(id)delegate
-                               success:(void (^)(id responseObject))success
-                               failure:(void(^)(NSError *error))failure;
+                                success:(void (^)(id responseObject))success
+                                failure:(void(^)(NSError *error))failure;
 
 //我的奖励列表
 - (void)getMyAwardListWithdelegate:(id)delegate
-                               success:(void (^)(id responseObject))success
-                               failure:(void(^)(NSError *error))failure;
+                           success:(void (^)(id responseObject))success
+                           failure:(void(^)(NSError *error))failure;
 
 //购买产品详情
 - (void)getBuyProductDetailWithProductId:(NSString *)productId

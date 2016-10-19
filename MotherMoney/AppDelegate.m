@@ -19,6 +19,8 @@
 #import "NetServiceManager.h"
 #import "QMTokenInfo.h"
 #import "QMDealDetailViewController.h"
+#import "QMInputPasswordViewController.h"
+#import <objc/runtime.h>
 
 #define SHOW_RECT_PWD_MIN_TIME_INTERVAL 30
 
@@ -311,7 +313,26 @@
         // 有手势密码
         [self tryShowGesturePwdWindow];
     }else {
-        [QMLoginManagerUtil showLoginViewControllerFromViewController:self.window.rootViewController];
+        NSLog(@"%@ %@",self.window.rootViewController,[self topViewControllerWithRootViewController:self.window.rootViewController]);
+        if (object_getClassName([self topViewControllerWithRootViewController:self.window.rootViewController]) != object_getClassName([QMInputPasswordViewController class])) {
+            [QMLoginManagerUtil showLoginViewControllerFromViewController:[self topViewControllerWithRootViewController:self.window.rootViewController]];
+        }
+    }
+}
+
+- (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController
+{
+    if ([rootViewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarController = (UITabBarController *)rootViewController;
+        return [self topViewControllerWithRootViewController:tabBarController.selectedViewController];
+    } else if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)rootViewController;
+        return [self topViewControllerWithRootViewController:navigationController.visibleViewController];
+    } else if (rootViewController.presentedViewController) {
+        UIViewController* presentedViewController = rootViewController.presentedViewController;
+        return [self topViewControllerWithRootViewController:presentedViewController];
+    } else {
+        return rootViewController;
     }
 }
 

@@ -70,7 +70,7 @@
             make.right.equalTo(self.contentView.mas_right).offset(-15.0f);
             make.top.equalTo(productNameLabel.mas_top);
             make.bottom.equalTo(productNameLabel.mas_bottom);
-            make.width.equalTo(40);
+            make.width.equalTo(60);
         }];
         
         // 时间图标

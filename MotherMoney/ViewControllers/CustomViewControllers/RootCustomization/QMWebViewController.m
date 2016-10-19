@@ -5,9 +5,11 @@
 //
 
 #import "QMWebViewController.h"
+#import "QMProductInfoViewController.h"
+
 #define PROGRESSTINTCOLOR [UIColor colorWithRed:89.0f / 255.0f green:12.0f / 255.0f blue:4.0f / 255.0f alpha:1.0f]
 
-@interface QMWebViewController ()<NJKWebViewProgressDelegate>
+@interface QMWebViewController ()<NJKWebViewProgressDelegate,NJKWebViewPushDelegate>
 
 @end
 
@@ -26,13 +28,19 @@
     con.isModel = isModel;
     con.navTitle = title;
     con.request = request;
-    
     if (isModel) {
         QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
         [controller presentViewController:nav animated:YES completion:nil];
     }else {
         [controller.navigationController pushViewController:con animated:YES];
     }
+}
+
+- (void)pushView:(QMProductInfo *)info
+{
+    QMProductInfoViewController *con = [[QMProductInfoViewController alloc] initViewControllerWithProductInfo:info];
+    [self.navigationController pushViewController:con animated:YES];
+
 }
 
 
@@ -59,6 +67,7 @@
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     webViewProgress=[[NJKWebViewProgress alloc] init];
     webViewProgress.progressDelegate=self;
+    webViewProgress.pushdelegate = self;
     webViewProgress.currentController = self;
     [self customSubViews];
     
@@ -77,7 +86,6 @@
     [self.view addSubview:progressView];
     
     if (self.request) {
-        
         [webContentView loadRequest:self.request];
         webContentView.frame=self.view.bounds;
         

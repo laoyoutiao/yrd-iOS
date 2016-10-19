@@ -20,6 +20,7 @@
 #import "QMWebViewAdvertisementViewController.h"
 #import "QMTokenInfo.h"
 #import "QMDealDetailViewController.h"
+#import "QMFrameUtil.h"
 #define PRODUCT_GUIDE_HAS_SHOW_KEY @"PRODUCT_GUIDE_HAS_SHOW_KEY"
 
 @interface RecommendationViewController ()<KIImagePagerDelegate, KIImagePagerDataSource, UITableViewDataSource, UITableViewDelegate>
@@ -109,6 +110,12 @@
         NSURL *url = [NSURL URLWithString:model.AdverHomePath];
         NSData *data = [[NSData alloc]initWithContentsOfURL:url];
         UIImage *image = [[UIImage alloc]initWithData:data];
+        
+        if (i == 0 && [QMFrameUtil hasShownWelcomPage])
+        {
+            [self showAdvertisementPicture:image];
+            advertUrlString = model.AdverUrl;
+        }
         
         if (data != nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -206,10 +213,15 @@
 - (void)clickAdvertisement
 {
     advinimageview.userInteractionEnabled = NO;
-    QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
-    advertwebview.advertUrlString = advertUrlString;
-    [advertwebview setHidesBottomBarWhenPushed:YES];
-    [self.navigationController pushViewController:advertwebview animated:YES];
+    
+//    QMWebViewAdvertisementViewController *advertwebview = [[QMWebViewAdvertisementViewController alloc] init];
+//    advertwebview.advertUrlString = advertUrlString;
+//    [advertwebview setHidesBottomBarWhenPushed:YES];
+//    [self.navigationController pushViewController:advertwebview animated:YES];
+    
+    [QMWebViewController showWebViewWithRequest:[[NSURLRequest alloc] initWithURL:[NSURL URLWithString:advertUrlString]] navTitle:nil isModel:YES from:self];
+
+
     [passbutton removeFromSuperview];
     [backgroundView removeFromSuperview];
     [self close];
@@ -240,15 +252,15 @@
 - (void)updataView
 {
     //检测后台更新接口
-    NSInteger statusnum = 0;
-    if (statusnum == 2) {
-        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护中" message:@"维护时间:xx-xx" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-        [alertview show];
-    }else if (statusnum == 1)
-    {
-        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护通知" message:@"预计维护时间:xx-xx" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
-        [alertview show];
-    }
+//    NSInteger statusnum = 0;
+//    if (statusnum == 2) {
+//        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护中" message:@"维护时间:xx-xx" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+//        [alertview show];
+//    }else if (statusnum == 1)
+//    {
+//        UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"系统维护通知" message:@"预计维护时间:xx-xx" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil];
+//        [alertview show];
+//    }
     
     //实现上部分子view
     [self setUpSubViews];

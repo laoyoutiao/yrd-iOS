@@ -277,17 +277,19 @@ CGFloat selledProductRateViewRightPadding = 30;
             imageName = @"product_over_icon.png";
         }else if ([productStatus isEqualToString:@"TASTE"]) { // 体验
             imageName = @"product_taste_icon.png";
-        }else if ([productStatus isEqualToString:@"ACTIVITY"]) { // 活动
-            imageName = @"product_activity_icon.png";
-        }else if ([productStatus isEqualToString:@"CLOSED"]) { // 完成状态
+        }
+//        else if ([productStatus isEqualToString:@"ACTIVITY"]) { // 活动
+//            imageName = @"product_activity_icon.png";
+//        }
+        else if ([productStatus isEqualToString:@"CLOSED"]) { // 完成状态
             imageName = @"products_list_sold_finish.png";
         }else if ([productStatus isEqualToString:@"LENDING"]) { // 还款状态
             imageName = @"products_list_huankuan.png";
-        }else {
-            imageName = @"product_activity_icon.png";      //默认活动
         }
+//        else {
+//            imageName = @"product_activity_icon.png";      //默认活动
+//        }
     }
-    
     if (!QM_IS_STR_NIL(imageName)) {
         return [UIImage imageNamed:imageName];
     }

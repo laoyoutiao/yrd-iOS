@@ -75,6 +75,7 @@ typedef enum {
     [self setUpProductInfoTable];
 }
 
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (QM_IS_STR_NIL(mProductInfo.product_id)) {
@@ -297,18 +298,17 @@ typedef enum {
     // 打点
     btn.enabled = NO;
     [QMUMTookKitManager event:USER_CLICK_BUY_INDETAILVIEW_KEY label:@"用户在详情点击购买"];
-
     [[NetServiceManager sharedInstance] checkProductCanBuyWithProductId:mProductInfo.product_id
-                                                               delegate:self
-                                                                success:^(id responseObject) {
-                                                                    // 可以购买
-                                                                    [self handleCheckResult:responseObject];
-                                                                    btn.enabled = YES;
-                                                                } failure:^(NSError *error) {
-                                                                    // 不可以购买
-                                                                    [CMMUtility showNoteWithError:error];
-                                                                    btn.enabled = YES;
-                                                                }];
+                                                                   delegate:self
+                                                                    success:^(id responseObject) {
+                                                                        // 可以购买
+                                                                        [self handleCheckResult:responseObject];
+                                                                        btn.enabled = YES;
+                                                                    } failure:^(NSError *error) {
+                                                                        // 不可以购买
+                                                                        [CMMUtility showNoteWithError:error];
+                                                                        btn.enabled = YES;
+                                                                    }];
 }
 
 - (void)handleCheckResult:(id)response {

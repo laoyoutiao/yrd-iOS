@@ -298,7 +298,6 @@
 		18BC71451AD2BAD800C80C29 /* BlockActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BC71441AD2BAD800C80C29 /* BlockActionSheet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		18BEFA881AF3C820003AF453 /* libPaySdkColor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18BEFA851AF3C820003AF453 /* libPaySdkColor.a */; };
 		18BEFA891AF3C820003AF453 /* walletResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 18BEFA871AF3C820003AF453 /* walletResources.bundle */; };
-		18BEFA8C1AF3C85C003AF453 /* LLPayUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BEFA8B1AF3C85C003AF453 /* LLPayUtil.m */; };
 		18BEFA901AF3C922003AF453 /* LLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BEFA8F1AF3C922003AF453 /* LLViewController.m */; };
 		18C9F05219D10E6700849682 /* QMSetPayPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C9F05119D10E6700849682 /* QMSetPayPasswordViewController.m */; };
 		18DDE0C11A54168A00ECD11F /* QMModifyPayPwdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18DDE0C01A54168A00ECD11F /* QMModifyPayPwdViewController.m */; };
@@ -375,7 +374,9 @@
 		C997BDB21D2A102400990073 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C997BDB11D2A102400990073 /* libstdc++.tbd */; };
 		C997BDB41D2A102D00990073 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C997BDB31D2A102D00990073 /* libsqlite3.tbd */; };
 		C997BDB61D2A103500990073 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C997BDB51D2A103500990073 /* libz.tbd */; };
+		C9A968061D5C586E005743A1 /* QMPanicBuyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A968051D5C586E005743A1 /* QMPanicBuyViewController.m */; };
 		C9F9A53D1CF579510052DAED /* QMTokenInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F9A53C1CF579510052DAED /* QMTokenInfo.m */; };
+		C9FC98771DAB720D0001F55A /* LLPayUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FC98761DAB720D0001F55A /* LLPayUtil.m */; };
 		C9FCED651CE47C500062E594 /* ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C9FCED641CE47C500062E594 /* ProgressView.m */; };
 		CEE1A3D81C34CDFD00ADD873 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEE1A3D71C34CDFD00ADD873 /* CoreFoundation.framework */; };
 /* End PBXBuildFile section */
@@ -426,7 +427,7 @@
 		18533B2919C41B9F008348B4 /* QMStringUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMStringUtil.m; sourceTree = "<group>"; };
 		185686331A32C0E200A397FC /* QFHttpDownload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QFHttpDownload.h; sourceTree = "<group>"; };
 		185686341A32C0E200A397FC /* QFHttpDownload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QFHttpDownload.m; sourceTree = "<group>"; };
-		185FB616198E754F00F538FF /* MotherMoney.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MotherMoney.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		185FB616198E754F00F538FF /* 粤融贷.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "粤融贷.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		185FB619198E754F00F538FF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		185FB61B198E754F00F538FF /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		185FB61D198E754F00F538FF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -939,8 +940,6 @@
 		18BEFA851AF3C820003AF453 /* libPaySdkColor.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libPaySdkColor.a; sourceTree = "<group>"; };
 		18BEFA861AF3C820003AF453 /* LLPaySdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPaySdk.h; sourceTree = "<group>"; };
 		18BEFA871AF3C820003AF453 /* walletResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = walletResources.bundle; sourceTree = "<group>"; };
-		18BEFA8A1AF3C85C003AF453 /* LLPayUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPayUtil.h; sourceTree = "<group>"; };
-		18BEFA8B1AF3C85C003AF453 /* LLPayUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPayUtil.m; sourceTree = "<group>"; };
 		18BEFA8E1AF3C922003AF453 /* LLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLViewController.h; sourceTree = "<group>"; };
 		18BEFA8F1AF3C922003AF453 /* LLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLViewController.m; sourceTree = "<group>"; };
 		18C9F05019D10E6700849682 /* QMSetPayPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMSetPayPasswordViewController.h; sourceTree = "<group>"; };
@@ -1079,8 +1078,12 @@
 		C997BDB11D2A102400990073 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
 		C997BDB31D2A102D00990073 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		C997BDB51D2A103500990073 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		C9A968041D5C586E005743A1 /* QMPanicBuyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMPanicBuyViewController.h; sourceTree = "<group>"; };
+		C9A968051D5C586E005743A1 /* QMPanicBuyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMPanicBuyViewController.m; sourceTree = "<group>"; };
 		C9F9A53B1CF579510052DAED /* QMTokenInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMTokenInfo.h; sourceTree = "<group>"; };
 		C9F9A53C1CF579510052DAED /* QMTokenInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMTokenInfo.m; sourceTree = "<group>"; };
+		C9FC98751DAB720D0001F55A /* LLPayUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLPayUtil.h; sourceTree = "<group>"; };
+		C9FC98761DAB720D0001F55A /* LLPayUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLPayUtil.m; sourceTree = "<group>"; };
 		C9FCED631CE47C500062E594 /* ProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressView.h; sourceTree = "<group>"; };
 		C9FCED641CE47C500062E594 /* ProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressView.m; sourceTree = "<group>"; };
 		CEE1A3D71C34CDFD00ADD873 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
@@ -1245,7 +1248,7 @@
 		185FB617198E754F00F538FF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				185FB616198E754F00F538FF /* MotherMoney.app */,
+				185FB616198E754F00F538FF /* 粤融贷.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1490,6 +1493,8 @@
 				C0EEF4561B7D9B7F002E603B /* QMGoodListDetailViewController.m */,
 				C0E510A51B84949A00F5DAA2 /* QMDealDetailViewController.h */,
 				C0E510A61B84949A00F5DAA2 /* QMDealDetailViewController.m */,
+				C9A968041D5C586E005743A1 /* QMPanicBuyViewController.h */,
+				C9A968051D5C586E005743A1 /* QMPanicBuyViewController.m */,
 			);
 			path = MyFund;
 			sourceTree = "<group>";
@@ -2301,10 +2306,10 @@
 		18BEFA841AF3C820003AF453 /* LLPaySDK */ = {
 			isa = PBXGroup;
 			children = (
+				C9FC98751DAB720D0001F55A /* LLPayUtil.h */,
+				C9FC98761DAB720D0001F55A /* LLPayUtil.m */,
 				18BEFA851AF3C820003AF453 /* libPaySdkColor.a */,
 				18BEFA861AF3C820003AF453 /* LLPaySdk.h */,
-				18BEFA8A1AF3C85C003AF453 /* LLPayUtil.h */,
-				18BEFA8B1AF3C85C003AF453 /* LLPayUtil.m */,
 				18BEFA871AF3C820003AF453 /* walletResources.bundle */,
 			);
 			path = LLPaySDK;
@@ -2410,7 +2415,7 @@
 			);
 			name = MotherMoney;
 			productName = MotherMoney;
-			productReference = 185FB616198E754F00F538FF /* MotherMoney.app */;
+			productReference = 185FB616198E754F00F538FF /* 粤融贷.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2419,11 +2424,12 @@
 		185FB60E198E754F00F538FF /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "___FULLUSERNAME___";
 				TargetAttributes = {
 					185FB615198E754F00F538FF = {
 						DevelopmentTeam = MY6HP6CP23;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -2576,6 +2582,7 @@
 				185FB71B198EA1BC00F538FF /* UIButton+WebCache.m in Sources */,
 				18AF8E3C199F590B0021A70A /* QMInputPhoneNumberViewController.m in Sources */,
 				18BC56501B0A4226008913E2 /* QMWithDrawViewController.m in Sources */,
+				C9FC98771DAB720D0001F55A /* LLPayUtil.m in Sources */,
 				185FB6A9198E9A9A00F538FF /* DDContextFilterLogFormatter.m in Sources */,
 				18A841941997302C00985E35 /* QMMoreItemInfoCell.m in Sources */,
 				18A8416D19964CAD00985E35 /* QMAccountInfo.m in Sources */,
@@ -2671,6 +2678,7 @@
 				C0DFCA171BAAE3E400B069E7 /* QMProductCouponModel.m in Sources */,
 				18B6CC9A1B0E220F00642548 /* DLTabedSlideView.m in Sources */,
 				C0E510A71B84949A00F5DAA2 /* QMDealDetailViewController.m in Sources */,
+				C9A968061D5C586E005743A1 /* QMPanicBuyViewController.m in Sources */,
 				18B7E3751AA2E13700F7C22B /* MASCompositeConstraint.m in Sources */,
 				18AF8E6719A043840021A70A /* QMMiniLockView.m in Sources */,
 				18B11EFA19ED565A0096A70C /* QMGoodsListItem.m in Sources */,
@@ -2735,7 +2743,6 @@
 				C0DF9C1B1BA6EB2E005371C9 /* UnuseViewController.m in Sources */,
 				1885A17419B3349100D4F555 /* QMAccountUtil.m in Sources */,
 				18A8419F1997515C00985E35 /* QMActivityCenterViewController.m in Sources */,
-				18BEFA8C1AF3C85C003AF453 /* LLPayUtil.m in Sources */,
 				56CB7E3A19960266000CD797 /* AFHTTPClient.m in Sources */,
 				18AF8E2F199F3E440021A70A /* QMTwoLineCollectionCell.m in Sources */,
 				C0B594941BAFBF7800A26E4D /* QMUnUseModel.m in Sources */,
@@ -2843,6 +2850,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2852,16 +2860,22 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = MY6HP6CP23;
 				ENABLE_BITCODE = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -2874,9 +2888,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "fd2561a0-e5ae-4bc8-8a7f-4cc2e73e9a67";
+				PROVISIONING_PROFILE = "676c59c1-3ba4-4f11-b204-4c1466cee4da";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 arm64";
@@ -2887,6 +2901,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2896,23 +2911,29 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
+				DEVELOPMENT_TEAM = MY6HP6CP23;
 				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
-				PROVISIONING_PROFILE = "fd2561a0-e5ae-4bc8-8a7f-4cc2e73e9a67";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				PROVISIONING_PROFILE = "676c59c1-3ba4-4f11-b204-4c1466cee4da";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2925,8 +2946,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = MY6HP6CP23;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2936,7 +2958,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MotherMoney/MotherMoney-Prefix.pch";
 				INFOPLIST_FILE = "MotherMoney/MotherMoney-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MotherMoney/ThirdPart/UMLib/UMMobClick",
@@ -2954,8 +2976,9 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yrdai.yrdai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fd2561a0-e5ae-4bc8-8a7f-4cc2e73e9a67";
+				PRODUCT_NAME = "粤融贷";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 arm64";
 				WRAPPER_EXTENSION = app;
@@ -2967,8 +2990,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Qixin Chen (5XNYRPT8X4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = MY6HP6CP23;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2978,7 +3002,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MotherMoney/MotherMoney-Prefix.pch";
 				INFOPLIST_FILE = "MotherMoney/MotherMoney-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MotherMoney/ThirdPart/UMLib/UMMobClick",
@@ -2996,8 +3020,9 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yrdai.yrdai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "fd2561a0-e5ae-4bc8-8a7f-4cc2e73e9a67";
+				PRODUCT_NAME = "粤融贷";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "armv7 arm64";
 				WRAPPER_EXTENSION = app;

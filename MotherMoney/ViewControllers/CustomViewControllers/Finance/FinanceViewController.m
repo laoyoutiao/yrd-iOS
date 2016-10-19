@@ -236,6 +236,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QMProductListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:PRODUCT_LIST_CELL_IDENTIFIER forIndexPath:indexPath];
+//    cell.backgroundColor = [UIColor orangeColor];
     if (indexPath.row < [productList count]) {
         QMProductInfo *info = [productList objectAtIndex:indexPath.row];
         //实现产品cell的显示，cell的返回高度：130

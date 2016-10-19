@@ -100,7 +100,7 @@ presentedController:(UIViewController *)controller
         //        content = [NSString stringWithFormat:@"%@\n%@", title, content];
         //        shareImage = nil;
     }else if ([platform isEqualToString:UMShareToSina]) { // 分享到新浪
-        content = [NSString stringWithFormat:@"%@\n%@", title1, content];
+        content = [NSString stringWithFormat:@"%@\n%@ %@", title1, content, APP_DOWNLOAD_H5_URL];
         shareImage = [UIImage imageNamed:@""];
     }else if ([platform isEqualToString:UMShareToSms]) { // 短信分析那个
         content = [NSString stringWithFormat:@"%@\n%@ %@", title1, content,

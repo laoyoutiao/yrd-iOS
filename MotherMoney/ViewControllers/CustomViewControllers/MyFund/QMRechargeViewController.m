@@ -203,10 +203,10 @@
     }
     
 #if ON_LINE
-    if ([amount doubleValue] < 50.0f) {
-        [CMMUtility showNote:@"充值金额必须大于等于50元"];
-        return;
-    }
+//    if ([amount doubleValue] < 50.0f) {
+//        [CMMUtility showNote:@"充值金额必须大于等于50元"];
+//        return;
+//    }
 #else
     
 #endif
@@ -233,10 +233,12 @@
                 sdk = [[LLPaySdk alloc] init];
                 sdk.sdkDelegate = self;
                 
-                // 认证支付
-                [LLPaySdk setLLsdkPayState:1];
+                // 认证支付(旧版本方法)
+//                [LLPaySdk setLLsdkPayState:1];
+//                [sdk presentPaySdkInViewController:self withTraderInfo:param];
                 
-                [sdk presentPaySdkInViewController:self withTraderInfo:param];
+                //认证支付
+                [sdk presentLLPaySDKInViewController:self withPayType:LLPayTypeVerify andTraderInfo:param];
                 
             } failure:^(NSError *error) {
                 [CMMUtility showNoteWithError:error];

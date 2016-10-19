@@ -62,10 +62,6 @@
     if (!QM_IS_STR_NIL(errorMsg)) {
         UIAlertView *alertInstance  = [[UIAlertView alloc] initWithTitle:@"提示" message:errorMsg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
         [alertInstance show];
-        
-        
-        
-        
     }
 }
 
@@ -79,11 +75,6 @@
 {
     UIAlertView *alertInstance  = [[UIAlertView alloc] initWithTitle:@"提示" message:alertContent delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
     [alertInstance show];
-    
-    
-
-    
-    
 }
 
 +(void)showTMPLogin {
