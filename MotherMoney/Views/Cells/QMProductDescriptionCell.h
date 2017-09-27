@@ -8,10 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "QMProductInfo.h"
+#import "QMCreditorsInfo.h"
 
 @interface QMProductDescriptionCell : UICollectionViewCell
 
 + (CGFloat)getCellHeightForProductInfo:(QMProductInfo *)info;
 - (void)configureCellWithProductInfo:(QMProductInfo *)info;
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info;
+- (void)configureCellWithCreditorsInfo:(QMCreditorsInfo *)info;
 
 @end

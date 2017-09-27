@@ -30,10 +30,10 @@
     products.tabBarItem = [self financeTabBarItem];
     
     // 我的资产
-    MyFundViewController *myFund = [[MyFundViewController alloc] init];
-    myFund.hidesBottomBarWhenPushed = NO;
-    QMNavigationController *myFundNav = [[QMNavigationController alloc] initWithRootViewController:myFund];
-    myFund.tabBarItem = [self myFundTabBarItem];
+//    MyFundViewController *myFund = [[MyFundViewController alloc] init];
+//    myFund.hidesBottomBarWhenPushed = NO;
+//    QMNavigationController *myFundNav = [[QMNavigationController alloc] initWithRootViewController:myFund];
+//    myFund.tabBarItem = [self myFundTabBarItem];
     
     // 更多
     MoreViewController *more = [[MoreViewController alloc] init];
@@ -41,7 +41,7 @@
     QMNavigationController *moreNav = [[QMNavigationController alloc] initWithRootViewController:more];
     more.tabBarItem = [self moreTabBarItem];
     
-    NSArray *viewControllers = [[NSArray alloc] initWithObjects:recommendNav, financeNav, myFundNav, moreNav, nil];
+    NSArray *viewControllers = [[NSArray alloc] initWithObjects:recommendNav, financeNav, moreNav, nil];
     [tabBarController setViewControllers:viewControllers];
     
     [self customTabBarAppearance:tabBarController];
@@ -62,7 +62,7 @@
 }
 
 + (UITabBarItem *)recommendTabBarItem {
-    return [self commonTabBarItemWithTitle:QMLocalizedString(@"qm_tab_title_recommendation", @"精品推荐") normalImageName:@"home_nm.png" selectedImageName:@"home_selected.png"];
+    return [self commonTabBarItemWithTitle:QMLocalizedString(@"qm_tab_title_recommendation", @"首页") normalImageName:@"home_nm.png" selectedImageName:@"home_selected.png"];
 }
 
 + (UITabBarItem *)financeTabBarItem {

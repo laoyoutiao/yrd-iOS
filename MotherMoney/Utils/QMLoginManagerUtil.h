@@ -10,4 +10,6 @@
 
 + (void)showLoginViewControllerFromViewController:(UIViewController *)controller;
 
++ (void)showLoginViewControllerFromViewController:(UIViewController *)controller completion:(void (^ __nullable)(void))completion;
+
 @end

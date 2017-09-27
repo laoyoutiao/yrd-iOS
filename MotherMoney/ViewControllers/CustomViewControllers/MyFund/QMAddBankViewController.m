@@ -38,37 +38,21 @@
 }
 
 - (void)initDataSource {
-    [[NetServiceManager sharedInstance] getAvailableBankListWithProductChannelId:mOrderModel.productChannelId
-                                                                        delegate:self
-                                                                         success:^(id responseObject) {
-                                                                             [self handleProductListSuccess:responseObject];
-                                                                         } failure:^(NSError *error) {
-                                                                             [self handleProductListFailure:error];
-                                                                         }];
-}
-
-- (void)handleProductListSuccess:(id)responseObject {
-    if (![responseObject isKindOfClass:[NSDictionary class]]) {
-        return;
-    }
-    
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:0];
-    NSArray *bankList = [responseObject objectForKey:kNetWorkList];
-    if (![bankList isKindOfClass:[NSArray class]]) {
-        return;
-    }
-    
-    for (NSDictionary *dict in bankList) {
-        QMBankInfo *info = [[QMBankInfo alloc] initWithDictionary:dict];
+    NSDictionary *infodict = [QMBankInfo getBankInfoWithGuiZhou];
+    NSArray *namearray = [infodict allKeys];
+    for (int i=0; i < [namearray count]; i ++) {
+        NSString *name = [namearray objectAtIndex:i];
+        NSString *code = [infodict objectForKey:name];
+        QMBankInfo *info = [[QMBankInfo alloc] init];
+        info.bankName = name;
+        info.itemTitle = name;
+        info.bankCode = code;
         [array addObject:info];
     }
-
+    
     items = [NSArray arrayWithArray:array];
     [self reloadData];
-}
-
-- (void)handleProductListFailure:(NSError *)error {
-    [self handleProductListSuccess:nil];
 }
 
 - (void)searchItemsWithKeyWord:(NSString *)keyWord {

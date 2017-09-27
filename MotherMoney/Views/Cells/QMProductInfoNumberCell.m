@@ -69,4 +69,27 @@
     return 64.0f;
 }
 
+- (void)configureCellWithCreditorsInfo:(QMCreditorsInfo *)info {
+    // 转让金额
+    moneyValue.titleLabel.text = @"转让金额";
+    moneyValue.numberLabel.text = [NSString stringWithFormat:@"%@", [CMMUtility formatterNumberWithComma:info.transferPrincipal]];
+    moneyValue.numberLabel.font = [UIFont boldSystemFontOfSize:18];
+
+    
+    // 到期时间
+    buyPeopleNum.titleLabel.text = @"到期时间";
+    buyPeopleNum.numberLabel.text = [NSString stringWithFormat:@"%@", info.repay_date];
+    buyPeopleNum.numberLabel.font = [UIFont boldSystemFontOfSize:18];
+
+    // 起息时间
+    startMoney.titleLabel.text = @"起息时间";
+    startMoney.numberLabel.text = [NSString stringWithFormat:@"%@", info.pass_time];
+    startMoney.numberLabel.font = [UIFont boldSystemFontOfSize:18];
+
+}
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info {
+    return 64.0f;
+}
+
 @end

@@ -22,7 +22,8 @@
 #import "QMProductDescriptionCell.h"
 #import "QMBuyProductInputMoneyViewControllerV2.h"
 #import "BlockActionSheet.h"
-#import "UMSocialSnsPlatformManager.h"
+#import <UMSocialCore/UMSocialCore.h>
+//#import "UMSocialSnsPlatformManager.h"
 
 #define QMProductInfoItemCellIdentifier @"QMProductInfoItemCellIdentifier"
 #define QMProductInfoActionCellIdentifier @"QMProductInfoActionCellIdentifier"
@@ -156,39 +157,38 @@ typedef enum {
     NSString* shareStr2=[shareStr1 stringByAppendingString:mProductInfo.product_id];
     __block NSString *shareUrl = shareStr2;
     __block NSString *shareContent =@"这个产品棒棒哒，一块来买吧！";
-    __block NSString *platform = nil;
+    __block UMSocialPlatformType platform = nil;
     UIImage *shareImage = nil;
     BlockActionSheet *sheet = [BlockActionSheet sheetWithTitle:@"分享到"];
+
     // 短信
     [sheet addButtonWithTitle:@"短信" imageName:@"message_icon.png" block:^{
-        platform = UMShareToSms;
-//        [self shareTo:platform content:shareContent image:shareImage];
-        
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_Sms;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // 微信好友
     [sheet addButtonWithTitle:@"微信好友" imageName:@"wechat_icon.png" block:^{
-        platform = UMShareToWechatSession;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_WechatSession;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // 微信朋友圈
     [sheet addButtonWithTitle:@"微信朋友圈" imageName:@"wechat_favirate_icon.png" block:^{
-        platform = UMShareToWechatTimeline;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_WechatTimeLine;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
-
+    
     // 新浪微博
     [sheet addButtonWithTitle:@"新浪微博" imageName:@"sina_icon.png" block:^{
-        platform = UMShareToSina;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_Sina;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // QQ
     [sheet addButtonWithTitle:@"QQ" imageName:@"qq_icon.png" block:^{
-        platform = UMShareToQQ;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_QQ;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     [sheet setDestructiveButtonWithTitle:@"取消" block:^{
@@ -198,18 +198,24 @@ typedef enum {
     [sheet showInView:self.tabBarController.view];
 }
 
-- (void)shareTo:(NSString *)platform
+- (void)shareTo:(UMSocialPlatformType)platform
         content:(NSString *)content
           image:(UIImage *)image
-       shareUrl:(NSString *)shareUrl
 {
     
 //    [QMUMTookKitManager shareTo:platform title:nil content:content image:image presentedController:self  completion:^(UMSocialResponseEntity *response) {
 //        // 提示用户分享成功
 //    }];
-    [QMUMTookKitManager shareTo:platform title:nil content:content image:image shareUrl:shareUrl presentedController:self completion:^(UMSocialResponseEntity *response) {
-        
-    }];
+    QMAccountInfo *info = [[QMAccountUtil sharedInstance] currentAccount];
+    if (!info.phoneNumber) {
+        [QMLoginManagerUtil showLoginViewControllerFromViewController:self completion:^{
+            NSString *shareurl = [NSString stringWithFormat:@"http://m.yrdloan.com/wap/register?recommend=%@",info.phoneNumber];
+            [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:shareurl presentedController:self];        }];
+    }else
+    {
+        NSString *shareurl = [NSString stringWithFormat:@"http://m.yrdloan.com/wap/register?recommend=%@",info.phoneNumber];
+        [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:shareurl presentedController:self];
+    }
 }
 
 

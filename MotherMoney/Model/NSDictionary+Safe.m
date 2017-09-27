@@ -49,24 +49,24 @@
 - (NSDictionary *)safeDictForKey:(NSString *)key
 {
     id value = [self valueForKey:key defaultsTo:nil];
-    return ([value isKindOfClass:NSDictionary.class]) ? nil : value;
+    return (![value isKindOfClass:NSDictionary.class]) ? nil : value;
 }
 
 - (NSDictionary *)safeDictForKeyPath:(NSString *)keypath
 {
     id value = [self valueForKeyPath:keypath defaultsTo:nil];
-    return ([value isKindOfClass:NSDictionary.class]) ? nil : value;
+    return (![value isKindOfClass:NSDictionary.class]) ? nil : value;
 }
 
 - (NSArray *)safeArrayForKey:(NSString *)key
 {
     id value = [self valueForKey:key defaultsTo:nil];
-    return ([value isKindOfClass:NSArray.class]) ? nil : value;
+    return (![value isKindOfClass:NSArray.class]) ? nil : value;
 }
 - (NSArray *)safeArrayForKeyPath:(NSString *)keypath
 {
     id value = [self valueForKeyPath:keypath defaultsTo:nil];
-    return ([value isKindOfClass:NSArray.class]) ? nil : value;
+    return (![value isKindOfClass:NSArray.class]) ? nil : value;
 }
 
 - (id)valueForKey:(NSString *)key defaultsTo:(NSString *)str

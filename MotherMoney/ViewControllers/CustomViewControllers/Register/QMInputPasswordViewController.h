@@ -7,7 +7,7 @@
 #import "QMAccountInfo.h"
 
 @protocol QMInputPasswordViewControllerDelegate;
-@interface QMInputPasswordViewController : QMViewController
+@interface QMInputPasswordViewController : QMViewController <UIGestureRecognizerDelegate>
 @property (nonatomic, assign) BOOL isModel;
 @property (nonatomic, assign) BOOL showBackBtn;
 @property (nonatomic, weak) id<QMInputPasswordViewControllerDelegate> delegate;

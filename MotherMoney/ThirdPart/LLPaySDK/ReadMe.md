@@ -12,7 +12,7 @@ LLPaySDK iOS接入指南
 	|文件				|文件内容|
 	|-------------		|----------------|
 	|LLPaySdk.h			|	头文件，声明接口|
-	|libPaySdkColor.a	|	单独的LLPay 的 lib库 或者 单独的LLAPPay 的 lib库|
+	|libLLPaySDK.a	|	单独的LLPay 的 lib库 或者 单独的LLAPPay 的 lib库|
 	|walletResources.bundle|	LianlianPay 资源包,**请勿改名**(如果是 Pay可不用)|
 	
 
@@ -26,17 +26,16 @@ LLPaySDK iOS接入指南
 	- 可能添加-all_load以后和其他库冲突，可以尝试使用 -force_load 单独load库, force_load后面跟的是 lib库的完整路径
 
 	```
-	- -force_load $(SRCROOT)/***/libPaySdkColor.a (****需要按照你的库放置的路径决定)
+	- -force_load $(SRCROOT)/***/libLLPaySDK.a (****需要按照你的库放置的路径决定)
 	```
 
 4. 调用sdk显示，注意retain修饰，自动释放以后，调用后会导致程序崩溃或者有些图片会消失（如导航栏返回图片等）
 
 	```
 	NSDictionary *orderParam = @{*****}; // 创建订单
-	self.sdk = [LLPaySdk sharedSdk]; // 创建SDK
-	self.sdk.sdkDelegate = self;  // 设置回调
+	[LLPaySdk sharedSdk].sdkDelegate = self;  // 设置回调
 	NSDictionary* signedDic = [payUtil signedOrderDic:orderParam andSignKey:md5key_or_rsakey] // 加过签名的订单字典
-	[self.sdk presentLLPaySDKInViewController: rootVC
+	[[LLPaySdk sharedSdk] presentLLPaySDKInViewController: rootVC
                             	   withPayType: LLPayTypeQuick
                           	  	 andTraderInfo: signedDic];
 	```

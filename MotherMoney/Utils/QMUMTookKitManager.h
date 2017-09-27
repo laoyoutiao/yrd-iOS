@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MobClick.h"
-#import "UMSocialSnsService.h"
-#import "UMSocialDataService.h"
+#import <UMSocialCore/UMSocialCore.h>
 
 @interface QMUMTookKitManager : NSObject
 
@@ -27,14 +26,13 @@
 
 #pragma mark -
 #pragma mark 友盟Social 配置
-+ (void)UMShareConfigure:(NSString *)shareUrl
-;
-+ (void)shareTo:(NSString *)platform
++ (void)UMShareConfigure:(NSString *)shareUrl;
+
++ (void)shareTo:(UMSocialPlatformType)platform
           title:(NSString *)title11
         content:(NSString *)content
           image:(UIImage *)image
        shareUrl:(NSString *)shareUrl
-presentedController:(UIViewController *)controller
-     completion:(UMSocialDataServiceCompletion)completion;
+presentedController:(UIViewController *)controller;
 
 @end

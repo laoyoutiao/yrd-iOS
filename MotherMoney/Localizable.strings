@@ -7,7 +7,7 @@
 */
 
 // tab bar titles
-"qm_tab_title_recommendation" = "精品推荐";
+"qm_tab_title_recommendation" = "首页";
 
 "qm_tab_title_finance" = "理财产品";
 
@@ -23,7 +23,7 @@
 
 "qm_navigation_title_myprize" = "我的奖励";
 
-"qm_navigation_title_mycoupon" = "代金券明细";
+"qm_navigation_title_mycoupon" = "礼券明细";
 
 "qm_navigation_title_more" = "更多";
 
@@ -64,7 +64,9 @@
 
 "qm_product_list_purchaseAmountLimit" = "%d元起购";
 
-"qm_product_list_buy_people_count" = "已售份数 %d";
+"qm_product_list_buy_people_count" = "已售份数: %d";
+
+"qm_product_list_notbuy_count" = "剩余份数: %d";
 
 "qm_product_list_finance_rate" = "已融资 %.2f%%";
 
@@ -188,6 +190,8 @@
 
 "qm_register_phone_number_principle" = "<<使用条款和隐私政策协议>>";
 
+"qm_register_phone_number_riskAgreement" = "<<粤融贷风险提示>>";
+
 "qm_register_input_password_nav_title" = "填写登录密码";
 
 "qm_register_input_password_placeholder" = "请填写登录密码";
@@ -297,7 +301,7 @@
 
 "qm_idcard_number_invalid" = "身份证号码或手机号码不合法";
 
-"qm_identify_identity_btn_title" = "认证";
+"qm_identify_identity_btn_title" = "提交";
 
 // 添加银行卡
 "qm_add_bankcard_prompt_text" = "确认银行卡信息，如需修改请直接编辑";
@@ -413,6 +417,8 @@
 "qm_user_use_nav_title" = "粤融贷用户使用协议";
 
 "qm_privacy_principle_nav_title" = "使用条款和隐私政策协议";
+
+"qm_privacy_riskAgreement_nav_title" = "粤融贷风险提示";
 
 "qm_not_login_alert_message" = "您还没有登录，请先登录";
 
@@ -540,6 +546,8 @@
 "qm_exchange_btn_title" = "兑换";
 
 "qm_exchange_success_title" = "兑换成功礼品将于两个工作日内发放。";
+
+"qm_exchange_successL_title" = "兑换成功";
 
 "qm_input_initial_pwd" = "请输入密码";
 

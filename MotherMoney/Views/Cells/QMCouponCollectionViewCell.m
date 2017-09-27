@@ -16,7 +16,7 @@
     if (self = [super initWithFrame:frame]) {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.frame), 40)];
         
-        label.text = @"一个代金券";
+        label.text = @"一个现金券";
         
         label.textAlignment = NSTextAlignmentLeft;
         

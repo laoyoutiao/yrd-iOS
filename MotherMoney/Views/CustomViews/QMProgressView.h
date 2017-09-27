@@ -11,5 +11,6 @@
 @interface QMProgressView : UIView
 
 - (void)setCurrentProgress:(CGFloat)progress;
+- (void)overCurrentProgress:(CGFloat)progress;
 
 @end

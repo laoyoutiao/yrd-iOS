@@ -10,7 +10,6 @@
 @interface QMMyFundGoodListHeaderView : UICollectionReusableView
 
 @property (nonatomic,strong)UITapGestureRecognizer* tapGes;
-
--(void)configCurrentScoreValue:(NSString*)currentScoreValue;
+-(void)configCurrentScoreValue:(NSString*)currentScoreValue :(NSString *)currentWillTimeOutScoreValue :(NSString *)willEndTime;
 
 @end

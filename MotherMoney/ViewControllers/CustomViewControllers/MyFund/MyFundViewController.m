@@ -29,6 +29,7 @@
 #import "QMWithDrawViewController.h"
 #import "QMDealDetailViewController.h"
 #import "QMPrizeViewController.h"
+#import "QMProvinceInfo.h"
 #define myFundAbstractCellIdentifier @"myFundAbstractCellIdentifier"
 #define buyedProductInfoCellIdentifier @"buyedProductInfoCellIdentifier"
 #define totalEarningsCellIdentifier @"totalEarningsCellIdentifier"
@@ -61,7 +62,7 @@ typedef enum {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
-
+    [self.navigationController setNavigationBarHidden:NO];
     [self initDataSource];
 }
 
@@ -95,6 +96,13 @@ typedef enum {
                                                                 // 获取失败
                                                                 [self handleFetchMyAssertFailure:error];
                                                             }];
+    
+    [[NetServiceManager sharedInstance] getProvinceInfo:nil success:^(id responseObject) {
+        NSDictionary *dic = (NSDictionary *)[responseObject objectFromJSONData];
+        [[QMProvinceInfo sharedInstance] cutupProvince:dic];
+    } failure:^(NSError *error) {
+//        [SVProgressHUD showErrorWithStatus:@"城市信息获取失败"];
+    }];
 }
 
 - (void)handleFetchMyAssertSuccess:(id)responseObject {
@@ -133,7 +141,6 @@ typedef enum {
     
     
 }
-
 
 - (void)initDataSource {
     [self asyncFetchMyAssertFromServer];
@@ -183,7 +190,7 @@ typedef enum {
 {
 //    [self gotoRealNameAuthenticateViewController];
     
-    if (myFundInfo.realNameAuthed) {
+    if (myFundInfo.realNameAuthed  && myFundInfo.ableCardNum.integerValue) {
         QMRechargeViewController *con = [[QMRechargeViewController alloc] init];
         con.isModel = YES;
         QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
@@ -194,10 +201,11 @@ typedef enum {
     }
     
 }
+
 //体现
 -(void)gotoWithDrawController
 {
-    if (myFundInfo.realNameAuthed) {
+    if (myFundInfo.realNameAuthed && myFundInfo.ableCardNum.integerValue) {
         QMWithDrawViewController *con = [[QMWithDrawViewController alloc] init];
         con.isModel = YES;
         QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
@@ -242,8 +250,12 @@ typedef enum {
     info.realName = myFundInfo.realName;
     info.identifierCardId = myFundInfo.idCardNumber;
     info.hasRealName = myFundInfo.realNameAuthed;
+    info.salesman = myFundInfo.salesman;
+    info.channelID = myFundInfo.channelId;
+    info.customerCount = myFundInfo.customerCount;
+    info.openAccountStatus = myFundInfo.openAccountStatus;
     QMPersonalCenterViewController *con = [[QMPersonalCenterViewController alloc] initViewControllerWithAccountInf:info];
-    con.currentAvailabelScore=myFundInfo.availableScore;
+    con.currentAvailabelScore = myFundInfo.availableScore;
     [self.navigationController pushViewController:con
                                          animated:YES];
 }

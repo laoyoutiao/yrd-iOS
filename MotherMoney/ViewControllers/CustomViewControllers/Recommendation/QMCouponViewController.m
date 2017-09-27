@@ -81,7 +81,7 @@
     
 }
 - (NSString *)title{
-    return QMLocalizedString(@"qm_navigation_title_mycoupon", @"代金券明细");
+    return QMLocalizedString(@"qm_navigation_title_mycoupon", @"礼券明细");
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -95,7 +95,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self initDataSource];
-    
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void)initDataSource {

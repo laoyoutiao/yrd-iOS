@@ -10,7 +10,7 @@
 #import "QMRechargeRecordListViewController.h"
 #import "QMSingleLineCollectionCell.h"
 #import "QMTextFieldCollectionCell.h"
-#import "QMMoreInfoTableFooterView.h"
+#import "QMMoreInfoBankTableFooterView.h"
 #import "QMSelectBankViewControllerV2.h"
 #import "LLViewController.h"
 #import "QMTextFieldCollectionCell.h"
@@ -19,6 +19,8 @@
 #import "QMAddBankCardViewControllerV2.h"
 #import "QMWebViewController2.h"
 #import "QMHeeWebViewController.h"
+#import "QMAddBankCardViewController.h"
+#import "QMIdentityAuthenticationViewController.h"
 #define QMSINGLELINECOLLECTIONCELLIDENTIFIER1 @"QMSINGLELINECOLLECTIONCELLIDENTIFIER"
 #define QMTEXTFIELDCOLLECTIONCELLIDENTIFIER1 @"QMTEXTFIELDCOLLECTIONCELLIDENTIFIER"
 #define MORE_ITEM_TABLE_FOOTER_IDENTIFIER1 @"MORE_ITEM_TABLE_FOOTER_IDENTIFIER"
@@ -30,9 +32,13 @@
 @implementation QMRechargeViewController {
     UICollectionView *myCollectionView;
     QMBankCardModel *cardModel;
+    UICollectionViewCell *lastclickcell;
+    NSArray *cardArrayModel;
     QMTextFieldCollectionCell *amountCell;
     LLPaySdk *sdk;
-    QMMoreInfoTableFooterView *footerView;
+    QMMoreInfoBankTableFooterView *footerView;
+    UIScrollView *myScrollView;
+    UIImageView *checkImgView;
 }
 
 - (void)viewDidLoad {
@@ -53,18 +59,22 @@
         }
         
         NSArray *cardList = [responseObject objectForKey:kNetWorkList];
-        if (cardList && [cardList isKindOfClass:[NSArray class]]) {
-            
-            for (NSDictionary *dict in cardList) {
-                QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
-                
-                cardModel = model;
-                break;
-            }
-            //刷新表格
-            [myCollectionView reloadData];
-            [amountCell.textField becomeFirstResponder];
-        }
+        
+        cardArrayModel = [QMBankCardModel getArrayModel:cardList];
+        [myCollectionView reloadData];
+        
+        //        if (cardList && [cardList isKindOfClass:[NSArray class]]) {
+        //
+        //            for (NSDictionary *dict in cardList) {
+        //                QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
+        //
+        //                cardModel = model;
+        //                break;
+        //            }
+        //            //刷新表格
+        //            [myCollectionView reloadData];
+        //            [amountCell.textField becomeFirstResponder];
+        //        }
     } failure:^(NSError *error) {
         [CMMUtility showNoteWithError:error];
     }];
@@ -104,16 +114,27 @@
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.minimumLineSpacing = 0;
     
+    myScrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    [self.view addSubview:myScrollView];
+    
     myCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
     myCollectionView.alwaysBounceVertical = YES;
     [myCollectionView registerClass:[QMBankInfoCell class] forCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER1];
     [myCollectionView registerClass:[QMTextFieldCollectionCell class] forCellWithReuseIdentifier:QMTEXTFIELDCOLLECTIONCELLIDENTIFIER1];
-    [myCollectionView registerClass:[QMMoreInfoTableFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER1];
+    [myCollectionView registerClass:[QMMoreInfoBankTableFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER1];
     
     myCollectionView.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
+    myCollectionView.scrollEnabled = NO;
     myCollectionView.dataSource = self;
     myCollectionView.delegate = self;
-    [self.view addSubview:myCollectionView];
+    [myScrollView addSubview:myCollectionView];
+    
+    [myScrollView setContentSize:CGSizeMake(self.view.bounds.size.width, self.view.bounds.size.height + 150)];
+    
+    checkImgView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    checkImgView.image = [UIImage imageNamed:@"check_box_2"];
+    //    checkImgView.backgroundColor = [UIColor redColor];
+    
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -125,8 +146,13 @@
 }
 
 - (void)gotoAddBankCardViewController {
-    QMAddBankCardViewControllerV2 *con = [[QMAddBankCardViewControllerV2 alloc] init];
+    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
+    QMAccountInfo *info = [[QMAccountUtil sharedInstance] currentAccount];
     con.isModel = YES;
+    con.userIdCard = info.identifierCardId;
+    NSLog(@"%@",info.realName);
+    con.userRealName = info.realName;
+    con.haveDefaultMessage = YES;
     QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
@@ -136,8 +162,47 @@
         QMBankInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER1 forIndexPath:indexPath];
         cell.withDraw = NO;//提示信息将显示为充值银行卡。。。。
         [cell.actionBtn addTarget:self action:@selector(gotoAddBankCardViewController) forControlEvents:UIControlEventTouchUpInside];
-        [cell configureCellWithBankCardModel:cardModel];
+        QMBankCardModel *model;
         
+        if ([cardArrayModel count] == 1 && indexPath.row == 0)
+        {
+            cell.withOnlyCard = YES;
+        }else
+        { 
+            cell.backgroundColor = [UIColor whiteColor];
+        }
+        
+        if (indexPath.row < [cardArrayModel count])
+        {
+            model = [cardArrayModel objectAtIndex:indexPath.row];
+            [cell configureCellWithBankCardModel:model];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 0.5, cell.frame.size.width, 0.5)];
+            line.backgroundColor = [UIColor grayColor];
+            [cell addSubview:line];
+        }else
+        {
+            [cell configureCellWithBankCardModel:nil];
+        }
+        
+        
+        
+        if (indexPath.row < [cardArrayModel count] - 1)
+        {
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 0.5, cell.frame.size.width, 0.5)];
+            line.backgroundColor = [UIColor grayColor];
+            [cell addSubview:line];
+        }
+        
+        
+                else if (indexPath.row == [cardArrayModel count])
+                {
+                    UILabel *label = [[UILabel alloc] initWithFrame:cell.bounds];
+                    label.text = @"添加提现银行卡";
+                    label.font = [UIFont systemFontOfSize:16];
+                    label.textAlignment = NSTextAlignmentCenter;
+                    [cell addSubview:label];
+                    cell.tag = 1200;
+                }
         return cell;
     }else if (indexPath.section == 1) {
         QMTextFieldCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMTEXTFIELDCOLLECTIONCELLIDENTIFIER1 forIndexPath:indexPath];
@@ -155,13 +220,25 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 1;
+    if (section == 0) {
+//        if ([cardArrayModel count] < 3 && [cardArrayModel count] > 0)
+//        {
+//            return [cardArrayModel count] + 1;
+//        }else
+//        {
+//            return [cardArrayModel count];
+//        }
+        return 0;
+    }else
+    {
+        return 1;
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.section == 0 && indexPath.row == 0) {
-        
-        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:cardModel]);
+    if (indexPath.section == 0 && indexPath.row < [cardArrayModel count]) {
+        QMBankCardModel *model = [cardArrayModel objectAtIndex:indexPath.row];
+        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:model]);
     }
     return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, 44);
 }
@@ -185,10 +262,31 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    if (lastclickcell) {
+        lastclickcell.backgroundColor = [UIColor whiteColor];
+        [checkImgView removeFromSuperview];
+    }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
+    if ([cardArrayModel count] == 1)
+    {
+        return;
+    }else
+    {
+        checkImgView.frame = CGRectMake(cell.frame.size.width - 70, cell.frame.size.height / 2 - 15, 30, 30);
+        [cell addSubview:checkImgView];
+    }
+    cell.backgroundColor = [UIColor grayColor];
+    lastclickcell = cell;
+    QMBankCardModel *model = [cardArrayModel objectAtIndex:indexPath.row];
+    cardModel = model;
 }
 
 - (void)commitBtnClicked:(id)sender {
+    if ([cardArrayModel count] == 1)
+    {
+        cardModel = [cardArrayModel objectAtIndex:0];
+    }
     NSString *bankCardId = cardModel.bankCardId;
     NSString *amount = [amountCell.textField text];
     
@@ -203,10 +301,10 @@
     }
     
 #if ON_LINE
-//    if ([amount doubleValue] < 50.0f) {
-//        [CMMUtility showNote:@"充值金额必须大于等于50元"];
-//        return;
-//    }
+    if ([amount doubleValue] < 50.0f) {
+        [CMMUtility showNote:@"充值金额必须大于等于50元"];
+        return;
+    }
 #else
     
 #endif
@@ -218,7 +316,7 @@
         NSLog(@"支付方式:%@",[responseObject objectForKey:@"payWay"]);
         NSString *payWay = [responseObject objectForKey:@"payWay"];
         if ([payWay isEqualToString:@"WAP"]) {
-//            [self gotoLLWapWithURL:[responseObject objectForKey:@"url"]];
+            //            [self gotoLLWapWithURL:[responseObject objectForKey:@"url"]];
             [self gotoHeeWapWithURL:[responseObject objectForKey:@"url"]];
         }else{
             //发起支付请求
@@ -233,15 +331,17 @@
                 sdk = [[LLPaySdk alloc] init];
                 sdk.sdkDelegate = self;
                 
+                NSLog(@"%@",kLLPaySDKBuildVersion);
                 // 认证支付(旧版本方法)
-//                [LLPaySdk setLLsdkPayState:1];
-//                [sdk presentPaySdkInViewController:self withTraderInfo:param];
+                //                [LLPaySdk setLLsdkPayState:1];
+                //                [sdk presentPaySdkInViewController:self withTraderInfo:param];
                 
                 //认证支付
                 [sdk presentLLPaySDKInViewController:self withPayType:LLPayTypeVerify andTraderInfo:param];
                 
             } failure:^(NSError *error) {
                 [CMMUtility showNoteWithError:error];
+                [myCollectionView reloadData];
             }];
         }
         
@@ -251,7 +351,7 @@
         [CMMUtility showNoteWithError:error];
     }];
     
-
+    
 }
 
 - (void)gotoLLWapWithURL:(NSString *)url{

@@ -8,11 +8,7 @@
 #import "NJKWebViewProgress.h"
 #import "QMUMTookKitManager.h"
 #import "BlockActionSheet.h"
-#import "UMSocialDataService.h"
-#import "UMSocialSnsPlatformManager.h"
-#import "UMSocialConfig.h"
-#import "WXApi.h"
-#import "UMSocialAccountManager.h"
+#import <UMSocialCore/UMSocialCore.h>
 #import "QMWebViewController.h"
 #import "NSString+url.h"
 #import "JSONKit.h"
@@ -89,6 +85,7 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 #pragma mark -
 #pragma mark UIWebViewDelegate
 
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
@@ -99,7 +96,7 @@ static const float afterInteractiveMaxProgressValue = 0.9;
     
     
     NSString *urlPath = [[request URL] path];
-    NSString *url = [[request URL] absoluteString];
+    NSString *url = [[request URL] absoluteString];                                                                                                                                                                          
     NSLog(@"web view request urlPath:%@",urlPath);
     NSLog(@"web view request urlPath:%@",url);
     
@@ -138,7 +135,7 @@ static const float afterInteractiveMaxProgressValue = 0.9;
         NSDictionary *dic = (NSDictionary *)[[decodeString dataUsingEncoding:NSUTF8StringEncoding] objectFromJSONData];
         NSLog(@"%@",dic);
         __block NSString *shareContent = @"";
-        __block NSString *platform = nil;
+        __block UMSocialPlatformType platform = 1000;
         __block NSString *shareTitle = @"";
         UIImage *shareImage = nil;
         NSString *content = [dic objectForKey:@"shareContent"];
@@ -148,7 +145,7 @@ static const float afterInteractiveMaxProgressValue = 0.9;
         BlockActionSheet *sheet = [BlockActionSheet sheetWithTitle:@"分享到"];
         // 短信
         [sheet addButtonWithTitle:@"短信" imageName:@"message_icon.png" block:^{
-            platform = UMShareToSms;
+            platform = UMSocialPlatformType_Sms;
 
             [self shareTo:platform content:shareContent title:shareTitle image:shareImage shareUrl:url];
         }];
@@ -156,28 +153,28 @@ static const float afterInteractiveMaxProgressValue = 0.9;
         // 微信好友
         [sheet addButtonWithTitle:@"微信好友" imageName:@"wechat_icon.png" block:^{
 
-            platform = UMShareToWechatSession;
+            platform = UMSocialPlatformType_WechatSession;
             [self shareTo:platform content:content title:shareTitle image:shareImage shareUrl:url];
         }];
         
         // 微信朋友圈
         [sheet addButtonWithTitle:@"微信朋友圈" imageName:@"wechat_favirate_icon.png" block:^{
-            platform = UMShareToWechatTimeline;
+            platform = UMSocialPlatformType_WechatTimeLine;
             [self shareTo:platform content:content title:shareTitle image:shareImage shareUrl:url];
         }];
         
         // 新浪微博
         [sheet addButtonWithTitle:@"新浪微博" imageName:@"sina_icon.png" block:^{
-            platform = UMShareToSina;
+            platform = UMSocialPlatformType_Sina;
             [self shareTo:platform content:content title:shareTitle image:shareImage shareUrl:url];
         }];
         
         // QQ
         [sheet addButtonWithTitle:@"QQ" imageName:@"qq_icon.png" block:^{
-            platform = UMShareToQQ;
+            platform = UMSocialPlatformType_QQ;
             [self shareTo:platform content:content title:shareTitle image:shareImage shareUrl:url];
         }];
-        
+//
         [sheet setDestructiveButtonWithTitle:@"取消" block:^{
             
         }];
@@ -214,7 +211,7 @@ static const float afterInteractiveMaxProgressValue = 0.9;
     }
     return ret;
 }
-- (void)shareTo:(NSString *)platform
+- (void)shareTo:(UMSocialPlatformType)platform
         content:(NSString *)content
           title:(NSString *)title
           image:(UIImage *)image
@@ -226,9 +223,7 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 //    [QMUMTookKitManager shareTo:platform title:title content:content image:image presentedController:self.currentController completion:^(UMSocialResponseEntity *response) {
 //        // 提示用户分享成功
 //    }];
-    [QMUMTookKitManager shareTo:platform title:title content:content image:image shareUrl:shareUrl presentedController:self.currentController completion:^(UMSocialResponseEntity *response) {
-        
-    }];
+    [QMUMTookKitManager shareTo:platform title:title content:content image:image shareUrl:shareUrl presentedController:self.currentController];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView
@@ -259,7 +254,6 @@ static const float afterInteractiveMaxProgressValue = 0.9;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView
 {
-
     NSLog(@"UserAgent = %@", [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"]);
     
     if ([_webViewProxyDelegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {

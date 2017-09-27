@@ -10,7 +10,7 @@
 #import "QMWithDrawRecordListViewController.h"
 #import "QMSingleLineCollectionCell.h"
 #import "QMTextFieldCollectionCell.h"
-#import "QMMoreInfoTableFooterView.h"
+#import "QMMoreInfoBankTableFooterView.h"
 #import "QMSingleLineTextCell.h"
 #import "QMBankCardModel.h"
 #import "QMSelectBankViewControllerV2.h"
@@ -23,7 +23,7 @@
 #define QMTEXTFIELDCOLLECTIONCELLIDENTIFIER2 @"QMTEXTFIELDCOLLECTIONCELLIDENTIFIER"
 #define MORE_ITEM_TABLE_FOOTER_IDENTIFIER2 @"MORE_ITEM_TABLE_FOOTER_IDENTIFIER"
 
-@interface QMWithDrawViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, QMSelectBankViewControllerV2Delegate>
+@interface QMWithDrawViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, QMSelectBankViewControllerV2Delegate,UIAlertViewDelegate>
 
 @end
 
@@ -31,19 +31,28 @@
     UICollectionView *myCollectionView;
     QMSingleLineTextCell *amountCell;
     QMBankCardModel *cardModel;
+    NSArray *cardArrayModel;
     QMTextFieldCollectionCell *pwdCell;
+    UICollectionViewCell *lastclickcell;
     double available;
+    bool isWithDrawCardNow;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     [self setUpCollectionView];
+    isWithDrawCardNow = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self netupdateCardInformation];
+}
+
+- (void)netupdateCardInformation
+{
     // 获取剩余金额
     [[NetServiceManager sharedInstance] getAvailableMoneyWithDelegate:self success:^(id responseObject) {
         if (!QM_IS_DICT_NIL(responseObject)) {
@@ -62,23 +71,54 @@
         }
         
         NSArray *cardList = [responseObject objectForKey:kNetWorkList];
-        if (cardList && [cardList isKindOfClass:[NSArray class]]) {
-            
-            for (NSDictionary *dict in cardList) {
-                QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
-                
-                cardModel = model;
-                break;
+        
+        NSLog(@"%@",[QMBankCardModel getArrayModel:cardList]);
+        
+        cardArrayModel = [QMBankCardModel getArrayModel:cardList];
+        
+        NSMutableArray *modelArray = [[NSMutableArray alloc] initWithArray:cardArrayModel];
+        
+        for (QMBankCardModel *model in modelArray)
+        {
+            if (model.isWithdrawCard.integerValue) {
+                cardArrayModel = @[model];
+                isWithDrawCardNow = YES;
+                [myCollectionView reloadData];
+                return;
             }
-            
-            [myCollectionView reloadData];
         }
+        
+        if ([modelArray count])
+        {
+            cardArrayModel = modelArray;
+            [myCollectionView reloadData];
+            return;
+        }
+        
+        cardArrayModel = nil;
+        [myCollectionView reloadData];
+        //        if (cardList && [cardList isKindOfClass:[NSArray class]]) {
+        //
+        //            for (NSDictionary *dict in cardList) {
+        //                QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
+        //
+        //                cardModel = model;
+        //                break;
+        //            }
+        //
+        //            [myCollectionView reloadData];
+        //        }
     } failure:^(NSError *error) {
         [CMMUtility showNoteWithError:error];
     }];
 }
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)gesture {
+//- (void)handleTapGesture:(UITapGestureRecognizer *)gesture {
+//    [amountCell.detailField resignFirstResponder];
+//    [pwdCell.textField resignFirstResponder];
+//}
+
+- (void)handleTapGesture{
     [amountCell.detailField resignFirstResponder];
     [pwdCell.textField resignFirstResponder];
 }
@@ -93,15 +133,15 @@
     [myCollectionView registerClass:[QMSingleLineTextCell class] forCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER3];
     
     [myCollectionView registerClass:[QMTextFieldCollectionCell class] forCellWithReuseIdentifier:QMTEXTFIELDCOLLECTIONCELLIDENTIFIER2];
-    [myCollectionView registerClass:[QMMoreInfoTableFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2];
+    [myCollectionView registerClass:[QMMoreInfoBankTableFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2];
     
     myCollectionView.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     myCollectionView.dataSource = self;
     myCollectionView.delegate = self;
     [self.view addSubview:myCollectionView];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [myCollectionView addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+//    [myCollectionView addGestureRecognizer:tap];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -112,6 +152,10 @@
     return 4;
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self handleTapGesture];
+}
 
 - (void)onBack {
     if (self.isModel) {
@@ -141,8 +185,21 @@
         QMBankInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER2 forIndexPath:indexPath];
         cell.withDraw = YES;
         [cell.actionBtn addTarget:self action:@selector(gotoAddBankCardViewController) forControlEvents:UIControlEventTouchUpInside];
-        [cell configureCellWithBankCardModel:cardModel];
-        
+        QMBankCardModel *model = [cardArrayModel objectAtIndex:indexPath.row];
+        if ([cardArrayModel count] == 1 && isWithDrawCardNow == YES)
+        {
+            cell.withDrawCard = YES;
+        }else
+        {
+            cell.backgroundColor = [UIColor whiteColor];
+        }
+        [cell configureCellWithBankCardModel:model];
+        if (indexPath.row < [cardArrayModel count] - 1)
+        {
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 0.5, cell.frame.size.width, 0.5)];
+            line.backgroundColor = [UIColor grayColor];
+            [cell addSubview:line];
+        }
         return cell;
     }else if (indexPath.section == 1) {
         QMSingleLineTextCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER3 forIndexPath:indexPath];
@@ -197,6 +254,7 @@
 
 - (void)allMoney {
     amountCell.detailField.text = [NSString stringWithFormat:@"%.2f", available];
+    [self handleTapGesture];
 }
 
 - (void)gotoAddBankCardViewController {
@@ -207,12 +265,19 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 1;
+    if (section == 0) {
+//        return [cardArrayModel count];
+        return 0;
+    }else
+    {
+        return 1;
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0 && indexPath.section == 0) {
-        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:cardModel]);
+    if (indexPath.section == 0 && indexPath.row < [cardArrayModel count]) {
+        QMBankCardModel *model = [cardArrayModel objectAtIndex:indexPath.row];
+        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:model]);
     }
     
     return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, 44);
@@ -223,7 +288,7 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    QMMoreInfoTableFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2 forIndexPath:indexPath];
+    QMMoreInfoBankTableFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2 forIndexPath:indexPath];
     [footerView.actionBtn setTitle:@"提交" forState:UIControlStateNormal];
     [footerView.actionBtn addTarget:self action:@selector(commitBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -232,20 +297,35 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
- 
-    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"%ld",buttonIndex);
+    lastclickcell.backgroundColor = [UIColor whiteColor];
+    NSInteger clickcell = [myCollectionView indexPathForCell:lastclickcell].row;
+    if (alertView.tag == 100 && buttonIndex == 1) {
+        QMBankCardModel *model = [cardArrayModel objectAtIndex:clickcell];
+        [[NetServiceManager sharedInstance] setWithDrawCardWithCardID:model.bankCardId Delegate:self success:^(id responseObject) {
+            [self netupdateCardInformation];
+        } failure:^(NSError *error) {
+            [CMMUtility showNote:@"绑定失败"];
+        }];
+    }
 }
 
 // 提现申请
 - (void)commitBtnClicked:(id)sender {
+    [self handleTapGesture];
     NSString *channelId = @"2";
+    cardModel = [cardArrayModel objectAtIndex:0];
     NSString *bankCardId = cardModel.bankCardId;
     NSString *pwd = [pwdCell.textField text];
     NSString *amount = [amountCell.detailField text];
     UIButton *btn = (UIButton *)sender;
     btn.enabled = NO;
-    if (QM_IS_STR_NIL(bankCardId)) {
-        [CMMUtility showNote:@"请选择银行卡"];
+    if (cardModel.isWithdrawCard.integerValue == 0) {
+        [CMMUtility showNote:@"请先点击选择银行卡，进行提现银行卡的设置。"];
         btn.enabled = YES;
         return;
     }

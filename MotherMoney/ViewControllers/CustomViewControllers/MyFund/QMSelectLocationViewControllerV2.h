@@ -16,6 +16,7 @@ typedef enum {
 @interface QMSelectLocationViewControllerV2 : QMSelectItemViewController
 @property (nonatomic, assign) QMSelectLocationTypeV2 currentType;
 @property (nonatomic, strong) NSString *provinceCode;
+@property (nonatomic, strong) NSString *provinceName;
 
 - (id)initViewControllerWithType:(QMSelectLocationTypeV2)type;
 

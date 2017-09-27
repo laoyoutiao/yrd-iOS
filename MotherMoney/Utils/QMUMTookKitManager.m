@@ -7,13 +7,8 @@
 //
 
 #import "QMUMTookKitManager.h"
-#import "UMSocialWechatHandler.h"
-#import "UMSocialData.h"
-#import "UMSocialSinaHandler.h"
-#import "UMSocialQQHandler.h"
-#import "UMSocialSnsPlatformManager.h"
 
-#define APP_DOWNLOAD_H5_URL @"http://m.yrdloan.com/mobile/rest/share/target"
+#define APP_DOWNLOAD_H5_URL @"http://m.yrdloan.com/wap/register"
 #define SHARE_MARK @"%"
 @implementation QMUMTookKitManager
 
@@ -49,30 +44,29 @@
      if (QM_IS_STR_NIL(shareUrl)) {
          shareUrl= APP_DOWNLOAD_H5_URL;
      }
-    [UMSocialData setAppKey:[self UMAppKey]];
+//    [UMSocialData setAppKey:[self UMAppKey]];
     // 微信分享配置
-    [UMSocialWechatHandler setWXAppId:@"wxb05f40f331dd269c" appSecret:@"c250130ce72d7368ea2ea6a0246f081a" url:shareUrl];
+//    [UMSocialWechatHandler setWXAppId:@"wxb05f40f331dd269c" appSecret:@"c250130ce72d7368ea2ea6a0246f081a" url:shareUrl];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:@"wxb05f40f331dd269c" appSecret:@"c250130ce72d7368ea2ea6a0246f081a" redirectURL:shareUrl];
     
     // 新浪微博分享
-    [UMSocialSinaHandler openSSOWithRedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
+     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_Sina appKey:@"2482297240"  appSecret:@"3ce75361dd8ed85f597535f82f39d60b" redirectURL:shareUrl];
     
     // QQ 分享
-    [UMSocialQQHandler setQQWithAppId:@"1105012298" appKey:@"2irOUHKtua2l0p8w" url:shareUrl];
-    
+//    [UMSocialQQHandler setQQWithAppId:@"1105012298" appKey:@"2irOUHKtua2l0p8w" url:shareUrl];
+    [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_QQ appKey:@"1105012298"/*设置QQ平台的appID*/  appSecret:@"2irOUHKtua2l0p8w" redirectURL:shareUrl];
+     
 }
 
-+ (void)shareTo:(NSString *)platform
++ (void)shareTo:(UMSocialPlatformType)platform
           title:(NSString *)title1
         content:(NSString *)content
           image:(UIImage *)image
        shareUrl:(NSString *)shareUrl
-presentedController:(UIViewController *)controller
-     completion:(UMSocialDataServiceCompletion)completion {
+presentedController:(UIViewController *)controller{
+    
     [self UMShareConfigure:shareUrl];
     if (QM_IS_STR_NIL(content)) {
-        
-        
-        
         content = [NSString stringWithFormat:@"粤融贷为理财用户提供安全高效、专业优质的高收益理财产品。点击 %@ 即刻让我们的财富向前进。", APP_DOWNLOAD_H5_URL];
     }
     
@@ -82,62 +76,75 @@ presentedController:(UIViewController *)controller
         
     }
     
-    if (QM_IS_STR_NIL(platform)) {
-        
-        return;
+    if (QM_IS_STR_NIL(shareUrl)) {
+        shareUrl= APP_DOWNLOAD_H5_URL;
     }
+    
     UIImage *shareImage = [UIImage imageNamed:@"share_icon.png"];
-    if ([platform isEqualToString:UMShareToWechatSession]) { // 分享到微信
-        [UMSocialData defaultData].extConfig.wechatSessionData.title = title1;
-        [UMSocialData defaultData].extConfig.wechatSessionData.wxMessageType = UMSocialWXMessageTypeWeb;
-    }else if ([platform isEqualToString:UMShareToWechatTimeline]) { // 分享到微信朋友圈
-        content = [NSString stringWithFormat:@"%@\n%@", title1, content];
-        [UMSocialData defaultData].extConfig.wechatTimelineData.wxMessageType = UMSocialWXMessageTypeWeb;
-    }else if ([platform isEqualToString:UMShareToQQ]) { // 分享到QQ
-        [UMSocialData defaultData].extConfig.qqData.qqMessageType = UMSocialQQMessageTypeDefault;
-        [UMSocialData defaultData].extConfig.qqData.title = title1;
-        
-        //        content = [NSString stringWithFormat:@"%@\n%@", title, content];
-        //        shareImage = nil;
-    }else if ([platform isEqualToString:UMShareToSina]) { // 分享到新浪
-        content = [NSString stringWithFormat:@"%@\n%@ %@", title1, content, APP_DOWNLOAD_H5_URL];
-        shareImage = [UIImage imageNamed:@""];
-    }else if ([platform isEqualToString:UMShareToSms]) { // 短信分析那个
-        content = [NSString stringWithFormat:@"%@\n%@ %@", title1, content,
-                   (shareUrl == nil) ? @"":shareUrl];
-        shareImage = nil;
+    
+    UMSocialMessageObject *messageObject = [UMSocialMessageObject messageObject];
+    
+    if (platform == UMSocialPlatformType_WechatSession) { // 分享到微信
+        UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:title1 descr:content thumImage:shareImage];
+        //设置网页地址
+        shareObject.webpageUrl = shareUrl;
+        messageObject.shareObject = shareObject;
+    }else if (platform == UMSocialPlatformType_WechatTimeLine) { // 分享到微信朋友圈
+        UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:[NSString stringWithFormat:@"%@\n%@", title1, content] descr:nil thumImage:shareImage];
+        //设置网页地址
+        shareObject.webpageUrl = shareUrl;
+        messageObject.shareObject = shareObject;
+
+    }else if (platform == UMSocialPlatformType_QQ) { // 分享到QQ
+        UMShareWebpageObject *shareObject = [UMShareWebpageObject shareObjectWithTitle:title1 descr:content thumImage:shareImage];
+        //设置网页地址
+        shareObject.webpageUrl = shareUrl;
+        messageObject.shareObject = shareObject;
+    }else if (platform == UMSocialPlatformType_Sina) { // 分享到新浪
+        messageObject.text = [NSString stringWithFormat:@"%@\n%@ %@", title1, content, (shareUrl == nil) ? @"":shareUrl];
+        UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+        shareObject.shareImage = shareImage;
+        messageObject.shareObject = shareObject;
+    }else if (platform == UMSocialPlatformType_Sms) { // 短信分析那个
+        messageObject.text = [NSString stringWithFormat:@"%@\n%@ %@", title1, content, (shareUrl == nil) ? @"":shareUrl];
+        UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
+        shareObject.shareImage = shareImage;
+        messageObject.shareObject = shareObject;
     }else {
-        return;
+            return;
     }
-    NSLog(@"title1=%@", title1);
+    
     [self postSNSWithType:platform
-                  content:content
-                    image:shareImage
                  location:nil
-              urlResource:nil
       presentedController:controller
-               conpletion:completion];
+            messageObject:messageObject];
 }
 
-+ (void)postSNSWithType:(NSString *)platform
-                content:(NSString *)content
-                  image:(UIImage *)image
++ (void)postSNSWithType:(UMSocialPlatformType)platform
                location:(CLLocation *)location
-            urlResource:(UMSocialUrlResource *)urlResource
     presentedController:(UIViewController *)controller
-             conpletion:(void(^)(UMSocialResponseEntity *response))completionBlock {
+          messageObject:(UMSocialMessageObject *)messageObject{
     
-    if (QM_IS_STR_NIL(platform)) {
-        return;
-    }
+//    messageObject.title = @"粤融贷";
+    [[UMSocialManager defaultManager] shareToPlatform:platform messageObject:messageObject currentViewController:controller completion:^(id data, NSError *error) {
+        if (error) {
+            NSLog(@"************Share fail with error %@*********",error);
+        }else{
+            if ([data isKindOfClass:[UMSocialShareResponse class]]) {
+                UMSocialShareResponse *resp = data;
+                //分享结果消息
+                NSLog(@"response message is %@",resp.message);
+                //第三方原始返回的数据
+                NSLog(@"response originalResponse data is %@",resp.originalResponse);
+                
+            }else{
+                NSLog(@"response data is %@",data);
+            }
+            
+        }
+//        [self alertWithError:error];
+    }];
     
-//    if (QM_IS_STR_NIL(content) && nil == image) {
-//        return;
-//    }
-    
-    [[UMSocialControllerService defaultControllerService] setShareText:content shareImage:image socialUIDelegate:nil];
-    UMSocialSnsPlatform *snsPlatform = [UMSocialSnsPlatformManager getSocialPlatformWithName:platform];
-    snsPlatform.snsClickHandler(controller,[UMSocialControllerService defaultControllerService],YES);
 }
 
 @end

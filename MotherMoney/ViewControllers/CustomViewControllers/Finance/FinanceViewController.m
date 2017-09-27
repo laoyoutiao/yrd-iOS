@@ -9,7 +9,10 @@
 #import "FinanceViewController.h"
 #import "QMProductInfo.h"
 #import "QMProductListCell.h"
+#import "QMCreditorsInfo.h"
+#import "QMCreditorsListCell.h"
 #define PRODUCT_LIST_CELL_IDENTIFIER  @"product_list_cell_identifier"
+#define CREDITORS_LIST_CELL_IDENTIFIER  @"creditors_list_cell_identifier"
 #define LOADMORE_PAGE_FOOTER_VIEW_IDENTIFIER @"loadmore_page_footer_view_identifier"
 #define LOADMORE_PAGE_HEADER_VIEW_IDENTIFIER @"loadmore_page_header_view_identifier"
 
@@ -30,6 +33,8 @@
     //
     UIView* pushView;
     UITextField* pushTextField;
+    
+    BOOL isProductList;
 }
 
 - (id)initViewControllerWithChannelId:(NSString *)channelId {
@@ -43,13 +48,43 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    [self productListViewChangeFrame];
+//    [self headViewButtonBuild];
     [self initDataSource];
-    
+    isProductList = YES;
     if (ON_LINE==0) {
 //        [self initPushView];
     }
-    
 }
+
+- (void)headViewButtonBuild
+{
+    [productListButton addTarget:self action:@selector(clickProductList) forControlEvents:UIControlEventTouchUpInside];
+    [creditorsListBUtton addTarget:self action:@selector(clickCreditors) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)clickProductList
+{
+    isProductList = YES;
+    [productList removeAllObjects];
+    productListButton.backgroundColor = QM_COMMON_HEADBUTTON_COLOR;
+    creditorsListBUtton.backgroundColor = [UIColor whiteColor];
+    [productListButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [creditorsListBUtton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self asyncFetchProductListWithOffset:1 pageSize:QM_FETCH_PAGE_SIZE];
+}
+
+- (void)clickCreditors
+{
+    isProductList = NO;
+    [productList removeAllObjects];
+    productListButton.backgroundColor = [UIColor whiteColor];
+    creditorsListBUtton.backgroundColor = QM_COMMON_HEADBUTTON_COLOR;
+    [productListButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [creditorsListBUtton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self asyncFetchCreditorsListWithOffset:1 pageSize:QM_FETCH_PAGE_SIZE];
+}
+
 -(void)initPushView
 {
     pushView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 120)];
@@ -75,24 +110,25 @@
 }
 -(void)yesAction:(id)sender
 {
-    
-    
-    
     NSString* productId=pushTextField.text;
     if (productId) {
         if (productList) {
-            
-            QMProductInfo *info = [[QMProductInfo alloc] init];
-            info.product_id =productId;
-            [self gotoProductDetailInfoViewController:info];
-        
+            if(isProductList)
+            {
+                QMProductInfo *info = [[QMProductInfo alloc] init];
+                info.product_id =productId;
+                [self gotoProductDetailInfoViewController:info];
+            }else
+            {
+                QMCreditorsInfo *info = [[QMCreditorsInfo alloc] init];
+                info.product_id =productId;
+                [self gotoCreditorsDetailInfoViewController:info];
+            }
         }
         else
         {
             NSLog(@"productList is nil");
         }
-        
-        
     }
 }
 //-(void)cancelAction:(id)sender
@@ -133,6 +169,26 @@
                                                                     [self handleFetchProductListFailure:error];
                                                                 }];
 }
+
+
+- (void)asyncFetchCreditorsListWithOffset:(NSInteger)offset
+                               pageSize:(NSInteger)pageSize {
+    
+    [[NetServiceManager sharedInstance] getCreditorsListWithWithChannelId:mChannelId
+                                                                 offset:offset
+                                                               pageSize:pageSize
+                                                               delegate:self
+                                                                success:^(id responseObject) {
+                                                                    if (1 == offset) {
+                                                                        [productList removeAllObjects];
+                                                                    }
+                                                                    [self handleFetchCreditorsListSuccess:responseObject];
+                                                                } failure:^(NSError *error) {
+                                                                    [self handleFetchProductListFailure:error];
+                                                                }];
+}
+
+
 //产品列表加载成功
 - (void)handleFetchProductListSuccess:(id)responseObject {
     if ([responseObject isKindOfClass:[NSDictionary class]]) {
@@ -156,9 +212,37 @@
     [self doneLoadingTableViewData];
 }
 
+- (void)handleFetchCreditorsListSuccess:(id)responseObject {
+    if ([responseObject isKindOfClass:[NSDictionary class]]) {
+        NSArray *products = (NSArray *)[responseObject objectForKey:kNetWorkList];
+        isAllDataLoaded = NO;
+        if ([products isKindOfClass:[NSArray class]]) {
+            if ([products count] < QM_FETCH_PAGE_SIZE) {
+                isAllDataLoaded = YES;
+            }
+            
+            for (NSDictionary *dict in products) {
+                QMCreditorsInfo *info = [[QMCreditorsInfo alloc] initWithDictionary:dict];
+                
+                if (info) {
+                    [productList addObject:info];
+                }
+            }
+        }
+    }
+    
+    [self doneLoadingTableViewData];
+}
+
 - (void)handleFetchProductListFailure:(NSError *)error {
 //    [self doneLoadingTableViewData];
-    [self handleFetchProductListSuccess:nil];
+    if (isProductList)
+    {
+        [self handleFetchProductListSuccess:nil];
+    }else
+    {
+        [self handleFetchCreditorsListSuccess:nil];
+    }
 }
 
 - (void)refreshBtnClicked:(id)sender {
@@ -176,26 +260,33 @@
     layout.minimumLineSpacing = 8;
     layout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8);
     //设置网格
-    productListTable = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+    CGRect rect = self.view.bounds;
+    productListTable = [[UICollectionView alloc] initWithFrame:rect collectionViewLayout:layout];
     productListTable.alwaysBounceVertical = YES;
     productListTable.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     productListTable.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [productListTable registerClass:[QMProductListCell class] forCellWithReuseIdentifier:PRODUCT_LIST_CELL_IDENTIFIER];
+    [productListTable registerClass:[QMCreditorsListCell class] forCellWithReuseIdentifier:CREDITORS_LIST_CELL_IDENTIFIER];
     [productListTable registerClass:[QMPageFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:LOADMORE_PAGE_FOOTER_VIEW_IDENTIFIER];
     productListTable.delegate = self;
     productListTable.dataSource = self;
-    
     return productListTable;
 }
 
 - (void)reloadData {
-    [self asyncFetchProductListWithOffset:1 pageSize:QM_FETCH_PAGE_SIZE];
+    if (isProductList)
+    {
+        [self asyncFetchProductListWithOffset:1 pageSize:QM_FETCH_PAGE_SIZE];
+    }else
+    {
+        [self asyncFetchCreditorsListWithOffset:1 pageSize:QM_FETCH_PAGE_SIZE];
+    }
 }
+
 
 - (void)doneLoadingTableViewData {
     [super doneLoadingTableViewData];
     [(UICollectionView *)self.scrollView reloadData];
-    
     if (QM_IS_ARRAY_NIL(productList)) {
         [self showEmptyView];
     }else {
@@ -205,7 +296,13 @@
 
 - (void)didTriggerLoadNextPageData {
     NSInteger pageNumber = [productList count] / QM_FETCH_PAGE_SIZE + 1;
-    [self asyncFetchProductListWithOffset:pageNumber pageSize:QM_FETCH_PAGE_SIZE];
+    if (isProductList)
+    {
+        [self asyncFetchProductListWithOffset:pageNumber pageSize:QM_FETCH_PAGE_SIZE];
+    }else
+    {
+        [self asyncFetchCreditorsListWithOffset:pageNumber pageSize:QM_FETCH_PAGE_SIZE];
+    }
 }
 
 - (BOOL)isAllDataLoaded {
@@ -213,9 +310,6 @@
 }
 
 - (void)setUpProductListTable {
-    
-    
-    
 //    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
 //    layout.minimumLineSpacing = 8;
 //    layout.sectionInset = UIEdgeInsetsMake(8, 8, 8, 8);
@@ -235,34 +329,57 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    QMProductListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:PRODUCT_LIST_CELL_IDENTIFIER forIndexPath:indexPath];
-//    cell.backgroundColor = [UIColor orangeColor];
-    if (indexPath.row < [productList count]) {
-        QMProductInfo *info = [productList objectAtIndex:indexPath.row];
-        //实现产品cell的显示，cell的返回高度：130
-        [cell configureCellWithProductionInfo:info];
+    
+    if (isProductList) {
+        QMProductListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:PRODUCT_LIST_CELL_IDENTIFIER forIndexPath:indexPath];
+        //    cell.backgroundColor = [UIColor orangeColor];
+        if (indexPath.row < [productList count]) {
+            QMProductInfo *info = [productList objectAtIndex:indexPath.row];
+            //实现产品cell的显示，cell的返回高度：130
+            [cell configureCellWithProductionInfo:info];
+        }
+        return cell;
+    }else
+    {
+        QMCreditorsListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CREDITORS_LIST_CELL_IDENTIFIER forIndexPath:indexPath];
+
+        if (indexPath.row < [productList count]) {
+            QMCreditorsInfo *info = [productList objectAtIndex:indexPath.row];
+            //实现产品cell的显示，cell的返回高度：130
+            [cell configureCellWithProductionInfo:info];
+        }
+        return cell;
     }
-    
-    
-    return cell;
 }
 //选中cell实现的方法
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     // 打点
     [QMUMTookKitManager event:USER_CLICK_Buy_InPRODUCTLIST_KEY label:@"点击列表产品"];
-    
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     if (indexPath.row < [productList count]) {
-        QMProductInfo *info = [productList objectAtIndex:indexPath.row];
-        //跳转产品详情页面
-        [self gotoProductDetailInfoViewController:info];
+        if (isProductList) {
+            QMProductInfo *info = [productList objectAtIndex:indexPath.row];
+            //跳转产品详情页面
+            [self gotoProductDetailInfoViewController:info];
+        }else
+        {
+            QMCreditorsInfo *info = [productList objectAtIndex:indexPath.row];
+            //跳转产品详情页面
+            [self gotoCreditorsDetailInfoViewController:info];
+        }
     }
 }
 
 //返回每个cell的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat padding = ((UICollectionViewFlowLayout *)collectionView.collectionViewLayout).sectionInset.left;
-    return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * padding, [QMProductListCell getCellHeightForProductInfo:nil]);
+    if (isProductList)
+    {
+        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * padding, [QMProductListCell getCellHeightForProductInfo:nil]);
+    }else
+    {
+        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * padding, [QMCreditorsListCell getCellHeightForProductInfo:nil]);
+    }
 }
 
 //cell footer和headerView的返回
@@ -293,6 +410,15 @@
     }
     
     QMProductInfoViewController *con = [[QMProductInfoViewController alloc] initViewControllerWithProductInfo:productInfo];
+    [self.navigationController pushViewController:con animated:YES];
+}
+
+- (void)gotoCreditorsDetailInfoViewController:(QMCreditorsInfo *)productInfo {
+    if (nil == productInfo) {
+        return;
+    }
+    
+    QMCreditorsInfoViewController *con = [[QMCreditorsInfoViewController alloc] initViewControllerWithProductInfo:productInfo];
     [self.navigationController pushViewController:con animated:YES];
 }
 

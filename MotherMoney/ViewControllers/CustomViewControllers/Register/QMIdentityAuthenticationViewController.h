@@ -11,7 +11,12 @@
 @interface QMIdentityAuthenticationViewController : QMViewController
 @property (nonatomic, assign) BOOL isModel;
 @property (nonatomic, weak) id<QMIdentityAuthenticationViewControllerDelegate> delegate;
-
+@property (assign, nonatomic) BOOL haveDefaultMessage;
+@property (nonatomic, strong) NSString *userRealName;
+@property (nonatomic, strong) NSString *userIdCard;
+@property (nonatomic, assign) BOOL isOpenAccount;
+@property (nonatomic, assign) BOOL isActivationAccount;
+@property (nonatomic, assign) BOOL isChangeBandCard;
 @end
 
 @protocol QMIdentityAuthenticationViewControllerDelegate <NSObject>

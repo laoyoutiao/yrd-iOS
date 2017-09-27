@@ -14,4 +14,6 @@
 @property(nonatomic,strong)NSNumber *value;
 @property(nonatomic,strong)NSNumber *expire;
 @property(nonatomic,strong)NSString *endDate;
+@property(nonatomic,strong)NSString *extraInterest;
+@property (nonatomic,strong) NSString *explanation;
 @end

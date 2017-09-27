@@ -26,7 +26,7 @@
 @implementation QMBuyProductInputMoneyViewController {
     UICollectionView *myCollectionView;
     QMProductInfo *myProductInfo;
-    
+    QMCreditorsInfo *myCreditorsInfo;
     NSInteger rateMoney;
 }
 
@@ -34,6 +34,15 @@
     if (self = [super init]) {
         myProductInfo = info;
         rateMoney = [info.baseAmount integerValue];
+    }
+    
+    return self;
+}
+
+- (id)initViewControllerWithCreditorsInfo:(QMCreditorsInfo *)info {
+    if (self = [super init]) {
+        myCreditorsInfo = info;
+//        rateMoney = [info.baseAmount integerValue];
     }
     
     return self;

@@ -78,6 +78,33 @@
             self.ableWithdrawalAmount = ableWithdrawalAmount;
         }
         
+        NSString *ableCardNum = [NSString stringWithFormat:@"%@", [dict objectForKey:@"ableCardNum"]];
+        if ([CMMUtility isStringOk:ableCardNum]) {
+            self.ableCardNum = ableCardNum;
+        }
+        
+        NSString *salesman = [NSString stringWithFormat:@"%@", [dict objectForKey:@"salesman"]];
+        if ([CMMUtility isStringOk:salesman]) {
+            self.salesman = [salesman boolValue];
+            NSLog(@"%u",self.salesman);
+        }
+        
+        NSString *channelId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"channelId"]];
+        if ([CMMUtility isStringOk:channelId]) {
+            self.channelId = channelId;
+        }
+        
+        NSString *customerCount = [NSString stringWithFormat:@"%@",[dict objectForKey:@"customerCount"]];
+        if ([CMMUtility isStringOk:customerCount]) {
+            self.customerCount = customerCount;
+        }
+        
+        NSString *openAccountStatus = [NSString stringWithFormat:@"%@",[dict objectForKey:@"status"]];
+        if ([CMMUtility isStringOk:openAccountStatus]) {
+            self.openAccountStatus = openAccountStatus;
+        }
+
+        
 //        // 初始化产品数据
 //        NSMutableArray *array = [NSMutableArray arrayWithCapacity:0];
 //        

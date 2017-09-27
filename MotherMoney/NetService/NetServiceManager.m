@@ -67,13 +67,22 @@
     if (delegate == nil) {
         return;
     }
+    
     if ([delegate isKindOfClass:[UIViewController class]]) {
         [CMMUtility hideWaitingAlertView];
     }
+    
+    if ([path isEqualToString:kBuyTicket] || [path isEqualToString:kOpenAccount] || [path isEqualToString:kActivationAccount] || [path isEqualToString:kChangeBankCard]) {
+        NSString *result =[[ NSString alloc] initWithData:info encoding:NSUTF8StringEncoding];
+        NSLog(@"%@",result);
+        success(result);
+        return;
+    }
+    
     //网络请求成功
     NSDictionary *dic = (NSDictionary *)[info objectFromJSONData];
-    
-//      NSLog(@"网络响应数据【%@】",dic);
+//    NSLog(@"%@",info);
+    NSLog(@"网络响应数据【%@】",dic);
     
     NSNumber *resCode = [dic objectForKey:kNetWorkCode];
     
@@ -202,7 +211,6 @@
     [_httpRequest xsPostPath:kUserLogin delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kUserLogin];
-        
         NSDictionary *dict = (NSDictionary *)[responseObject objectFromJSONData];
 //        NSLog(@"Test --------- %@", dict);
         if([dict objectForKey:@"success"])
@@ -235,6 +243,9 @@
     [param setObject:@"1" forKey:@"endType"];
     [param setObject:statuNumber forKey:@"status"];
     [_httpRequest xsPostPath:kPostToken delegate:self params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        [self catchNetResWithResInfo:responseObject success:nil error:nil delegate:nil path:nil];
+        NSDictionary *dic = (NSDictionary *)[responseObject objectFromJSONData];
+        NSLog(@"%@",dic);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@",error);
@@ -360,11 +371,47 @@
     NSMutableDictionary *param = [self buildParametersDic];
     [param setValue:[NSNumber numberWithInteger:offset] forKey:@"pageNow"];
     [param setValue:[NSNumber numberWithInteger:pageSize] forKey:@"pageSize"];
+//    [param setValue:@"2" forKey:@"pageNow"];
+//    [param setValue:@"3" forKey:@"pageSize"];
     [param setValue:channelId forKey:@"productChannelId"];
     
     [_httpRequest xsPostPath:kProductList delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
+//        NSError *error = nil;
+//        NSDictionary *jsonArray = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+//        NSLog(@"%@",jsonArray);
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kProductList];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        failure(error);
+        [CMMUtility hideWaitingAlertView];
+        [self showNoNetworkErrorPrompt:error];
+    }];
+}
+
+// 债权转让产品列表
+- (void)getCreditorsListWithWithChannelId:(NSString *)channelId
+                                 offset:(NSInteger)offset
+                               pageSize:(NSInteger)pageSize
+                               delegate:(id)delegate
+                                success:(void (^)(id responseObject))success
+                                failure:(void(^)(NSError *error))failure {
+    
+    if (offset==1) {
+        [CMMUtility showWaitingAlertView];
+    }
+    
+    NSMutableDictionary *param = [self buildParametersDic];
+    [param setValue:[NSNumber numberWithInteger:offset] forKey:@"pageNow"];
+    [param setValue:[NSNumber numberWithInteger:pageSize] forKey:@"pageSize"];
+    //    [param setValue:@"2" forKey:@"pageNow"];
+    //    [param setValue:@"3" forKey:@"pageSize"];
+    [param setValue:channelId forKey:@"productChannelId"];
+    
+    [_httpRequest xsPostPath:kCreditorsList delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //        NSError *error = nil;
+        //        NSDictionary *jsonArray = [NSJSONSerialization JSONObjectWithData:responseObject options:kNilOptions error:&error];
+        //        NSLog(@"%@",jsonArray);
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kCreditorsList];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         failure(error);
@@ -430,6 +477,27 @@
     [_httpRequest xsPostPath:kProductDetail delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kProductDetail];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        failure(error);
+        [CMMUtility hideWaitingAlertView];
+        [self showNoNetworkErrorPrompt:error];
+    }];
+}
+
+// 获得债权转让产品详情
+- (void)getCreditorsDetailWithProductId:(NSString *)productId
+                             delegate:(id)delegate
+                              success:(void (^)(id responseObject))success
+                              failure:(void(^)(NSError *error))failure {
+    assert(productId);
+    
+    [CMMUtility showWaitingAlertView];
+    NSMutableDictionary *param = [self buildParametersDic];
+    [param setObject:productId forKey:@"trproductId"];
+    [_httpRequest xsPostPath:kCreditorsDetail delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kCreditorsDetail];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
         failure(error);
@@ -1104,6 +1172,25 @@
     }];
 }
 
+// 风险提示
+- (void)getRiskAgreementWithDelegate:(id)delegate
+                             success:(void (^)(id responseObject))success
+                             failure:(void(^)(NSError *error))failure
+{
+    [CMMUtility showWaitingAlertView];
+    NSMutableDictionary *param = [self buildParametersDic];
+    
+    [_httpRequest xsPostPath:KRiskAgreement delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kPrivacyAgreement];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        failure(error);
+        [CMMUtility hideWaitingAlertView];
+        [self showNoNetworkErrorPrompt:error];
+    }];
+}
+
 //@new 安全
 - (void)getSecurityTemplateWithDelegate:(id)delegate
                                 success:(void (^)(id responseObject))success
@@ -1401,7 +1488,6 @@
     NSMutableDictionary *param = [self buildParametersDic];
     [param setValue:channelId forKey:@"productChannelId"];
     [_httpRequest xsPostPath:kUserBankCardListByChannelId delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kUserBankCardListByChannelId];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failure(error);
@@ -1527,9 +1613,7 @@
 - (void)getMyUseCouponListWithdelegate:(id)delegate
                                success:(void (^)(id responseObject))success
                                failure:(void(^)(NSError *error))failure{
-    
-    
-    
+                         
     [CMMUtility showWaitingAlertView];
     NSMutableDictionary *param = [self buildParametersDic];
     [_httpRequest xsPostPath:kCanUseCoupon delegate:delegate params:param success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -1623,6 +1707,31 @@
         failure(error);
     }];
 }
+
+- (void)getHomeDataWithDelegate:(id)delegate
+                        success:(void (^)(id responseObject))success
+                        failure:(void(^)(NSError *error))failure
+{
+    [_httpRequest xsPostPath:kGetHomedata delegate:delegate params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        NSLog(@"%@",(NSDictionary *)[responseObject objectFromJSONData]);
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kGetHomedata];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+- (void)getHomeMiddleLinkDelegate:(id)delegate
+                          success:(void (^)(id responseObject))success
+                          failure:(void(^)(NSError *error))failure
+{
+    [_httpRequest xsPostPath:kHomeMiddleLink delegate:delegate params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        //        NSLog(@"%@",(NSDictionary *)[responseObject objectFromJSONData]);
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kHomeMiddleLink];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
 - (void)getAboutMessageWithdelegate:(id)delegate
                             success:(void (^)(id responseObject))success
                             failure:(void(^)(NSError *error))failure{
@@ -1634,6 +1743,222 @@
     }];
 
 }
+
+- (void)setWithDrawCardWithCardID:(NSString *)cardid
+                         Delegate:(id)delegate
+                          success:(void (^)(id responseObject))success
+                          failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"bankCardId":cardid};
+    [_httpRequest xsPostPath:kSetWithDrawCard delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kSetWithDrawCard];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+- (void)sendVerifyCodeMessage:(NSString *)verify
+                       Mobile:(NSString *)mobile
+                         Delegate:(id)delegate
+                          success:(void (^)(id responseObject))success
+                          failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"imageCode":verify,@"mobile":mobile};
+    [_httpRequest xsPostPath:kSendVerifyCodeMessage delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kSendVerifyCodeMessage];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+- (void)getMobileResgist:(NSString *)mobile
+                     Delegate:(id)delegate
+                      success:(void (^)(id responseObject))success
+                      failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"mobile":mobile};
+    [_httpRequest xsPostPath:kMobileRegisted delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kMobileRegisted];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+- (void)getWillTimeOutScore:(NSString *)mobile
+               Delegate:(id)delegate
+                success:(void (^)(id responseObject))success
+                failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"phone":mobile};
+    [_httpRequest xsPostPath:kWillTimeOutScore delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kWillTimeOutScore];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+- (void)getBankQuotaDelegate:(id)delegate
+                     success:(void (^)(id responseObject))success
+                     failure:(void(^)(NSError *error))failure
+{
+    [_httpRequest xsPostPath:kGetBankQuota delegate:delegate params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kGetBankQuota];
+//        success(responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//业务员佣金详情
+- (void)getBusinessAmount:(id)delegate
+                  success:(void (^)(id responseObject))success
+                  failure:(void(^)(NSError *error))failure
+{
+    [_httpRequest xsPostPath:kGetBusinessAmount delegate:delegate params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kGetBusinessAmount];
+        //        success(responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//获取省份信息
+- (void)getProvinceInfo:(id)delegate
+                  success:(void (^)(id responseObject))success
+                  failure:(void(^)(NSError *error))failure
+{
+    [_httpRequest xsPostPath:kGetProvinceInfo delegate:delegate params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+//        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kGetProvinceInfo];
+        success(responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//获取贵州银行存管银行卡短信验证码
+- (void)getBankMessageCode:(id)delegate
+                    BankCardID:(NSString *)bankcardid
+                    Mobile:(NSString *)mobile
+                   SmsType:(RebindBankMessageType)smstype
+                success:(void (^)(id responseObject))success
+                failure:(void(^)(NSError *error))failure
+{
+    NSString *Smstype;
+    switch (smstype) {
+        case RebindBankMessageTypeOldCard:
+            Smstype = @"O";
+            break;
+            
+        case RebindBankMessageTypeNewCard:
+            Smstype = @"N";
+            break;
+            
+        default:
+            break;
+    }
+    NSDictionary *params = @{@"busiType":@"rebind",
+                             @"cardId":bankcardid,
+                             @"usrMp":mobile,
+                             @"smsType":Smstype};
+    [_httpRequest xsPostPath:kGetBankMessageCode delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kGetBankMessageCode];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//用户开户接口
+- (void)PersonOpenAccount:(id)delegate
+                 RealName:(NSString *)realname
+                   IdCard:(NSString *)idcard
+               BankCardID:(NSString *)bankcardid
+                   Mobile:(NSString *)mobile
+                 BankCode:(NSString *)bankcode
+             ProvinceCode:(NSString *)provincecode
+                 CityCode:(NSString *)citycode
+                  success:(void (^)(id responseObject))success
+                  failure:(void(^)(NSError *error))failure
+{
+//    NSDictionary *params = @{@"realName":realname,
+//                             @"idCard":idcard,
+//                             @"cardNo":bankcardid,
+//                             @"usrMp":mobile,
+//                             @"bank":bankcode,
+//                             @"province":provincecode,
+//                             @"city":citycode,
+//                             @"os":@"true"};
+    NSDictionary *params = @{@"realName":@"卓年彬",
+                             @"idCard":@"440923199807051471",
+                             @"cardNo":@"6225805555510712",
+                             @"usrMp":@"18814284041",
+                             @"bank":bankcode,
+                             @"province":provincecode,
+                             @"city":citycode,
+                             @"os":@"true"};
+    [_httpRequest xsPostPath:kOpenAccount delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kOpenAccount];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//用户激活接口
+- (void)PersonActivationAccount:(id)delegate
+                     BankCardID:(NSString *)bankcardid
+                         Mobile:(NSString *)mobile
+                       BankCode:(NSString *)bankcode
+                   ProvinceCode:(NSString *)provincecode
+                       CityCode:(NSString *)citycode
+                        success:(void (^)(id responseObject))success
+                        failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"cardNo":bankcardid,
+                             @"usrMp":mobile,
+                             @"bank":bankcode,
+                             @"province":provincecode,
+                             @"city":citycode};
+    [_httpRequest xsPostPath:kActivationAccount delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kActivationAccount];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//用户换绑卡接口
+- (void)PersonChangeBankCard:(id)delegate
+               OldBankCardID:(NSString *)oldbankcardid
+                   OldMobile:(NSString *)oldmobile
+                  OldSmsCode:(NSString *)oldsmscode
+               NewBankCardID:(NSString *)newbankcardid
+                   NewMobile:(NSString *)newmobile
+                  NewSmsCode:(NSString *)newsmscode
+                    BankCode:(NSString *)bankcode
+                ProvinceCode:(NSString *)provincecode
+                    CityCode:(NSString *)citycode
+                     success:(void (^)(id responseObject))success
+                     failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"oldOpenAcctId":oldbankcardid,
+                             @"oldUsrMp":oldmobile,
+                             @"oldUsrMpSmsCode":oldsmscode,
+                             @"newOpenAcctId":newbankcardid,
+                             @"newUsrMp":newmobile,
+                             @"newUsrMpSmsCode":newsmscode,
+                             @"bankId":bankcode,
+                             @"provId":provincecode,
+                             @"areaId":citycode};
+    [_httpRequest xsPostPath:kChangeBankCard delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kChangeBankCard];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+
+
 - (void)showNoNetworkErrorPrompt:(NSError *)error {
     if ([error code] == -1004) {
         [CMMUtility showNote:QMLocalizedString(@"qm_no_network_error", @"未检测到网络，请检查网络配置")];

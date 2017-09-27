@@ -135,10 +135,11 @@
 //#pragma mark -
 //#pragma mark UIWebViewDelegate
 //
+
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     NSString *url = [[request URL] parameterString];
-    
+
     NSLog(@"%@",url);
     
     return YES;

@@ -14,8 +14,9 @@
 #import "QMBankBranchInfo.h"
 #import "QMBankBranchInfoViewController.h"
 #import "QMTokenInfo.h"
+#import "QMProvinceInfo.h"
 
-@interface QMIdentityAuthenticationViewController ()<UITextFieldDelegate, QMSelectItemViewControllerDelegate>
+@interface QMIdentityAuthenticationViewController ()<UITextFieldDelegate, QMSelectItemViewControllerDelegate, UIWebViewDelegate>
 
 @end
 
@@ -39,33 +40,46 @@
     
     UIButton *selectCityBtn;
     
+    UIButton *oldgetbankMessageCodeBtn;
+    
+    UIButton *newgetbankMessageCodeBtn;
+    
     UITextField *reseveredPhoneField;
     
     UITextField *bankCardIdField;
     
-    UITextField *bankDetailInfoField;
+    UITextField *oldreseveredPhoneField;
+    
+    UITextField *oldbankCardIdField;
+    
+    UITextField *oldbankCardMessageCodeField;
+    
+    UITextField *newbankCardMessageCodeField;
     
 //    QMOrderModel *mOrderModel;
     
     QMBankInfo *currentBankInfo;
     
-    QMBankBranchInfo *branchInfo;
-    
     QMNumberFormatPromptView *bankCardIdPromptView;
     
     QMNumberFormatPromptView *idCardPromptView;
     
-//    QMNumberFormatPromptView *phoneNumberPromptView;
+    QMNumberFormatPromptView *oldbankCardIdPromptView;
     
     QMSearchItem *provinceItem;
     
     QMSearchItem *cityitem;
+    
+    BOOL showWebNow;
+    
+    UIWebView *responWebView;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     
+    showWebNow = NO;
     // Do any additional setup after loading the view.
     [self setUpSubViews];
     
@@ -117,6 +131,24 @@
             [self updateSubViewsFrameAnimated:NO];
         }
         
+    }else if(object == oldbankCardIdField)
+    {
+        NSString *string = oldbankCardIdField.text;
+        [oldbankCardIdPromptView updateWithText:[QMStringUtil formattedBankCardIdFromCardId:string]];
+        
+        BOOL oldbankCardIdPromotHidden = oldbankCardIdPromptView.hidden;
+        //文本框为空或者文本框不在第一个响应bankNowHidden都是为yes
+        BOOL oldbankCardIdPromotNowHidden = QM_IS_STR_NIL(oldbankCardIdField.text) || !(oldbankCardIdField.isFirstResponder);
+        
+        oldbankCardIdPromptView.hidden = oldbankCardIdPromotNowHidden;
+        
+        if (oldbankCardIdPromotHidden != oldbankCardIdPromotNowHidden) {
+            //            bankCardIdPromptView.frame = CGRectMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(idCardField.frame), CGRectGetWidth(idCardField.frame), 40.0f);
+            [self updateSubViewsFrameAnimated:YES];
+        }else {
+            [self updateSubViewsFrameAnimated:NO];
+        }
+        
     }
 }
 
@@ -125,13 +157,19 @@
 }
 
 - (void)goBack {
-    if (self.isModel) {
-        [self dismissViewControllerAnimated:YES
-                                 completion:^{
-                                     
-                                 }];
-    }else {
-        [self.navigationController popViewControllerAnimated:YES];
+    if (showWebNow) {
+        [responWebView removeFromSuperview];
+        showWebNow = NO;
+    }else
+    {
+        if (self.isModel) {
+            [self dismissViewControllerAnimated:YES
+                                     completion:^{
+                                         
+                                     }];
+        }else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 }
 
@@ -146,6 +184,39 @@
     containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:containerView];
     
+    if (_isOpenAccount == YES) {
+        [self setupOpenAccount];
+    }else if (_isActivationAccount == YES)
+    {
+        [self setupActvitionAccount];
+    }else if (_isChangeBandCard == YES)
+    {
+        [self setupChangeBandCard];
+    }
+    
+    [self setupPromptView];
+    
+    [self updateNextBtnState];
+    [self updateBtnTitles];
+}
+
+- (void)setupPromptView
+{
+    oldbankCardIdPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(CGRectGetMinX(oldbankCardIdField.frame), CGRectGetMaxY(oldbankCardIdField.frame), CGRectGetWidth(oldbankCardIdField.frame), 40.0f)];
+    oldbankCardIdPromptView.hidden = YES;
+    [containerView addSubview:oldbankCardIdPromptView];
+    
+    idCardPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(idCardField.frame), CGRectGetWidth(idCardField.frame), 40.0f)];
+    idCardPromptView.hidden = YES;
+    [containerView addSubview:idCardPromptView];
+    
+    bankCardIdPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame), CGRectGetWidth(bankCardIdField.frame), 40.0f)];
+    bankCardIdPromptView.hidden = YES;
+    [containerView addSubview:bankCardIdPromptView];
+}
+
+- (void)setupOpenAccount
+{
     promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, CGRectGetWidth(self.view.frame) - 2 * 20, 50.0f)];
     promptLabel.font = [UIFont systemFontOfSize:14];
     promptLabel.numberOfLines = 2;
@@ -160,10 +231,13 @@
     realNameField.leftView = nameleftView;
     realNameField.placeholder = QMLocalizedString(@"qm_identify_realname_field_text", @"请填写您的真实姓名");
     realNameField.leftViewMode = UITextFieldViewModeAlways;
+    realNameField.text = self.userRealName;
+    NSLog(@"%@",_userRealName);
     [containerView addSubview:realNameField];
     
     // 身份证号
     idCardField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(realNameField.frame), CGRectGetMaxY(realNameField.frame) + 10, CGRectGetWidth(realNameField.frame), CGRectGetHeight(realNameField.frame))];
+    idCardField.text = self.userIdCard;
     nameleftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(idCardField.frame))];
     [idCardField setBackground:[QMImageFactory commonBackgroundImage]];
     idCardField.leftView = nameleftView;
@@ -175,16 +249,101 @@
     [idCardField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
     [containerView addSubview:idCardField];
     
-    idCardPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(idCardField.frame), CGRectGetWidth(idCardField.frame), 40.0f)];
-    idCardPromptView.hidden = YES;
-    [containerView addSubview:idCardPromptView];
-    
-    promptLabel  = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(idCardPromptView.frame), CGRectGetMaxY(idCardField.frame) + 15, CGRectGetWidth(self.view.frame) - 2 * CGRectGetMinX(idCardPromptView.frame), 13)];
+    promptLabel  = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(idCardField.frame) + 10, CGRectGetWidth(self.view.frame) - 2 * CGRectGetMinX(idCardField.frame), 13)];
     promptLabel.textColor = QM_COMMON_SUB_TITLE_COLOR;
     promptLabel.font = [UIFont systemFontOfSize:11];
     promptLabel.text = QMLocalizedString(@"qm_add_bankcard_prompt_text", @"确认银行卡信息，如需修改请直接编辑");
     [containerView addSubview:promptLabel];
     
+    [self setupPublicBtnWithAccount];
+}
+
+- (void)setupActvitionAccount
+{
+    promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, CGRectGetWidth(self.view.frame) - 2 * 20, 50.0f)];
+    promptLabel.font = [UIFont systemFontOfSize:14];
+    promptLabel.numberOfLines = 2;
+    promptLabel.textColor = QM_COMMON_TEXT_COLOR;
+    promptLabel.text = QMLocalizedString(@"qm_add_bankcard_prompt_text", @"确认银行卡信息，如需修改请直接编辑");
+    [containerView addSubview:promptLabel];
+    
+    [self setupPublicBtnWithAccount];
+}
+
+- (void)setupChangeBandCard
+{
+    promptLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, CGRectGetWidth(self.view.frame) - 2 * 20, 50.0f)];
+    promptLabel.font = [UIFont systemFontOfSize:14];
+    promptLabel.numberOfLines = 1;
+    promptLabel.textColor = QM_COMMON_TEXT_COLOR;
+    promptLabel.text = @"请输入原绑定银行卡信息";
+    [containerView addSubview:promptLabel];
+    
+    oldbankCardIdField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(promptLabel.frame), CGRectGetMaxY(promptLabel.frame) , CGRectGetWidth(promptLabel.frame), 44)];
+    oldbankCardIdField.delegate = self;
+    oldbankCardIdField.keyboardType = UIKeyboardTypeNumberPad;
+    oldbankCardIdField.textColor = QM_COMMON_TEXT_COLOR;
+    [oldbankCardIdField setBackground:[QMImageFactory commonTextFieldImage]];
+    oldbankCardIdField.font = [UIFont systemFontOfSize:13];
+    oldbankCardIdField.placeholder = QMLocalizedString(@"qm_add_bankcard_selectbank_id_text", @"请输入您的银行卡");
+    [oldbankCardIdField addTarget:self action:@selector(upPhoneslope:) forControlEvents:UIControlEventEditingDidBegin];
+    [oldbankCardIdField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
+    
+    UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(oldbankCardIdField.frame))];
+    oldbankCardIdField.leftView = leftView;
+    oldbankCardIdField.delegate = self;
+    oldbankCardIdField.leftViewMode = UITextFieldViewModeAlways;
+    [containerView addSubview:oldbankCardIdField];
+    
+    oldreseveredPhoneField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(oldbankCardIdField.frame), CGRectGetMaxY(oldbankCardIdField.frame) + 10, CGRectGetWidth(oldbankCardIdField.frame), CGRectGetHeight(oldbankCardIdField.frame))];
+    oldreseveredPhoneField.delegate = self;
+    oldreseveredPhoneField.keyboardType = UIKeyboardTypeNumberPad;
+    oldreseveredPhoneField.textColor = QM_COMMON_TEXT_COLOR;
+    [oldreseveredPhoneField setBackground:[QMImageFactory commonTextFieldImage]];
+    oldreseveredPhoneField.font = [UIFont systemFontOfSize:13];
+    oldreseveredPhoneField.placeholder = QMLocalizedString(@"qm_input_resevered_phone_number_text", @"请输入预留手机号码");
+    leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(oldbankCardIdField.frame))];
+    
+    oldreseveredPhoneField.leftView = leftView;
+    oldreseveredPhoneField.leftViewMode = UITextFieldViewModeAlways;
+    [oldreseveredPhoneField addTarget:self action:@selector(upPhoneslope:) forControlEvents:UIControlEventEditingDidBegin];
+    [oldreseveredPhoneField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
+    [containerView addSubview:oldreseveredPhoneField];
+    
+    oldbankCardMessageCodeField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.7, CGRectGetHeight(oldreseveredPhoneField.frame))];
+    oldbankCardMessageCodeField.delegate = self;
+    oldbankCardMessageCodeField.keyboardType = UIKeyboardTypeNumberPad;
+    oldbankCardMessageCodeField.textColor = QM_COMMON_TEXT_COLOR;
+    [oldbankCardMessageCodeField setBackground:[QMImageFactory commonTextFieldImage]];
+    oldbankCardMessageCodeField.font = [UIFont systemFontOfSize:13];
+    oldbankCardMessageCodeField.placeholder = @"请输入旧银行卡验证码";
+    leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(oldbankCardIdField.frame))];
+    oldbankCardMessageCodeField.leftView = leftView;
+    oldbankCardMessageCodeField.leftViewMode = UITextFieldViewModeAlways;
+    [oldbankCardMessageCodeField addTarget:self action:@selector(upPhoneslope:) forControlEvents:UIControlEventEditingDidBegin];
+    [oldbankCardMessageCodeField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
+    [containerView addSubview:oldbankCardMessageCodeField];
+    
+    oldgetbankMessageCodeBtn = [QMControlFactory commonButtonWithSize:CGSizeMake(CGRectGetWidth(oldreseveredPhoneField.frame) - CGRectGetWidth(oldbankCardMessageCodeField.frame) - 20, CGRectGetHeight(oldbankCardMessageCodeField.frame)) title:@"获取验证码"
+                                                  target:self
+                                                selector:@selector(clickGetOldBankMessageCode)];
+    CGRect frame = oldgetbankMessageCodeBtn.frame;
+    frame.origin = CGPointMake(CGRectGetMinX(oldbankCardMessageCodeField.frame) + CGRectGetWidth(oldbankCardMessageCodeField.frame) + 20, oldbankCardMessageCodeField.frame.origin.y);
+    oldgetbankMessageCodeBtn.frame = frame;
+    [containerView addSubview:oldgetbankMessageCodeBtn];
+
+    promptLabel  = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(oldbankCardMessageCodeField.frame), CGRectGetMaxY(oldbankCardMessageCodeField.frame) + 10, CGRectGetWidth(self.view.frame) - 2 * CGRectGetMinX(oldreseveredPhoneField.frame), 20)];
+    promptLabel.font = [UIFont systemFontOfSize:14];
+    promptLabel.numberOfLines = 1;
+    promptLabel.textColor = QM_COMMON_TEXT_COLOR;
+    promptLabel.text = @"请输入新绑定银行卡信息";
+    [containerView addSubview:promptLabel];
+    
+    [self setupPublicBtnWithAccount];
+}
+
+- (void)setupPublicBtnWithAccount
+{
     selectBankBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     selectBankBtn.frame = CGRectMake(CGRectGetMinX(promptLabel.frame), CGRectGetMaxY(promptLabel.frame) + 10, CGRectGetWidth(promptLabel.frame), 44);
     [selectBankBtn setBackgroundImage:[QMImageFactory commonTextFieldImageTopPart] forState:UIControlStateNormal];
@@ -215,10 +374,6 @@
     bankCardIdField.leftViewMode = UITextFieldViewModeAlways;
     [containerView addSubview:bankCardIdField];
     
-    bankCardIdPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame), CGRectGetWidth(bankCardIdField.frame), 40.0f)];
-    bankCardIdPromptView.hidden = YES;
-    [containerView addSubview:bankCardIdPromptView];
-    
     reseveredPhoneField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame))];
     reseveredPhoneField.delegate = self;
     reseveredPhoneField.keyboardType = UIKeyboardTypeNumberPad;
@@ -234,15 +389,40 @@
     [reseveredPhoneField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
     [containerView addSubview:reseveredPhoneField];
     
-//    phoneNumberPromptView = [[QMNumberFormatPromptView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(reseveredPhoneField.frame), 40.0f)];
-//    phoneNumberPromptView.hidden = YES;
-//    [containerView addSubview:phoneNumberPromptView];
+    if (_isChangeBandCard) {
+        newbankCardMessageCodeField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame))];
+        newbankCardMessageCodeField.delegate = self;
+        newbankCardMessageCodeField.keyboardType = UIKeyboardTypeNumberPad;
+        newbankCardMessageCodeField.textColor = QM_COMMON_TEXT_COLOR;
+        [newbankCardMessageCodeField setBackground:[QMImageFactory commonTextFieldImage]];
+        newbankCardMessageCodeField.font = [UIFont systemFontOfSize:13];
+        newbankCardMessageCodeField.placeholder = @"请输入新银行卡验证码";
+        leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(bankCardIdField.frame))];
+        newbankCardMessageCodeField.leftView = leftView;
+        newbankCardMessageCodeField.leftViewMode = UITextFieldViewModeAlways;
+        [newbankCardMessageCodeField addTarget:self action:@selector(upPhoneslope:) forControlEvents:UIControlEventEditingDidBegin];
+        [newbankCardMessageCodeField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
+        [containerView addSubview:newbankCardMessageCodeField];
+        
+        newgetbankMessageCodeBtn = [QMControlFactory commonButtonWithSize:CGSizeMake(CGRectGetWidth(reseveredPhoneField.frame) - CGRectGetWidth(newbankCardMessageCodeField.frame) - 20, CGRectGetHeight(newbankCardMessageCodeField.frame)) title:@"获取验证码"
+                                                                   target:self
+                                                                 selector:@selector(clickGetNewBankMessageCode)];
+        CGRect frame = newgetbankMessageCodeBtn.frame;
+        frame.origin = CGPointMake(CGRectGetMinX(newbankCardMessageCodeField.frame) + CGRectGetWidth(newbankCardMessageCodeField.frame) + 20, newbankCardMessageCodeField.frame.origin.y);
+        newgetbankMessageCodeBtn.frame = frame;
+        [containerView addSubview:newgetbankMessageCodeBtn];
+    }
     
     selectProvinceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [selectProvinceBtn setImage:[UIImage imageNamed:@"shearhead.png"] forState:UIControlStateNormal];
     [selectProvinceBtn setBackgroundImage:[QMImageFactory commonTextFieldImageTopPart] forState:UIControlStateNormal];
     [selectProvinceBtn setBackgroundImage:[QMImageFactory commonTextFieldImageTopPart] forState:UIControlStateHighlighted];
-    selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    if (_isChangeBandCard) {
+        selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(newbankCardMessageCodeField.frame), CGRectGetMaxY(newbankCardMessageCodeField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    }else
+    {
+        selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    }
     selectProvinceBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [selectProvinceBtn setTitleColor:QM_COMMON_TEXT_COLOR forState:UIControlStateNormal];
     selectProvinceBtn.titleEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0);
@@ -265,30 +445,14 @@
     [selectCityBtn addTarget:self action:@selector(selectCityBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     [containerView addSubview:selectCityBtn];
     
-    
-    bankDetailInfoField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 10, CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame))];
-    bankDetailInfoField.textColor = QM_COMMON_TEXT_COLOR;
-    [bankDetailInfoField setBackground:[QMImageFactory commonTextFieldImage]];
-    bankDetailInfoField.font = [UIFont systemFontOfSize:13];
-    bankDetailInfoField.placeholder = QMLocalizedString(@"qm_input_bank_detail_info_text", @"请输入支行信息");
-    leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 10, CGRectGetHeight(bankCardIdField.frame))];
-    bankDetailInfoField.leftView = leftView;
-    bankDetailInfoField.leftViewMode = UITextFieldViewModeAlways;
-    [bankDetailInfoField addTarget:self action:@selector(upBankDetailslope) forControlEvents:UIControlEventEditingDidBegin];
-    [bankDetailInfoField addTarget:self action:@selector(downBankDetailslope) forControlEvents:UIControlEventEditingDidEnd];
-    [containerView addSubview:bankDetailInfoField];
-    
-    identifyBtn = [QMControlFactory commonButtonWithSize:CGSizeMake(CGRectGetWidth(idCardField.frame), 40.0f) title:QMLocalizedString(@"qm_identify_identity_btn_title", @"认证")
+    identifyBtn = [QMControlFactory commonButtonWithSize:CGSizeMake(CGRectGetWidth(selectCityBtn.frame), 40.0f) title:QMLocalizedString(@"qm_identify_identity_btn_title", @"提交")
                                                   target:self
                                                 selector:@selector(identifyBtnClicked:)];
-    CGRect frame = idCardField.frame;
-    frame.origin = CGPointMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(bankDetailInfoField.frame) + 30);
+    CGRect frame = identifyBtn.frame;
+    frame.origin = CGPointMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 30);
     identifyBtn.frame = frame;
     [containerView addSubview:identifyBtn];
-    
-    [self updateNextBtnState];
-    [self updateBtnTitles];
-    
+
 }
 
 - (void)updateBtnTitles {
@@ -308,19 +472,66 @@
 }
 
 - (void)updateNextBtnState {
-    if (!QM_IS_STR_NIL(currentBankInfo.bankCode) &&
-        !QM_IS_STR_NIL([self getBankCardNumber]) &&
-        !QM_IS_STR_NIL([self getProvinceString]) &&
-        !QM_IS_STR_NIL([self getCityString]) &&
-        !QM_IS_STR_NIL([self getNameString]) &&
-        !QM_IS_STR_NIL([self getIdCardString]) &&
-        !QM_IS_STR_NIL([self getPhoneString]) &&
-        !QM_IS_STR_NIL([self getBankDetailString]))
+    if(_isOpenAccount == YES)
     {
-        identifyBtn.enabled = YES;
-    }else {
-        identifyBtn.enabled = NO;
+        if (!QM_IS_STR_NIL(currentBankInfo.bankCode) &&
+            !QM_IS_STR_NIL([self getBankCardNumber]) &&
+            !QM_IS_STR_NIL(provinceItem.itemCode) &&
+            !QM_IS_STR_NIL([self getCityCode]) &&
+            !QM_IS_STR_NIL([self getNameString]) &&
+            !QM_IS_STR_NIL([self getIdCardString]) &&
+            !QM_IS_STR_NIL([self getPhoneString]))
+        {
+            identifyBtn.enabled = YES;
+        }else {
+            identifyBtn.enabled = NO;
+        }
+    }else if (_isActivationAccount)
+    {
+        if (!QM_IS_STR_NIL(currentBankInfo.bankCode) &&
+            !QM_IS_STR_NIL([self getBankCardNumber]) &&
+            !QM_IS_STR_NIL(provinceItem.itemCode) &&
+            !QM_IS_STR_NIL([self getCityCode]) &&
+            !QM_IS_STR_NIL([self getPhoneString]))
+        {
+            identifyBtn.enabled = YES;
+        }else {
+            identifyBtn.enabled = NO;
+        }
+    }else if (_isChangeBandCard)
+    {
+        if (!QM_IS_STR_NIL(currentBankInfo.bankCode) &&
+            !QM_IS_STR_NIL([self getOldBankCardNumber]) &&
+            !QM_IS_STR_NIL([self getOldPhoneString]) &&
+            !QM_IS_STR_NIL([self getBankCardNumber]) &&
+            !QM_IS_STR_NIL([self getPhoneString]) &&
+            !QM_IS_STR_NIL(provinceItem.itemCode) &&
+            !QM_IS_STR_NIL([self getCityCode]) &&
+            !QM_IS_STR_NIL([self getOldBankMessageCode]) &&
+            !QM_IS_STR_NIL([self getNewBankMessageCode]))
+        {
+            identifyBtn.enabled = YES;
+        }else {
+            identifyBtn.enabled = NO;
+        }
+        if (QM_IS_STR_NIL([self getBankCardNumber])
+            || QM_IS_STR_NIL([self getPhoneString]))
+        {
+            newgetbankMessageCodeBtn.enabled = NO;
+        }else
+        {
+            newgetbankMessageCodeBtn.enabled = YES;
+        }
+        if (QM_IS_STR_NIL([self getOldBankCardNumber])
+            || QM_IS_STR_NIL([self getOldPhoneString]))
+        {
+            oldgetbankMessageCodeBtn.enabled = NO;
+        }else
+        {
+            oldgetbankMessageCodeBtn.enabled = YES;
+        }
     }
+    
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -345,6 +556,9 @@
         bankCardIdPromptView.hidden = NO;
     }else if (textField == idCardField){
         idCardPromptView.hidden = NO;
+    }else if (textField == oldbankCardIdField)
+    {
+        oldbankCardIdPromptView.hidden = NO;
     }
     
     [self updateSubViewsFrameAnimated:YES];
@@ -356,6 +570,9 @@
         bankCardIdPromptView.hidden = YES;
     }else if (textField == idCardField){
         idCardPromptView.hidden = YES;
+    }else if (textField == oldbankCardIdField)
+    {
+        oldbankCardIdPromptView.hidden = YES;
     }
     
     [self updateSubViewsFrameAnimated:YES];
@@ -374,6 +591,20 @@
 }
 
 - (void)updateFrames {
+    if (_isOpenAccount == YES)
+    {
+        [self updateFramesWithOpenAccount];
+    }else if (_isActivationAccount == YES)
+    {
+        [self updateFramesWithActivation];
+    }else if (_isChangeBandCard == YES)
+    {
+        [self updateFramesWithChangeBankCard];
+    }
+}
+
+- (void)updateFramesWithOpenAccount
+{
     if (NO == bankCardIdPromptView.hidden) {
         bankCardIdPromptView.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame), CGRectGetWidth(bankCardIdField.frame), 40.0f);
         
@@ -382,7 +613,7 @@
     }else if(NO == idCardPromptView.hidden)
     {
         idCardPromptView.frame = CGRectMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(idCardField.frame), CGRectGetWidth(idCardField.frame), 40.0f);
-        
+            
         promptLabel.frame = CGRectMake(CGRectGetMinX(idCardPromptView.frame), CGRectGetMaxY(idCardPromptView.frame) + 10, CGRectGetWidth(promptLabel.frame), CGRectGetHeight(promptLabel.frame));
         
         selectBankBtn.frame = CGRectMake(CGRectGetMinX(promptLabel.frame), CGRectGetMaxY(promptLabel.frame) + 10, CGRectGetWidth(selectBankBtn.frame), CGRectGetHeight(selectBankBtn.frame));
@@ -391,7 +622,8 @@
         
         reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
         
-    }else
+    }
+    else
     {
         promptLabel.frame = CGRectMake(CGRectGetMinX(idCardField.frame), CGRectGetMaxY(idCardField.frame) + 10, CGRectGetWidth(promptLabel.frame), CGRectGetHeight(promptLabel.frame));
         
@@ -407,12 +639,99 @@
     
     selectCityBtn.frame = CGRectMake(CGRectGetMinX(selectProvinceBtn.frame), CGRectGetMaxY(selectProvinceBtn.frame), CGRectGetWidth(selectProvinceBtn.frame), CGRectGetHeight(selectProvinceBtn.frame));
     
-    // 支行信息
-    bankDetailInfoField.frame = CGRectMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    // 绑定
+    CGRect frame = identifyBtn.frame;
+    frame.origin = CGPointMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 30);
+    identifyBtn.frame = frame;
+
+}
+
+- (void)updateFramesWithActivation
+{
+    if (NO == bankCardIdPromptView.hidden) {
+        bankCardIdPromptView.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame), CGRectGetWidth(bankCardIdField.frame), 40.0f);
+        
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdPromptView.frame), CGRectGetMaxY(bankCardIdPromptView.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+        
+    }else
+    {
+        bankCardIdField.frame = CGRectMake(CGRectGetMinX(selectBankBtn.frame), CGRectGetMaxY(selectBankBtn.frame), CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame));
+        
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    }
+    
+    // 选择省市
+    selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    
+    selectCityBtn.frame = CGRectMake(CGRectGetMinX(selectProvinceBtn.frame), CGRectGetMaxY(selectProvinceBtn.frame), CGRectGetWidth(selectProvinceBtn.frame), CGRectGetHeight(selectProvinceBtn.frame));
     
     // 绑定
     CGRect frame = identifyBtn.frame;
-    frame.origin = CGPointMake(CGRectGetMinX(bankDetailInfoField.frame), CGRectGetMaxY(bankDetailInfoField.frame) + 20);
+    frame.origin = CGPointMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 30);
+    identifyBtn.frame = frame;
+}
+
+- (void)updateFramesWithChangeBankCard
+{
+    if (NO == oldbankCardIdPromptView.hidden)
+    {
+        oldbankCardIdPromptView.frame = CGRectMake(CGRectGetMinX(oldbankCardIdField.frame), CGRectGetMaxY(oldbankCardIdField.frame), CGRectGetWidth(oldbankCardIdField.frame), 40.0f);
+        
+        oldreseveredPhoneField.frame = CGRectMake(CGRectGetMinX(oldbankCardIdPromptView.frame), CGRectGetMaxY(oldbankCardIdPromptView.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame), CGRectGetHeight(oldreseveredPhoneField.frame));
+        
+        oldbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.7, CGRectGetHeight(oldreseveredPhoneField.frame));
+        
+        promptLabel.frame = CGRectMake(CGRectGetMinX(oldbankCardMessageCodeField.frame), CGRectGetMaxY(oldbankCardMessageCodeField.frame) + 10, CGRectGetWidth(promptLabel.frame), CGRectGetHeight(promptLabel.frame));
+        
+        selectBankBtn.frame = CGRectMake(CGRectGetMinX(promptLabel.frame), CGRectGetMaxY(promptLabel.frame) + 10, CGRectGetWidth(selectBankBtn.frame), CGRectGetHeight(selectBankBtn.frame));
+        
+        bankCardIdField.frame = CGRectMake(CGRectGetMinX(selectBankBtn.frame), CGRectGetMaxY(selectBankBtn.frame), CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame));
+        
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+        
+        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame));
+        
+    }else if (NO == bankCardIdPromptView.hidden)
+    {
+        bankCardIdPromptView.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame), CGRectGetWidth(bankCardIdField.frame), 40.0f);
+        
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdPromptView.frame), CGRectGetMaxY(bankCardIdPromptView.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+        
+        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame));
+        
+    }else
+    {
+        oldreseveredPhoneField.frame = CGRectMake(CGRectGetMinX(oldbankCardIdField.frame), CGRectGetMaxY(oldbankCardIdField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame), CGRectGetHeight(oldreseveredPhoneField.frame));
+        
+        oldbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.7, CGRectGetHeight(oldreseveredPhoneField.frame));
+        
+        promptLabel.frame = CGRectMake(CGRectGetMinX(oldbankCardMessageCodeField.frame), CGRectGetMaxY(oldbankCardMessageCodeField.frame) + 10, CGRectGetWidth(promptLabel.frame), CGRectGetHeight(promptLabel.frame));
+        
+        selectBankBtn.frame = CGRectMake(CGRectGetMinX(promptLabel.frame), CGRectGetMaxY(promptLabel.frame) + 10, CGRectGetWidth(selectBankBtn.frame), CGRectGetHeight(selectBankBtn.frame));
+        
+        bankCardIdField.frame = CGRectMake(CGRectGetMinX(selectBankBtn.frame), CGRectGetMaxY(selectBankBtn.frame), CGRectGetWidth(bankCardIdField.frame), CGRectGetHeight(bankCardIdField.frame));
+        
+        reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+        
+        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame));
+    }
+    
+    // 选择省市
+    selectProvinceBtn.frame = CGRectMake(CGRectGetMinX(newbankCardMessageCodeField.frame), CGRectGetMaxY(newbankCardMessageCodeField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
+    
+    selectCityBtn.frame = CGRectMake(CGRectGetMinX(selectProvinceBtn.frame), CGRectGetMaxY(selectProvinceBtn.frame), CGRectGetWidth(selectProvinceBtn.frame), CGRectGetHeight(selectProvinceBtn.frame));
+    
+    CGRect oldbtnframe = oldgetbankMessageCodeBtn.frame;
+    oldbtnframe.origin = CGPointMake(oldbtnframe.origin.x, oldbankCardMessageCodeField.frame.origin.y);
+    oldgetbankMessageCodeBtn.frame = oldbtnframe;
+    
+    CGRect newbtnframe = newgetbankMessageCodeBtn.frame;
+    newbtnframe.origin = CGPointMake(newbtnframe.origin.x, newbankCardMessageCodeField.frame.origin.y);
+    newgetbankMessageCodeBtn.frame = newbtnframe;
+    
+    // 绑定
+    CGRect frame = identifyBtn.frame;
+    frame.origin = CGPointMake(CGRectGetMinX(selectCityBtn.frame), CGRectGetMaxY(selectCityBtn.frame) + 30);
     identifyBtn.frame = frame;
 }
 
@@ -421,6 +740,10 @@
 
 - (NSString *)getBankCardNumber {
     return [bankCardIdField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
+- (NSString *)getOldBankCardNumber {
+    return [oldbankCardIdField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
 - (NSString *)getProvinceString {
@@ -443,10 +766,30 @@
     return [reseveredPhoneField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
-- (NSString *)getBankDetailString {
-    return [bankDetailInfoField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+- (NSString *)getOldPhoneString {
+    return [oldreseveredPhoneField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 }
 
+- (NSString *)getOldBankMessageCode {
+    return [oldbankCardMessageCodeField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
+- (NSString *)getNewBankMessageCode {
+    return [oldbankCardMessageCodeField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
+- (NSString *)getProvinceCode {
+    NSString *province = [self getProvinceString];
+    return [[QMProvinceInfo sharedInstance] getProvinceNumWithProvinceName:province];}
+
+- (NSString *)getCityCode {
+    NSString *province = [self getProvinceString];
+    NSString *city = [self getCityString];
+    if ([city isEqualToString:@"请选择城市信息"]) {
+        return nil;
+    }
+    return [[QMProvinceInfo sharedInstance] getCityNumWithProvinceName:province CityName:city];
+}
 
 #pragma --
 #pragma mark TextField Edit ChangeContainerView
@@ -491,18 +834,19 @@
 - (void)hideKeyBoard {
     [realNameField resignFirstResponder];
     [idCardField resignFirstResponder];
-    [bankDetailInfoField resignFirstResponder];
     [reseveredPhoneField resignFirstResponder];
     [bankCardIdField resignFirstResponder];
+    [oldreseveredPhoneField resignFirstResponder];
+    [newbankCardMessageCodeField resignFirstResponder];
 }
 
 - (void)handleTapGesture:(UIGestureRecognizer *)tap {
     [realNameField resignFirstResponder];
     [idCardField resignFirstResponder];
     [reseveredPhoneField resignFirstResponder];
-    [bankDetailInfoField resignFirstResponder];
     [bankCardIdField resignFirstResponder];
-
+    [oldbankCardMessageCodeField resignFirstResponder];
+    [newbankCardMessageCodeField resignFirstResponder];
 }
 
 #pragma mark -- 
@@ -543,7 +887,8 @@
     
     QMSelectLocationViewControllerV2 *con = [[QMSelectLocationViewControllerV2 alloc] initViewControllerWithType:QMSelectLocationTypeV2_City];
     con.isModel = YES;
-    con.provinceCode = provinceItem.itemCode;
+//    con.provinceCode = provinceItem.itemCode;
+    con.provinceName = provinceItem.itemTitle;
     con.delegate = self;
     
     QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
@@ -555,8 +900,50 @@
 #pragma mark --
 #pragma mark Authentication
 
+- (void)clickGetOldBankMessageCode
+{
+    if (QM_IS_STR_NIL([self getOldBankCardNumber])
+        || QM_IS_STR_NIL([self getOldPhoneString]))
+    {
+        [CMMUtility showNote:@"请输入旧银行卡账号和预留手机号"];
+        return;
+    }
+    [[NetServiceManager sharedInstance] getBankMessageCode:self
+                                                BankCardID:[self getOldBankCardNumber]
+                                                    Mobile:[self getOldPhoneString]
+                                                   SmsType:RebindBankMessageTypeOldCard
+                                                   success:^(id responseObject) {
+                                                       
+                                                   } failure:^(NSError *error) {
+                                                       [CMMUtility showNoteWithError:error];
+                                                   }];
+}
+
+- (void)clickGetNewBankMessageCode
+{
+    if (QM_IS_STR_NIL([self getBankCardNumber])
+        || QM_IS_STR_NIL([self getPhoneString]))
+    {
+        [CMMUtility showNote:@"请输入新银行卡账号和预留手机号"];
+        return;
+    }
+    [[NetServiceManager sharedInstance] getBankMessageCode:self
+                                                BankCardID:[self getBankCardNumber]
+                                                    Mobile:[self getPhoneString]
+                                                   SmsType:RebindBankMessageTypeNewCard
+                                                   success:^(id responseObject) {
+                                                       
+                                                   } failure:^(NSError *error) {
+                                                       [CMMUtility showNoteWithError:error];
+                                                   }];
+}
+
 - (BOOL)isIDCardValid {
     NSString *idCard = [idCardField text];
+    
+    if (_haveDefaultMessage) {
+        return YES;
+    }
     
     BOOL result = [CMMUtility checkIdNumber:idCard] && [self getPhoneString].length == 11;
     
@@ -566,56 +953,132 @@
 - (void)identifyBtnClicked:(UIButton *)btn {
     // 验证身份证和手机号码是否合法
     btn.enabled = NO;
-    if ([self isIDCardValid]) {
-        // 请求服务器接口
-        NSDictionary *dict = @{@"idCardNumber":[self getIdCardString],
-                               @"realName":[self getNameString],
-                               @"bankCardNum":[self getBankCardNumber],
-                               @"mobile":[self getPhoneString],
-                               @"bankId":currentBankInfo.bankCardId,
-                               @"provinceCode":provinceItem.itemCode,
-                               @"cityCode":cityitem.itemCode,
-                               @"province":[self getProvinceString],
-                               @"city":[self getCityString],
-                               @"branch":bankDetailInfoField.text,
-                               @"productChannelId":@"2",};
-        [self checkUserValidate:dict btn:btn];
-    }else {
-        // 身份证号码或手机号码不合法
-        [CMMUtility showNote:QMLocalizedString(@"qm_idcard_number_invalid", @"身份证号码或手机号码不合法")];
-        btn.enabled = YES;
+    if (_isOpenAccount)
+    {
+        if ([self isIDCardValid]) {
+            // 请求服务器接口
+            [self checkUserValidatebtn:btn];
+        }else {
+            // 身份证号码或手机号码不合法
+            [CMMUtility showNote:QMLocalizedString(@"qm_idcard_number_invalid", @"身份证号码或手机号码不合法")];
+            btn.enabled = YES;
+        }
+    }
+    else
+    {
+        [self checkUserValidatebtn:btn];
     }
 }
 
-- (void)checkUserValidate:(NSDictionary *)dict btn:(UIButton *)btn
+- (void)checkUserValidatebtn:(UIButton *)btn
 {
-    if (QM_IS_STR_NIL(currentBankInfo.bankCardId)
-        || QM_IS_STR_NIL([self getBankCardNumber])
-        || QM_IS_STR_NIL(provinceItem.itemCode)
-        || QM_IS_STR_NIL([self getCityString])
-        || QM_IS_STR_NIL(bankDetailInfoField.text)
-        || QM_IS_STR_NIL([self getPhoneString])
-        )
+    if (_isOpenAccount == YES)
     {
-        return;
+        if (QM_IS_STR_NIL([self getIdCardString])
+            || QM_IS_STR_NIL([self getNameString])
+            || QM_IS_STR_NIL([self getBankCardNumber])
+            || QM_IS_STR_NIL(currentBankInfo.bankCode)
+            || QM_IS_STR_NIL(provinceItem.itemCode)
+            || QM_IS_STR_NIL([self getCityString])
+            || QM_IS_STR_NIL([self getPhoneString])
+            )
+        {
+            [CMMUtility showNote:@"请完善资料"];
+            return;
+        }
+        [[NetServiceManager sharedInstance] PersonOpenAccount:self
+                                                     RealName:[self getNameString]
+                                                       IdCard:[self getIdCardString]
+                                                   BankCardID:[self getBankCardNumber]
+                                                       Mobile:[self getPhoneString]
+                                                     BankCode:currentBankInfo.bankCode
+                                                 ProvinceCode:[self getProvinceCode]
+                                                     CityCode:[self getCityCode]
+                                                      success:^(id responseObject)
+        {
+            [self handleRealNameAuthSuccess:responseObject];
+        } failure:^(NSError *error) {
+            [self handleRealNameAuthFailure:error];
+        }];
+    }else if (_isActivationAccount == YES)
+    {
+        if (QM_IS_STR_NIL([self getBankCardNumber])
+            || QM_IS_STR_NIL([self getBankCardNumber])
+            || QM_IS_STR_NIL(provinceItem.itemCode)
+            || QM_IS_STR_NIL([self getCityString])
+            || QM_IS_STR_NIL([self getPhoneString])
+            )
+        {
+            [CMMUtility showNote:@"请完善资料"];
+            return;
+        }
+        [[NetServiceManager sharedInstance] PersonActivationAccount:self
+                                                         BankCardID:[self getBankCardNumber]
+                                                             Mobile:[self getPhoneString]
+                                                           BankCode:currentBankInfo.bankCode
+                                                       ProvinceCode:[self getProvinceCode]
+                                                           CityCode:[self getCityCode]
+                                                            success:^(id responseObject)
+         {
+            [self handleRealNameAuthSuccess:responseObject];
+        } failure:^(NSError *error) {
+            [self handleRealNameAuthFailure:error];
+        }];
+        
+    }else if (_isChangeBandCard == YES)
+    {
+        if (QM_IS_STR_NIL([self getOldBankCardNumber])
+            || QM_IS_STR_NIL([self getOldPhoneString])
+            || QM_IS_STR_NIL([self getBankCardNumber])
+            || QM_IS_STR_NIL([self getPhoneString])
+            || QM_IS_STR_NIL(currentBankInfo.bankCode)
+            || QM_IS_STR_NIL(provinceItem.itemCode)
+            || QM_IS_STR_NIL([self getCityString])
+            || QM_IS_STR_NIL([self getOldBankMessageCode])
+            || QM_IS_STR_NIL([self getNewBankMessageCode])
+            )
+        {
+            [CMMUtility showNote:@"请完善资料"];
+            return;
+        }
+        [[NetServiceManager sharedInstance] PersonChangeBankCard:self
+                                                   OldBankCardID:[self getOldBankCardNumber]
+                                                       OldMobile:[self getOldPhoneString]
+                                                      OldSmsCode:[self getOldBankMessageCode]
+                                                   NewBankCardID:[self getBankCardNumber]
+                                                       NewMobile:[self getPhoneString]
+                                                      NewSmsCode:[self getNewBankMessageCode]
+                                                        BankCode:currentBankInfo.bankCode
+                                                    ProvinceCode:provinceItem.itemCode
+                                                        CityCode:[self getCityCode]
+                                                         success:^(id responseObject)
+        {
+            [self handleRealNameAuthSuccess:responseObject];
+        } failure:^(NSError *error) {
+            [self handleRealNameAuthFailure:error];
+        }];
     }
-    
-    [[NetServiceManager sharedInstance] authDictionary:dict
-                                            delegate:self success:^(id responseObject) {
-                                                [self handleRealNameAuthSuccess:responseObject];
-                                                btn.enabled = YES;
-                                            } failure:^(NSError *error) {
-                                                [self handleRealNameAuthFailure:error];
-                                                btn.enabled = YES;
-                                            }];
 }
 
 - (void)handleRealNameAuthSuccess:(id)response {
-    [CMMUtility showNote:@"认证成功"];
-    [self goBack];
-    if (QM_IS_DELEGATE_RSP_SEL(self.delegate, authenticationViewController:didAuthenticateWithRealName:idCard:)) {
-        [self.delegate authenticationViewController:self didAuthenticateWithRealName:[realNameField text] idCard:[idCardField text]];
+    showWebNow = YES;
+    identifyBtn.enabled = YES;
+    responWebView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    responWebView.delegate = self;
+    [self.view addSubview:responWebView];
+    [responWebView loadHTMLString:response baseURL:[NSURL URLWithString:URL_BASE]];
+    
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *url = [[request URL] absoluteString];
+    NSLog(@"%@",url);
+    if ([url rangeOfString:[NSString stringWithFormat:@"/wap/myaccount"]].location != NSNotFound) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return NO;
     }
+    return YES;
 }
 
 - (void)handleRealNameAuthFailure:(NSError *)error {
@@ -635,10 +1098,12 @@
             // 更新省份信息
             provinceItem = item;
             [selectProvinceBtn setTitle:item.itemTitle forState:UIControlStateNormal];
+             [self updateNextBtnState];
         }else if (con.currentType == QMSelectLocationTypeV2_City) {
             // 更新城市信息
             cityitem = item;
             [selectCityBtn setTitle:item.itemTitle forState:UIControlStateNormal];
+             [self updateNextBtnState];
         }
         
     }else if ([controller isKindOfClass:[QMAddBankViewController class]]) {
@@ -646,22 +1111,24 @@
         if ([info isKindOfClass:[QMBankInfo class]]) {
             currentBankInfo = info;
             [selectBankBtn setTitle:currentBankInfo.bankName forState:UIControlStateNormal];
+             [self updateNextBtnState];
         }
-    }else if ([controller isKindOfClass:[QMBankBranchInfoViewController class]]) {
-        branchInfo = (QMBankBranchInfo *)item;
-        
-        //  更新支行名称
-        if (!QM_IS_STR_NIL(branchInfo.branchName)) {
-            bankDetailInfoField.text = branchInfo.branchName;
-        }
-        
-        [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
 #pragma mark -
 #pragma mark Override
 - (NSString *)title {
+    if (_isOpenAccount == YES) {
+        return @"用户开户";
+    }else if (_isActivationAccount == YES)
+    {
+        return @"个人用户激活";
+    }
+    else if (_isChangeBandCard == YES)
+    {
+        return @"银行卡换绑";
+    }
     return QMLocalizedString(@"qm_identify_nav_title", @"身份信息确认");
 }
 

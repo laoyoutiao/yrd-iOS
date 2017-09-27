@@ -17,7 +17,7 @@
         self.AdverName = [dic safeStringForKey:@"name"];
         self.AdverUrl = [dic safeStringForKey:@"url"];
         self.AdverPath = [dic safeStringForKey:@"picPath"];
-        self.AdverHomePath = [dic safeStringForKey:@"homepicPath"];
+        self.AdverHomePath = [dic safeStringForKey:@"picPath"];
     }
     return self;
 }

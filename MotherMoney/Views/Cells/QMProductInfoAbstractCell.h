@@ -8,11 +8,18 @@
 
 #import <UIKit/UIKit.h>
 #import "QMProductInfo.h"
+#import "QMCreditorsInfo.h"
 
 @interface QMProductInfoAbstractCell : UICollectionViewCell
+
+@property (nonatomic, strong) UIButton *mJumpRealProductInfoViewLabel;
 
 - (void)configureCellWithProductInfo:(QMProductInfo *)info;
 
 + (CGFloat)getCellHeightForProductInfo:(QMProductInfo *)info;
+
+- (void)configureCellWithCreditorsInfo:(QMCreditorsInfo *)info ViewConrtoller:(UIViewController *)viewcontroller;
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info;
 
 @end

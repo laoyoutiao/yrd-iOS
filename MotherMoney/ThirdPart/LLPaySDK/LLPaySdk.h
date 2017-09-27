@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 
 extern const NSString* const kLLPaySDKBuildVersion;
+extern const NSString *const kLLPaySDKVersion;
 
 typedef enum LLPayResult {
     kLLPayResultSuccess = 0,    // 支付成功

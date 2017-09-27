@@ -14,8 +14,9 @@
     UILabel *bankNameLable;
     UILabel *bankCardLabel;
     UILabel *promptLabel;
-    
+    UIImageView *checkImgView;
     UIView *cardContainerView;
+    CGRect cellFrame;
 }
 @synthesize mPromptLabel = promptLabel;
 @synthesize bankNameLable = bankNameLable;
@@ -23,6 +24,7 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        cellFrame = frame;
         self.actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         self.actionBtn.titleLabel.font = [UIFont systemFontOfSize:16.0f];
         [self.actionBtn setTitle:@"点击添加银行卡" forState:UIControlStateNormal];
@@ -104,10 +106,31 @@
     bankNameLable.text = model.bankName;
     bankCardLabel.text = [NSString stringWithFormat:@"尾号%@", model.bankCardNumber];
     if (self.withDraw) { // 提现
-        promptLabel.text = @"提现银行卡为绑定的投资银行卡";
+        if (self.withDrawCard) {
+            promptLabel.text = @"已绑定的提现银行卡";
+        }else
+        {
+            promptLabel.text = @"点击绑定提现银行卡";
+        }
     }else { // 充值
-        promptLabel.text = @"充值银行卡为绑定的投资银行卡";
+        if (self.withOnlyCard)
+        {
+            promptLabel.text = @"默认充值银行卡";
+        }else
+        {
+            promptLabel.text = @"点击选择充值银行卡";
+        }
     }
+}
+
+- (void)addCheckBox
+{
+    checkImgView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    checkImgView.frame = CGRectMake(cellFrame.size.width - 70, cellFrame.size.height / 2 - 15, 30, 30);
+    checkImgView.layer.cornerRadius = 5;
+    checkImgView.layer.borderWidth = 1;
+    checkImgView.layer.borderColor = [UIColor grayColor].CGColor;
+    [self addSubview:checkImgView];
 }
 
 + (CGFloat)getCellHeightWithBankCardModel:(QMBankCardModel *)model {

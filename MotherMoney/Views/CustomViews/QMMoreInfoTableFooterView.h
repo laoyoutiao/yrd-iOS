@@ -10,5 +10,5 @@
 
 @interface QMMoreInfoTableFooterView : UICollectionReusableView
 @property (nonatomic, strong) UIButton *actionBtn;
-
+@property (nonatomic, strong) UILabel *versionLabel;
 @end

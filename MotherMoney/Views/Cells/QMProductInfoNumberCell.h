@@ -9,11 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "QMProductInfo.h"
 #import "QMNumView.h"
+#import "QMCreditorsInfo.h"
 
 @interface QMProductInfoNumberCell : UICollectionViewCell
 
 - (void)configureCellWithProductInfo:(QMProductInfo *)info;
 
 + (CGFloat)getCellHeightForProductInfo:(QMProductInfo *)info;
+
+- (void)configureCellWithCreditorsInfo:(QMCreditorsInfo *)info;
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info;
 
 @end

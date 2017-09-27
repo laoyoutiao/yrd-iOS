@@ -29,7 +29,8 @@
 @property (nonatomic, strong) NSString *statusName;
 @property (nonatomic, strong) NSString *statusValue;
 @property (nonatomic, strong) NSString *bankCardId;
+@property (nonatomic, strong) NSString *isWithdrawCard;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
-
++ (NSArray *)getArrayModel:(NSArray *)array;
 @end
