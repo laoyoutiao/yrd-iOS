@@ -72,7 +72,12 @@
         [CMMUtility hideWaitingAlertView];
     }
     
-    if ([path isEqualToString:kBuyTicket] || [path isEqualToString:kOpenAccount] || [path isEqualToString:kActivationAccount] || [path isEqualToString:kChangeBankCard]) {
+    if ([path isEqualToString:kBuyTicket]
+        || [path isEqualToString:kOpenAccount]
+        || [path isEqualToString:kActivationAccount]
+        || [path isEqualToString:kChangeBankCard]
+        || [path isEqualToString:kNewRecharge]
+        || [path isEqualToString:kNewWithDraw]) {
         NSString *result =[[ NSString alloc] initWithData:info encoding:NSUTF8StringEncoding];
         NSLog(@"%@",result);
         success(result);
@@ -1952,6 +1957,38 @@
                              @"areaId":citycode};
     [_httpRequest xsPostPath:kChangeBankCard delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kChangeBankCard];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//用户充值接口(新)
+- (void)PersonRecharge:(id)delegate
+                Amount:(NSString *)amount
+              BankCode:(NSString *)bankcode
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"rechargeAmt":amount,
+                             @"bankId":bankcode};
+    [_httpRequest xsPostPath:kNewRecharge delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kNewRecharge];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
+
+//用户提现接口(新)
+- (void)PersonWithDraw:(id)delegate
+                Amount:(NSString *)amount
+           paypassword:(NSString *)password
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure
+{
+    NSDictionary *params = @{@"withdrawAmt":amount,
+                             @"paypassword":password};
+    [_httpRequest xsPostPath:kNewWithDraw delegate:delegate params:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kNewWithDraw];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failure(error);
     }];

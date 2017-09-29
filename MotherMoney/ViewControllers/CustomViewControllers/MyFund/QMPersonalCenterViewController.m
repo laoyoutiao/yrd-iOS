@@ -136,7 +136,7 @@
     TestOpenAccountItem.selectorName = @"gotoTestOpenAccountViewController";
     TestOpenAccountItem.selectionStyle = UITableViewCellSelectionStyleDefault;
     [itemList addObject:TestOpenAccountItem];
-    
+
     QMPersonalCenterItemInfo *TestActivationItem = [[QMPersonalCenterItemInfo alloc] init];
     TestActivationItem.iconImageName = @"real_name_authentication.png";
     TestActivationItem.itemName = @"测试激活";
@@ -144,7 +144,7 @@
     TestActivationItem.selectorName = @"gotoTestActivationViewController";
     TestActivationItem.selectionStyle = UITableViewCellSelectionStyleDefault;
     [itemList addObject:TestActivationItem];
-    
+
     QMPersonalCenterItemInfo *TestChangeBandCardItem = [[QMPersonalCenterItemInfo alloc] init];
     TestChangeBandCardItem.iconImageName = @"real_name_authentication.png";
     TestChangeBandCardItem.itemName = @"测试绑卡";
@@ -200,14 +200,6 @@
     myBeanValueItem.selectionStyle = UITableViewCellSelectionStyleDefault;
     [itemList addObject:myBeanValueItem];
     
-//    QMPersonalCenterItemInfo *businessActionItem = [[QMPersonalCenterItemInfo alloc] init];
-//    //    businessItem.iconImageName = @"bean_password.png";
-//    businessActionItem.selectorName = @"gotoBusinessActionViewController";
-//    businessActionItem.itemName = @"活动规则";
-//    businessActionItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//    businessActionItem.selectionStyle = UITableViewCellSelectionStyleDefault;
-//    [itemList addObject:businessActionItem];
-    
     if (accountInfo.salesman)
     {
         QMPersonalCenterItemInfo *businessItem = [[QMPersonalCenterItemInfo alloc] init];
@@ -218,14 +210,6 @@
         businessItem.selectionStyle = UITableViewCellSelectionStyleDefault;
         [itemList addObject:businessItem];
     }
-    
-//    QMPersonalCenterItemInfo *qrCodeItem = [[QMPersonalCenterItemInfo alloc] init];
-//    //    businessItem.iconImageName = @"bean_password.png";
-//    qrCodeItem.selectorName = @"gotoQRCodeViewController";
-//    qrCodeItem.itemName = @"邀请二维码";
-//    qrCodeItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//    qrCodeItem.selectionStyle = UITableViewCellSelectionStyleDefault;
-//    [itemList addObject:qrCodeItem];
     
     // 手势密码开关
     QMPersonalCenterItemInfo *gestureSwitchItem = [[QMPersonalCenterItemInfo alloc] init];
@@ -350,18 +334,6 @@
     [self.navigationController pushViewController:con animated:YES];
 }
 
-//- (void)gotoBusinessActionViewController {
-////    QMQRCodeOrActionViewController *con = [[QMQRCodeOrActionViewController alloc] init];
-////    con.isQRCode = NO;
-////    [self.navigationController pushViewController:con animated:YES];
-//    [QMWebViewController showWebViewWithRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.yrdloan.com/wap/anquanbaozhang"]] navTitle:@"活动规则" isModel:YES from:self];
-//}
-
-//- (void)gotoQRCodeViewController {
-//    QMQRCodeOrActionViewController *con = [[QMQRCodeOrActionViewController alloc] init];
-//    con.isQRCode = YES;
-//    [self.navigationController pushViewController:con animated:YES];
-//}
 
 - (void)updateRectpwdState {
     QMPersonalCenterItemInfo *info = [[QMPersonalCenterItemInfo alloc] init];

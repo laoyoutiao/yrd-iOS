@@ -256,6 +256,12 @@
 //用户换绑卡接口
 #define kChangeBankCard         @"chinapnr/changeCard"
 
+//新充值接口
+#define kNewRecharge            @"chinapnr/recharge"
+
+//新提现接口
+#define kNewWithDraw            @"chinapnr/withdraw"
+
 /**
  网络访问的服务类
  */
@@ -820,4 +826,17 @@ typedef enum {
                      success:(void (^)(id responseObject))success
                      failure:(void(^)(NSError *error))failure;
 
+//用户充值接口(新)
+- (void)PersonRecharge:(id)delegate
+                Amount:(NSString *)amount
+              BankCode:(NSString *)bankcode
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure;
+
+//用户提现接口(新)
+- (void)PersonWithDraw:(id)delegate
+                Amount:(NSString *)amount
+           paypassword:(NSString *)password
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure;
 @end

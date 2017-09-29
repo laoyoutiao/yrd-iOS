@@ -22,57 +22,38 @@
 
 @implementation QMIdentityAuthenticationViewController {
     UILabel *promptLabel;
-    
     UITextField *realNameField;
-    
     UITextField *idCardField;
     
     // login button
     UIButton *identifyBtn;
-    
     NSArray *locationInfo;
-    
     UIScrollView *containerView;
-    
     UIButton *selectBankBtn;
-    
     UIButton *selectProvinceBtn;
-    
     UIButton *selectCityBtn;
-    
     UIButton *oldgetbankMessageCodeBtn;
-    
     UIButton *newgetbankMessageCodeBtn;
-    
     UITextField *reseveredPhoneField;
-    
     UITextField *bankCardIdField;
-    
     UITextField *oldreseveredPhoneField;
-    
     UITextField *oldbankCardIdField;
-    
     UITextField *oldbankCardMessageCodeField;
-    
     UITextField *newbankCardMessageCodeField;
     
-//    QMOrderModel *mOrderModel;
-    
     QMBankInfo *currentBankInfo;
-    
     QMNumberFormatPromptView *bankCardIdPromptView;
-    
     QMNumberFormatPromptView *idCardPromptView;
-    
     QMNumberFormatPromptView *oldbankCardIdPromptView;
-    
     QMSearchItem *provinceItem;
-    
     QMSearchItem *cityitem;
     
     BOOL showWebNow;
-    
     UIWebView *responWebView;
+    NSTimer *oldSmsCodeTimer;
+    NSTimer *newSmsCodeTimer;
+    NSInteger oldSmsCodeTime;
+    NSInteger newSmsCodeTime;
 }
 
 - (void)viewDidLoad {
@@ -179,7 +160,16 @@
     containerView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     containerView.alwaysBounceVertical = YES;
     if (self.view.frame.size.height < 600) {
-        [containerView setContentSize:CGSizeMake(0, 800)];
+        if (_isOpenAccount)
+        {
+            [containerView setContentSize:CGSizeMake(0, 750)];
+        }else if (_isActivationAccount)
+        {
+            [containerView setContentSize:CGSizeMake(0, 650)];
+        }else if (_isChangeBandCard)
+        {
+            [containerView setContentSize:CGSizeMake(0, 870)];
+        }
     }
     containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:containerView];
@@ -310,7 +300,7 @@
     [oldreseveredPhoneField addTarget:self action:@selector(downPhoneslope) forControlEvents:UIControlEventEditingDidEnd];
     [containerView addSubview:oldreseveredPhoneField];
     
-    oldbankCardMessageCodeField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.7, CGRectGetHeight(oldreseveredPhoneField.frame))];
+    oldbankCardMessageCodeField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.9, CGRectGetHeight(oldreseveredPhoneField.frame))];
     oldbankCardMessageCodeField.delegate = self;
     oldbankCardMessageCodeField.keyboardType = UIKeyboardTypeNumberPad;
     oldbankCardMessageCodeField.textColor = QM_COMMON_TEXT_COLOR;
@@ -390,7 +380,7 @@
     [containerView addSubview:reseveredPhoneField];
     
     if (_isChangeBandCard) {
-        newbankCardMessageCodeField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame))];
+        newbankCardMessageCodeField = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.9, CGRectGetHeight(reseveredPhoneField.frame))];
         newbankCardMessageCodeField.delegate = self;
         newbankCardMessageCodeField.keyboardType = UIKeyboardTypeNumberPad;
         newbankCardMessageCodeField.textColor = QM_COMMON_TEXT_COLOR;
@@ -679,7 +669,7 @@
         
         oldreseveredPhoneField.frame = CGRectMake(CGRectGetMinX(oldbankCardIdPromptView.frame), CGRectGetMaxY(oldbankCardIdPromptView.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame), CGRectGetHeight(oldreseveredPhoneField.frame));
         
-        oldbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.7, CGRectGetHeight(oldreseveredPhoneField.frame));
+        oldbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.9, CGRectGetHeight(oldreseveredPhoneField.frame));
         
         promptLabel.frame = CGRectMake(CGRectGetMinX(oldbankCardMessageCodeField.frame), CGRectGetMaxY(oldbankCardMessageCodeField.frame) + 10, CGRectGetWidth(promptLabel.frame), CGRectGetHeight(promptLabel.frame));
         
@@ -689,7 +679,7 @@
         
         reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
         
-        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame));
+        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.9, CGRectGetHeight(reseveredPhoneField.frame));
         
     }else if (NO == bankCardIdPromptView.hidden)
     {
@@ -697,13 +687,13 @@
         
         reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdPromptView.frame), CGRectGetMaxY(bankCardIdPromptView.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
         
-        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame));
+        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.9, CGRectGetHeight(reseveredPhoneField.frame));
         
     }else
     {
         oldreseveredPhoneField.frame = CGRectMake(CGRectGetMinX(oldbankCardIdField.frame), CGRectGetMaxY(oldbankCardIdField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame), CGRectGetHeight(oldreseveredPhoneField.frame));
         
-        oldbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.7, CGRectGetHeight(oldreseveredPhoneField.frame));
+        oldbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(oldreseveredPhoneField.frame), CGRectGetMaxY(oldreseveredPhoneField.frame) + 10, CGRectGetWidth(oldreseveredPhoneField.frame) / 1.9, CGRectGetHeight(oldreseveredPhoneField.frame));
         
         promptLabel.frame = CGRectMake(CGRectGetMinX(oldbankCardMessageCodeField.frame), CGRectGetMaxY(oldbankCardMessageCodeField.frame) + 10, CGRectGetWidth(promptLabel.frame), CGRectGetHeight(promptLabel.frame));
         
@@ -713,7 +703,7 @@
         
         reseveredPhoneField.frame = CGRectMake(CGRectGetMinX(bankCardIdField.frame), CGRectGetMaxY(bankCardIdField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame), CGRectGetHeight(reseveredPhoneField.frame));
         
-        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.7, CGRectGetHeight(reseveredPhoneField.frame));
+        newbankCardMessageCodeField.frame = CGRectMake(CGRectGetMinX(reseveredPhoneField.frame), CGRectGetMaxY(reseveredPhoneField.frame) + 10, CGRectGetWidth(reseveredPhoneField.frame) / 1.9, CGRectGetHeight(reseveredPhoneField.frame));
     }
     
     // 选择省市
@@ -908,12 +898,16 @@
         [CMMUtility showNote:@"请输入旧银行卡账号和预留手机号"];
         return;
     }
+    
     [[NetServiceManager sharedInstance] getBankMessageCode:self
                                                 BankCardID:[self getOldBankCardNumber]
                                                     Mobile:[self getOldPhoneString]
                                                    SmsType:RebindBankMessageTypeOldCard
                                                    success:^(id responseObject) {
-                                                       
+                                                       oldgetbankMessageCodeBtn.enabled = NO;
+                                                       oldSmsCodeTime = 60;
+                                                       [oldgetbankMessageCodeBtn setTitle:@"60秒后再获取" forState:UIControlStateNormal];
+                                                       oldSmsCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutWithSmsCode:) userInfo:nil repeats:YES];
                                                    } failure:^(NSError *error) {
                                                        [CMMUtility showNoteWithError:error];
                                                    }];
@@ -927,15 +921,45 @@
         [CMMUtility showNote:@"请输入新银行卡账号和预留手机号"];
         return;
     }
+    
     [[NetServiceManager sharedInstance] getBankMessageCode:self
                                                 BankCardID:[self getBankCardNumber]
                                                     Mobile:[self getPhoneString]
                                                    SmsType:RebindBankMessageTypeNewCard
                                                    success:^(id responseObject) {
-                                                       
+                                                       newgetbankMessageCodeBtn.enabled = NO;
+                                                       newSmsCodeTime = 60;
+                                                       [newgetbankMessageCodeBtn setTitle:@"60秒后再获取" forState:UIControlStateNormal];
+                                                       newSmsCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutWithSmsCode:) userInfo:nil repeats:YES];
                                                    } failure:^(NSError *error) {
                                                        [CMMUtility showNoteWithError:error];
                                                    }];
+}
+
+- (void)timeoutWithSmsCode:(NSTimer *)timer
+{
+    if (timer == oldSmsCodeTimer) {
+        oldSmsCodeTime--;
+        if (oldSmsCodeTime == 0) {
+            oldgetbankMessageCodeBtn.enabled = YES;
+            [oldgetbankMessageCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+            [oldSmsCodeTimer invalidate];
+        }else
+        {
+            [oldgetbankMessageCodeBtn setTitle:[NSString stringWithFormat:@"%ld秒后再获取",oldSmsCodeTime] forState:UIControlStateNormal];
+        }
+    }else if(timer == newSmsCodeTimer)
+    {
+        newSmsCodeTime--;
+        if (newSmsCodeTime == 0) {
+            newgetbankMessageCodeBtn.enabled = YES;
+            [newgetbankMessageCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+            [newSmsCodeTimer invalidate];
+        }else
+        {
+            [newgetbankMessageCodeBtn setTitle:[NSString stringWithFormat:@"%ld秒后再获取",newSmsCodeTime] forState:UIControlStateNormal];
+        }
+    }
 }
 
 - (BOOL)isIDCardValid {
@@ -996,9 +1020,9 @@
                                                      CityCode:[self getCityCode]
                                                       success:^(id responseObject)
         {
-            [self handleRealNameAuthSuccess:responseObject];
+            [self handleResponseSuccess:responseObject];
         } failure:^(NSError *error) {
-            [self handleRealNameAuthFailure:error];
+            [self handleResponseFailure:error];
         }];
     }else if (_isActivationAccount == YES)
     {
@@ -1020,9 +1044,9 @@
                                                            CityCode:[self getCityCode]
                                                             success:^(id responseObject)
          {
-            [self handleRealNameAuthSuccess:responseObject];
+            [self handleResponseSuccess:responseObject];
         } failure:^(NSError *error) {
-            [self handleRealNameAuthFailure:error];
+            [self handleResponseFailure:error];
         }];
         
     }else if (_isChangeBandCard == YES)
@@ -1053,14 +1077,14 @@
                                                         CityCode:[self getCityCode]
                                                          success:^(id responseObject)
         {
-            [self handleRealNameAuthSuccess:responseObject];
+            [self handleResponseSuccess:responseObject];
         } failure:^(NSError *error) {
-            [self handleRealNameAuthFailure:error];
+            [self handleResponseFailure:error];
         }];
     }
 }
 
-- (void)handleRealNameAuthSuccess:(id)response {
+- (void)handleResponseSuccess:(id)response {
     showWebNow = YES;
     identifyBtn.enabled = YES;
     responWebView = [[UIWebView alloc] initWithFrame:self.view.bounds];
@@ -1081,7 +1105,7 @@
     return YES;
 }
 
-- (void)handleRealNameAuthFailure:(NSError *)error {
+- (void)handleResponseFailure:(NSError *)error {
     identifyBtn.enabled = YES;
     [CMMUtility showNoteWithError:error];
 }

@@ -852,9 +852,28 @@ static NSString *appSecret= @"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCv%2FckL6%2F
     registPeopleLbl.text = @"0";
     safeDayLbl.text = @"0";
     expiredLbl.text = @"0";
+    rankTwoNameLbl.text = @"未上榜";
+    rankOneNameLbl.text = @"未上榜";
+    rankThreeNameLbl.text = @"未上榜";
+    rankTwoLbl.text = @"";
+    rankOneLbl.text = @"";
+    rankThreeLbl.text = @"";
+    
     [[NetServiceManager sharedInstance] getHomeDataWithDelegate:self success:^(id responseObject) {
         registPeopleLbl.text = [NSString stringWithFormat:@"%@",[responseObject safeStringForKey:@"customerCount"]];
         safeDayLbl.text = [NSString stringWithFormat:@"%@",[responseObject safeStringForKey:@"yunying"]];
+        NSArray *rankarray = [responseObject safeArrayForKey:@"rank"];
+        NSDictionary *rankonedict = [rankarray objectAtIndex:0];
+        NSDictionary *ranktwodict = [rankarray objectAtIndex:1];
+        NSDictionary *rankthreedict = [rankarray objectAtIndex:2];
+        
+        rankOneLbl.text = [self rankMoney:rankonedict];
+        rankTwoLbl.text = [self rankMoney:ranktwodict];
+        rankThreeLbl.text = [self rankMoney:rankthreedict];
+        
+        rankOneNameLbl.text = [self rankName:rankonedict];
+        rankTwoNameLbl.text = [self rankName:ranktwodict];
+        rankThreeNameLbl.text = [self rankName:rankthreedict];
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];

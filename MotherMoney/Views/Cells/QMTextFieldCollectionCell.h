@@ -11,3 +11,8 @@
 @property (nonatomic, strong) UITextField *textField;
 
 @end
+
+@interface QMTSelectBankCollectionCell : UICollectionViewCell
+@property (nonatomic, strong) UIButton *selectBankBtn;
+
+@end
