@@ -216,7 +216,6 @@
 		18B4A05019A89C110085A608 /* QMLoginManagerUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4A04F19A89C110085A608 /* QMLoginManagerUtil.m */; };
 		18B4A05319A8ABA50085A608 /* QMAddBankCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B4A05219A8ABA50085A608 /* QMAddBankCardViewController.m */; };
 		18B4A05919A8DCA10085A608 /* city.plist in Resources */ = {isa = PBXBuildFile; fileRef = 18B4A05819A8DCA10085A608 /* city.plist */; };
-		18B500101AD56C85000A4311 /* libSocialQQ.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B5000C1AD56C85000A4311 /* libSocialQQ.a */; };
 		18B6CC811B0CEAF200642548 /* QMBankInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B6CC801B0CEAF200642548 /* QMBankInfoCell.m */; };
 		18B6CC951B0E220F00642548 /* DLLRUCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B6CC861B0E220F00642548 /* DLLRUCache.m */; };
 		18B6CC961B0E220F00642548 /* DLCustomSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B6CC881B0E220F00642548 /* DLCustomSlideView.m */; };
@@ -349,12 +348,6 @@
 		C4D1F6A31ADE2532000F115C /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = C4D1F6A21ADE2532000F115C /* share.png */; };
 		C940D55A1F3AF45000DDEC44 /* QMBusinessViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D5591F3AF45000DDEC44 /* QMBusinessViewController.m */; };
 		C940D55D1F3AF47E00DDEC44 /* QMQRCodeOrActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D55C1F3AF47E00DDEC44 /* QMQRCodeOrActionViewController.m */; };
-		C940D56F1F3AF57A00DDEC44 /* UIImage+SGHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D5641F3AF57A00DDEC44 /* UIImage+SGHelper.m */; };
-		C940D5701F3AF57A00DDEC44 /* SGQRCode.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C940D5651F3AF57A00DDEC44 /* SGQRCode.bundle */; };
-		C940D5711F3AF57A00DDEC44 /* SGQRCodeAlbumManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D5681F3AF57A00DDEC44 /* SGQRCodeAlbumManager.m */; };
-		C940D5721F3AF57A00DDEC44 /* SGQRCodeGenerateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D56A1F3AF57A00DDEC44 /* SGQRCodeGenerateManager.m */; };
-		C940D5731F3AF57A00DDEC44 /* SGQRCodeScanManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D56C1F3AF57A00DDEC44 /* SGQRCodeScanManager.m */; };
-		C940D5741F3AF57A00DDEC44 /* SGQRCodeScanningView.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D56E1F3AF57A00DDEC44 /* SGQRCodeScanningView.m */; };
 		C940D5771F3AFB7100DDEC44 /* QMBusinessCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D5761F3AFB7100DDEC44 /* QMBusinessCell.m */; };
 		C940D57A1F3C031200DDEC44 /* QMBusinessInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D5791F3C031200DDEC44 /* QMBusinessInfoModel.m */; };
 		C940D57D1F3C453800DDEC44 /* QMBusinessAmountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C940D57C1F3C453800DDEC44 /* QMBusinessAmountViewController.m */; };
@@ -364,6 +357,12 @@
 		C94AB5E41CF3DBB4005D005C /* QMAdvertisementModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C94AB5E31CF3DBB4005D005C /* QMAdvertisementModel.m */; };
 		C94AB5E71CF3E0F6005D005C /* NSDictionary+Safe.m in Sources */ = {isa = PBXBuildFile; fileRef = C94AB5E61CF3E0F6005D005C /* NSDictionary+Safe.m */; };
 		C94AB5EA1CF4075A005D005C /* QMWebViewAdvertisementViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C94AB5E91CF4075A005D005C /* QMWebViewAdvertisementViewController.m */; };
+		C95C483A1F8B6EF400E3FD29 /* UIImage+SGHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = C95C482F1F8B6EF300E3FD29 /* UIImage+SGHelper.m */; };
+		C95C483B1F8B6EF400E3FD29 /* SGQRCode.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C95C48301F8B6EF300E3FD29 /* SGQRCode.bundle */; };
+		C95C483C1F8B6EF400E3FD29 /* SGQRCodeAlbumManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C95C48331F8B6EF300E3FD29 /* SGQRCodeAlbumManager.m */; };
+		C95C483D1F8B6EF400E3FD29 /* SGQRCodeGenerateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C95C48351F8B6EF300E3FD29 /* SGQRCodeGenerateManager.m */; };
+		C95C483E1F8B6EF400E3FD29 /* SGQRCodeScanManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C95C48371F8B6EF300E3FD29 /* SGQRCodeScanManager.m */; };
+		C95C483F1F8B6EF400E3FD29 /* SGQRCodeScanningView.m in Sources */ = {isa = PBXBuildFile; fileRef = C95C48391F8B6EF300E3FD29 /* SGQRCodeScanningView.m */; };
 		C974DFC41E9B1C1400C4B842 /* QMMoreInfoBankTableFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = C974DFC31E9B1C1400C4B842 /* QMMoreInfoBankTableFooterView.m */; };
 		C979FAF51E7B6AB90001126B /* BCConnectorBundle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C979FAEC1E7B6AB90001126B /* BCConnectorBundle.framework */; };
 		C979FAF61E7B6AB90001126B /* BCHybridWebViewFMWK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C979FAED1E7B6AB90001126B /* BCHybridWebViewFMWK.framework */; };
@@ -819,10 +818,6 @@
 		18B4A05119A8ABA50085A608 /* QMAddBankCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMAddBankCardViewController.h; sourceTree = "<group>"; };
 		18B4A05219A8ABA50085A608 /* QMAddBankCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMAddBankCardViewController.m; sourceTree = "<group>"; };
 		18B4A05819A8DCA10085A608 /* city.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = city.plist; sourceTree = "<group>"; };
-		18B5000C1AD56C85000A4311 /* libSocialQQ.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSocialQQ.a; sourceTree = "<group>"; };
-		18B5000D1AD56C85000A4311 /* TencentOpenAPI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TencentOpenAPI.framework; sourceTree = "<group>"; };
-		18B5000E1AD56C85000A4311 /* TencentOpenApi_IOS_Bundle.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TencentOpenApi_IOS_Bundle.bundle; sourceTree = "<group>"; };
-		18B5000F1AD56C85000A4311 /* UMSocialQQHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialQQHandler.h; sourceTree = "<group>"; };
 		18B6CC7F1B0CEAF200642548 /* QMBankInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMBankInfoCell.h; sourceTree = "<group>"; };
 		18B6CC801B0CEAF200642548 /* QMBankInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMBankInfoCell.m; sourceTree = "<group>"; };
 		18B6CC841B0E220F00642548 /* DLCacheProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLCacheProtocol.h; sourceTree = "<group>"; };
@@ -1082,18 +1077,6 @@
 		C940D5591F3AF45000DDEC44 /* QMBusinessViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMBusinessViewController.m; sourceTree = "<group>"; };
 		C940D55B1F3AF47E00DDEC44 /* QMQRCodeOrActionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMQRCodeOrActionViewController.h; sourceTree = "<group>"; };
 		C940D55C1F3AF47E00DDEC44 /* QMQRCodeOrActionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMQRCodeOrActionViewController.m; sourceTree = "<group>"; };
-		C940D5631F3AF57A00DDEC44 /* UIImage+SGHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SGHelper.h"; sourceTree = "<group>"; };
-		C940D5641F3AF57A00DDEC44 /* UIImage+SGHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SGHelper.m"; sourceTree = "<group>"; };
-		C940D5651F3AF57A00DDEC44 /* SGQRCode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SGQRCode.bundle; sourceTree = "<group>"; };
-		C940D5661F3AF57A00DDEC44 /* SGQRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCode.h; sourceTree = "<group>"; };
-		C940D5671F3AF57A00DDEC44 /* SGQRCodeAlbumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeAlbumManager.h; sourceTree = "<group>"; };
-		C940D5681F3AF57A00DDEC44 /* SGQRCodeAlbumManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeAlbumManager.m; sourceTree = "<group>"; };
-		C940D5691F3AF57A00DDEC44 /* SGQRCodeGenerateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeGenerateManager.h; sourceTree = "<group>"; };
-		C940D56A1F3AF57A00DDEC44 /* SGQRCodeGenerateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeGenerateManager.m; sourceTree = "<group>"; };
-		C940D56B1F3AF57A00DDEC44 /* SGQRCodeScanManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeScanManager.h; sourceTree = "<group>"; };
-		C940D56C1F3AF57A00DDEC44 /* SGQRCodeScanManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeScanManager.m; sourceTree = "<group>"; };
-		C940D56D1F3AF57A00DDEC44 /* SGQRCodeScanningView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeScanningView.h; sourceTree = "<group>"; };
-		C940D56E1F3AF57A00DDEC44 /* SGQRCodeScanningView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeScanningView.m; sourceTree = "<group>"; };
 		C940D5751F3AFB7100DDEC44 /* QMBusinessCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMBusinessCell.h; sourceTree = "<group>"; };
 		C940D5761F3AFB7100DDEC44 /* QMBusinessCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMBusinessCell.m; sourceTree = "<group>"; };
 		C940D5781F3C031200DDEC44 /* QMBusinessInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMBusinessInfoModel.h; sourceTree = "<group>"; };
@@ -1112,6 +1095,18 @@
 		C94AB5E61CF3E0F6005D005C /* NSDictionary+Safe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Safe.m"; sourceTree = "<group>"; };
 		C94AB5E81CF4075A005D005C /* QMWebViewAdvertisementViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMWebViewAdvertisementViewController.h; sourceTree = "<group>"; };
 		C94AB5E91CF4075A005D005C /* QMWebViewAdvertisementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMWebViewAdvertisementViewController.m; sourceTree = "<group>"; };
+		C95C482E1F8B6EF300E3FD29 /* UIImage+SGHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+SGHelper.h"; sourceTree = "<group>"; };
+		C95C482F1F8B6EF300E3FD29 /* UIImage+SGHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+SGHelper.m"; sourceTree = "<group>"; };
+		C95C48301F8B6EF300E3FD29 /* SGQRCode.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SGQRCode.bundle; sourceTree = "<group>"; };
+		C95C48311F8B6EF300E3FD29 /* SGQRCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCode.h; sourceTree = "<group>"; };
+		C95C48321F8B6EF300E3FD29 /* SGQRCodeAlbumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeAlbumManager.h; sourceTree = "<group>"; };
+		C95C48331F8B6EF300E3FD29 /* SGQRCodeAlbumManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeAlbumManager.m; sourceTree = "<group>"; };
+		C95C48341F8B6EF300E3FD29 /* SGQRCodeGenerateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeGenerateManager.h; sourceTree = "<group>"; };
+		C95C48351F8B6EF300E3FD29 /* SGQRCodeGenerateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeGenerateManager.m; sourceTree = "<group>"; };
+		C95C48361F8B6EF300E3FD29 /* SGQRCodeScanManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeScanManager.h; sourceTree = "<group>"; };
+		C95C48371F8B6EF300E3FD29 /* SGQRCodeScanManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeScanManager.m; sourceTree = "<group>"; };
+		C95C48381F8B6EF300E3FD29 /* SGQRCodeScanningView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGQRCodeScanningView.h; sourceTree = "<group>"; };
+		C95C48391F8B6EF300E3FD29 /* SGQRCodeScanningView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGQRCodeScanningView.m; sourceTree = "<group>"; };
 		C974DFC21E9B1C1400C4B842 /* QMMoreInfoBankTableFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QMMoreInfoBankTableFooterView.h; sourceTree = "<group>"; };
 		C974DFC31E9B1C1400C4B842 /* QMMoreInfoBankTableFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QMMoreInfoBankTableFooterView.m; sourceTree = "<group>"; };
 		C979FAEC1E7B6AB90001126B /* BCConnectorBundle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BCConnectorBundle.framework; sourceTree = "<group>"; };
@@ -1253,7 +1248,6 @@
 				18A22EF51990F541001BECD7 /* Security.framework in Frameworks */,
 				C0E5B8291BCBA5B7002543B3 /* QuartzCore.framework in Frameworks */,
 				C98321D71F4D23BE002C1D19 /* UMSocialCore.framework in Frameworks */,
-				18B500101AD56C85000A4311 /* libSocialQQ.a in Frameworks */,
 				C98321DD1F4D23BE002C1D19 /* UShareUI.framework in Frameworks */,
 				18A0510F19AD798E00FA9C0C /* MobileCoreServices.framework in Frameworks */,
 				18A22F031990F6CF001BECD7 /* libUMessage_Sdk_1.1.0.a in Frameworks */,
@@ -1726,7 +1720,7 @@
 		185FB687198E9A9A00F538FF /* ThirdPart */ = {
 			isa = PBXGroup;
 			children = (
-				C940D5611F3AF57A00DDEC44 /* SGQRCode */,
+				C95C482C1F8B6EF300E3FD29 /* SGQRCode */,
 				C9AEFCEC1E7BB9A400C9AEA5 /* Tool */,
 				C979FB0B1E7B765A0001126B /* YiDun */,
 				C979FAFE1E7B6D4E0001126B /* LLPaySDK */,
@@ -1735,7 +1729,6 @@
 				18B8EEBF1B5A94F700DF34DD /* VENTouchLock */,
 				18B8EEB81B5A94A600DF34DD /* SSKeychain */,
 				18B6CCBC1B10A63E00642548 /* PSTAlertController */,
-				18B5000B1AD56C85000A4311 /* TencentOpenAPI */,
 				18B5FFD81AD56547000A4311 /* Share */,
 				18B7E35D1AA2E13700F7C22B /* Masonry */,
 				56ABD88B1A148D740082D42D /* OpenUDID */,
@@ -2218,18 +2211,6 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		18B5000B1AD56C85000A4311 /* TencentOpenAPI */ = {
-			isa = PBXGroup;
-			children = (
-				18B5000C1AD56C85000A4311 /* libSocialQQ.a */,
-				18B5000D1AD56C85000A4311 /* TencentOpenAPI.framework */,
-				18B5000E1AD56C85000A4311 /* TencentOpenApi_IOS_Bundle.bundle */,
-				18B5000F1AD56C85000A4311 /* UMSocialQQHandler.h */,
-			);
-			name = TencentOpenAPI;
-			path = Share/TencentOpenAPI;
-			sourceTree = "<group>";
-		};
 		18B5FFD81AD56547000A4311 /* Share */ = {
 			isa = PBXGroup;
 			children = (
@@ -2482,30 +2463,29 @@
 			path = UIViewExt;
 			sourceTree = "<group>";
 		};
-		C940D5611F3AF57A00DDEC44 /* SGQRCode */ = {
+		C95C482C1F8B6EF300E3FD29 /* SGQRCode */ = {
 			isa = PBXGroup;
 			children = (
-				C940D5621F3AF57A00DDEC44 /* Category */,
-				C940D5651F3AF57A00DDEC44 /* SGQRCode.bundle */,
-				C940D5661F3AF57A00DDEC44 /* SGQRCode.h */,
-				C940D5671F3AF57A00DDEC44 /* SGQRCodeAlbumManager.h */,
-				C940D5681F3AF57A00DDEC44 /* SGQRCodeAlbumManager.m */,
-				C940D5691F3AF57A00DDEC44 /* SGQRCodeGenerateManager.h */,
-				C940D56A1F3AF57A00DDEC44 /* SGQRCodeGenerateManager.m */,
-				C940D56B1F3AF57A00DDEC44 /* SGQRCodeScanManager.h */,
-				C940D56C1F3AF57A00DDEC44 /* SGQRCodeScanManager.m */,
-				C940D56D1F3AF57A00DDEC44 /* SGQRCodeScanningView.h */,
-				C940D56E1F3AF57A00DDEC44 /* SGQRCodeScanningView.m */,
+				C95C482D1F8B6EF300E3FD29 /* Category */,
+				C95C48301F8B6EF300E3FD29 /* SGQRCode.bundle */,
+				C95C48311F8B6EF300E3FD29 /* SGQRCode.h */,
+				C95C48321F8B6EF300E3FD29 /* SGQRCodeAlbumManager.h */,
+				C95C48331F8B6EF300E3FD29 /* SGQRCodeAlbumManager.m */,
+				C95C48341F8B6EF300E3FD29 /* SGQRCodeGenerateManager.h */,
+				C95C48351F8B6EF300E3FD29 /* SGQRCodeGenerateManager.m */,
+				C95C48361F8B6EF300E3FD29 /* SGQRCodeScanManager.h */,
+				C95C48371F8B6EF300E3FD29 /* SGQRCodeScanManager.m */,
+				C95C48381F8B6EF300E3FD29 /* SGQRCodeScanningView.h */,
+				C95C48391F8B6EF300E3FD29 /* SGQRCodeScanningView.m */,
 			);
-			name = SGQRCode;
-			path = "../../../../Downloads/SGQRCode-master/SGQRCode";
+			path = SGQRCode;
 			sourceTree = "<group>";
 		};
-		C940D5621F3AF57A00DDEC44 /* Category */ = {
+		C95C482D1F8B6EF300E3FD29 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				C940D5631F3AF57A00DDEC44 /* UIImage+SGHelper.h */,
-				C940D5641F3AF57A00DDEC44 /* UIImage+SGHelper.m */,
+				C95C482E1F8B6EF300E3FD29 /* UIImage+SGHelper.h */,
+				C95C482F1F8B6EF300E3FD29 /* UIImage+SGHelper.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2754,7 +2734,7 @@
 				ORGANIZATIONNAME = "___FULLUSERNAME___";
 				TargetAttributes = {
 					185FB615198E754F00F538FF = {
-						DevelopmentTeam = MY6HP6CP23;
+						DevelopmentTeam = B9XXC65B54;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
@@ -2798,6 +2778,7 @@
 				18B6CC9D1B0E34B100642548 /* balance_money.jpg in Resources */,
 				18AF249719BB16E4008EFAB0 /* item_ok@2x.png in Resources */,
 				C4D1F6A31ADE2532000F115C /* share.png in Resources */,
+				C95C483B1F8B6EF400E3FD29 /* SGQRCode.bundle in Resources */,
 				C979FAFB1E7B6AB90001126B /* yw_1222.jpg in Resources */,
 				18AF24A119BB16E4008EFAB0 /* nav_btn_bg.png in Resources */,
 				18B4A05919A8DCA10085A608 /* city.plist in Resources */,
@@ -2831,7 +2812,6 @@
 				18AF249619BB16E4008EFAB0 /* item_cancel_selected@2x.png in Resources */,
 				18B8EEE01B5A94F700DF34DD /* VENTouchLockPasscodeView.xib in Resources */,
 				18B7E3881AA3535200F7C22B /* MoreInfo.plist in Resources */,
-				C940D5701F3AF57A00DDEC44 /* SGQRCode.bundle in Resources */,
 				18AF249119BB16E4008EFAB0 /* blueArrow.png in Resources */,
 				18AF249019BB16E4008EFAB0 /* background@2x.png in Resources */,
 				18AF24AC19BB16E4008EFAB0 /* UMFeedbackViewController.xib in Resources */,
@@ -2855,6 +2835,7 @@
 				18A22F171991C4FC001BECD7 /* KIImagePager.m in Sources */,
 				18A22F1D1991CAC7001BECD7 /* QMRecommendData.m in Sources */,
 				C946A1E81EEFC65300D2DD77 /* QMCreditorsInfo.m in Sources */,
+				C95C483E1F8B6EF400E3FD29 /* SGQRCodeScanManager.m in Sources */,
 				18BC56531B0A4C7B008913E2 /* QMAccountOpHeaderView.m in Sources */,
 				C0DDE7531B9033E4009E4B51 /* BaseModel.m in Sources */,
 				185FB6AA198E9A9A00F538FF /* DDDispatchQueueLogFormatter.m in Sources */,
@@ -2883,13 +2864,11 @@
 				18B0531119A9DBBD009E8C2D /* QMBuyedProductRecordInfoHeaderView.m in Sources */,
 				C0E2BEFD1BA9416B00AE2F39 /* QMProductCouponCollectionViewCell.m in Sources */,
 				C0E15A7C1BA26388001130C1 /* UIViewExt.m in Sources */,
-				C940D56F1F3AF57A00DDEC44 /* UIImage+SGHelper.m in Sources */,
 				18A8415D19964C9400985E35 /* QMMyFundAbstractCell.m in Sources */,
 				18B8EED71B5A94F700DF34DD /* UIViewController+VENTouchLock.m in Sources */,
 				C979FB481E7B864B0001126B /* NTESVCReachability.m in Sources */,
 				18B8EEDF1B5A94F700DF34DD /* VENTouchLockPasscodeView.m in Sources */,
 				18533B2A19C41B9F008348B4 /* QMStringUtil.m in Sources */,
-				C940D5741F3AF57A00DDEC44 /* SGQRCodeScanningView.m in Sources */,
 				184381BA19CE7BF900210C5E /* QMResetPwdForPhoneViewController.m in Sources */,
 				182B393819DA9A8F005BA188 /* QMFundEmptyCell.m in Sources */,
 				C0E1DB141B957F58007E3B4C /* QMGoodListDetailCellModel.m in Sources */,
@@ -2935,6 +2914,7 @@
 				185686351A32C0E200A397FC /* QFHttpDownload.m in Sources */,
 				56CB7E3E19960266000CD797 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				18BC563E1B08C018008913E2 /* QMProductListViewController.m in Sources */,
+				C95C483C1F8B6EF400E3FD29 /* SGQRCodeAlbumManager.m in Sources */,
 				18AF8E61199F9BE70021A70A /* QMFrameUtil.m in Sources */,
 				18AF24A719BB16E4008EFAB0 /* UMContactViewController.m in Sources */,
 				185FB677198E871700F538FF /* QMTabBarConfigure.m in Sources */,
@@ -2970,6 +2950,7 @@
 				C0E2C54B1B9FDE0C00B0CE44 /* QMMyIntegralExchangeListViewControllerViewController2.m in Sources */,
 				1885A14919B214E100D4F555 /* QMProductBuyResultViewController.m in Sources */,
 				18209FCD1A244D8C00BF85BA /* QMProductImageItemModel.m in Sources */,
+				C95C483F1F8B6EF400E3FD29 /* SGQRCodeScanningView.m in Sources */,
 				18209FD61A24512F00BF85BA /* QMWindControlHeaderCellHeader.m in Sources */,
 				18B052ED19A8EBD3009E8C2D /* QMAddBankViewController.m in Sources */,
 				18A22F0D1991C48E001BECD7 /* QMPullRefreshViewController.m in Sources */,
@@ -2978,6 +2959,7 @@
 				18209FD31A2450F000BF85BA /* QMProductIntroductionCellHeader.m in Sources */,
 				56ABD88F1A148D740082D42D /* OpenUDID.m in Sources */,
 				18A841AE199781AA00985E35 /* QMAssistItemCell.m in Sources */,
+				C95C483A1F8B6EF400E3FD29 /* UIImage+SGHelper.m in Sources */,
 				185FB712198EA1BC00F538FF /* MKAnnotationView+WebCache.m in Sources */,
 				18A84178199654B400985E35 /* QMTradeInfo.m in Sources */,
 				C0E23EAB1BA11A48007B51B9 /* QMCouponCollectionViewCell.m in Sources */,
@@ -3019,7 +3001,6 @@
 				18A8418519967E8F00985E35 /* QMMessageInfo.m in Sources */,
 				185FB686198E974800F538FF /* QMTabBarController.m in Sources */,
 				C940D57D1F3C453800DDEC44 /* QMBusinessAmountViewController.m in Sources */,
-				C940D5721F3AF57A00DDEC44 /* SGQRCodeGenerateManager.m in Sources */,
 				C0DFCA171BAAE3E400B069E7 /* QMProductCouponModel.m in Sources */,
 				18B6CC9A1B0E220F00642548 /* DLTabedSlideView.m in Sources */,
 				C0E510A71B84949A00F5DAA2 /* QMDealDetailViewController.m in Sources */,
@@ -3063,7 +3044,6 @@
 				18AF10DC19D46A3C0033534F /* QMBuyedProductInfo.m in Sources */,
 				18A8418E199696D400985E35 /* QMSwitchCell.m in Sources */,
 				18AF8E1A199E774B0021A70A /* QMProductInfoAbstractCell.m in Sources */,
-				C940D5711F3AF57A00DDEC44 /* SGQRCodeAlbumManager.m in Sources */,
 				18A8416419964C9F00985E35 /* QMBankInfoView.m in Sources */,
 				18B052F019A8EBE7009E8C2D /* QMSelectLocationViewController.m in Sources */,
 				56CB7E3F19960266000CD797 /* AFPropertyListRequestOperation.m in Sources */,
@@ -3104,7 +3084,6 @@
 				18BC564A1B0A419A008913E2 /* QMAccountOpViewController.m in Sources */,
 				C979FB4E1E7B864B0001126B /* NTESVCCSPersisit.m in Sources */,
 				18B052F919A8FED0009E8C2D /* QMConfirmBuyProductViewController.m in Sources */,
-				C940D5731F3AF57A00DDEC44 /* SGQRCodeScanManager.m in Sources */,
 				18BC71391AD2A1F000C80C29 /* BlockBackground.m in Sources */,
 				185FB6A2198E9A9A00F538FF /* CLIColor.m in Sources */,
 				C979FB451E7B864B0001126B /* NTESVCBGRSafeMutableArray.m in Sources */,
@@ -3148,6 +3127,7 @@
 				18B6CC981B0E220F00642548 /* DLFixedTabbarView.m in Sources */,
 				56CB7E3D19960266000CD797 /* AFJSONRequestOperation.m in Sources */,
 				18209FCA1A244C4400BF85BA /* QMProductIntroductionModel.m in Sources */,
+				C95C483D1F8B6EF400E3FD29 /* SGQRCodeGenerateManager.m in Sources */,
 				18AF8E35199F4CA30021A70A /* QMControlFactory.m in Sources */,
 				185FB62A198E754F00F538FF /* AppDelegate.m in Sources */,
 				18B6CC971B0E220F00642548 /* DLSlideView.m in Sources */,
@@ -3301,7 +3281,8 @@
 				CODE_SIGN_ENTITLEMENTS = "MotherMoney/粤融贷.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = MY6HP6CP23;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3357,7 +3338,7 @@
 					"$(PROJECT_DIR)/MotherMoney/ThirdPart/Share/UMSocial/UMSocialSDKPlugin",
 				);
 				OTHER_LDFLAGS = "-all_load";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yrdai.yrdai;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yrdai.yrdaiTest;
 				PRODUCT_NAME = "粤融贷";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3375,7 +3356,8 @@
 				CODE_SIGN_ENTITLEMENTS = "MotherMoney/粤融贷.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = MY6HP6CP23;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3431,7 +3413,7 @@
 					"$(PROJECT_DIR)/MotherMoney/ThirdPart/Share/UMSocial/UMSocialSDKPlugin",
 				);
 				OTHER_LDFLAGS = "-all_load";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yrdai.yrdai;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yrdai.yrdaiTest;
 				PRODUCT_NAME = "粤融贷";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

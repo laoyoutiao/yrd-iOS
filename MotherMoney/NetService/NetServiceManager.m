@@ -1994,6 +1994,17 @@
     }];
 }
 
+//获取提现限额
+- (void)PersonWithDrawPermitAmt:(id)delegate
+                        success:(void (^)(id responseObject))success
+                        failure:(void (^)(NSError *error))failure
+{
+    [_httpRequest xsPostPath:kGetWithDrawPermitAmt delegate:delegate params:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [self catchNetResWithResInfo:responseObject success:success error:failure delegate:delegate path:kGetWithDrawPermitAmt];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failure(error);
+    }];
+}
 
 
 - (void)showNoNetworkErrorPrompt:(NSError *)error {

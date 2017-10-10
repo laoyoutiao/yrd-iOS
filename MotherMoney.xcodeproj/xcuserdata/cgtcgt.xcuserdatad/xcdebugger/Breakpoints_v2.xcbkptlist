@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/NetService/NetServiceManager.m"
-            timestampString = "528278920.575247"
+            timestampString = "528370523.5423"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1890"
@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/NetService/NetServiceManager.m"
-            timestampString = "528278920.57534"
+            timestampString = "528370523.542401"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1923"
@@ -122,7 +122,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/NetService/NetServiceManager.m"
-            timestampString = "528278920.575416"
+            timestampString = "528370523.542484"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1929"
@@ -138,7 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/NetService/NetServiceManager.m"
-            timestampString = "528278920.57549"
+            timestampString = "528370523.542589"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1931"
@@ -150,11 +150,11 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/NetService/NetServiceManager.m"
-            timestampString = "528278920.575563"
+            timestampString = "528370523.542659"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1949"
@@ -166,16 +166,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MotherMoney/ViewControllers/CustomViewControllers/Register/QMIdentityAuthenticationViewController.m"
-            timestampString = "528279220.591026"
+            filePath = "MotherMoney/NetService/NetServiceManager.m"
+            timestampString = "528370523.542737"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "902"
-            endingLineNumber = "902"
-            landmarkName = "-clickGetOldBankMessageCode"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "-catchNetResWithResInfo:success:error:delegate:path:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -185,14 +185,190 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MotherMoney/ViewControllers/CustomViewControllers/Register/QMIdentityAuthenticationViewController.m"
-            timestampString = "528279221.710002"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529228611.079132"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "912"
-            endingLineNumber = "912"
-            landmarkName = "-clickGetOldBankMessageCode"
+            startingLineNumber = "241"
+            endingLineNumber = "241"
+            landmarkName = "-gotoRechargeRecordListViewController"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529228611.079232"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
+            landmarkName = "-gotowithDrawApplyListViewController"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529228611.079313"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
+            landmarkName = "-gotoGoodsListViewController"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529228611.079393"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
+            landmarkName = "-gotoDealDetailController"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MyFundViewController gotoDealDetailController]"
+                  moduleName = "&#x7ca4;&#x878d;&#x8d37;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+                  timestampString = "529208756.258189"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "205"
+                  endingLineNumber = "205"
+                  offsetFromSymbolStart = "41">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__48-[MyFundViewController gotoDealDetailController]_block_invoke"
+                  moduleName = "&#x7ca4;&#x878d;&#x8d37;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+                  timestampString = "529208756.261107"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "206"
+                  endingLineNumber = "206"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529228611.079468"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "-gotoWithDrawController"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MyFundViewController gotoWithDrawController]"
+                  moduleName = "&#x7ca4;&#x878d;&#x8d37;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+                  timestampString = "529208756.266758"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "193"
+                  endingLineNumber = "193"
+                  offsetFromSymbolStart = "41">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__46-[MyFundViewController gotoWithDrawController]_block_invoke"
+                  moduleName = "&#x7ca4;&#x878d;&#x8d37;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+                  timestampString = "529208756.269423"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "194"
+                  endingLineNumber = "194"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529228611.079542"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "-gotoRechargeController"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[MyFundViewController gotoRechargeController]"
+                  moduleName = "&#x7ca4;&#x878d;&#x8d37;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+                  timestampString = "529208756.275344"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "180"
+                  endingLineNumber = "180"
+                  offsetFromSymbolStart = "41">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__46-[MyFundViewController gotoRechargeController]_block_invoke"
+                  moduleName = "&#x7ca4;&#x878d;&#x8d37;"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+                  timestampString = "529208756.278111"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "181"
+                  endingLineNumber = "181"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

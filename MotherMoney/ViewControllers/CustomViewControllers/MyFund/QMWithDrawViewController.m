@@ -57,16 +57,28 @@
 
 - (void)netupdateCardInformation
 {
+
+    [[NetServiceManager sharedInstance] PersonWithDrawPermitAmt:self
+                                                        success:^(id responseObject) {
+                                                            if (!QM_IS_DICT_NIL(responseObject)) {
+                                                                        // 显示当前余额
+                                                                available = [[responseObject objectForKey:@"permitAmt"] doubleValue];
+                                                            }
+                                                            [myCollectionView reloadData];
+                                                        } failure:^(NSError *error) {
+                                                            [CMMUtility showNoteWithError:error];
+                                                        }];
+    
     // 获取剩余金额
-    [[NetServiceManager sharedInstance] getAvailableMoneyWithDelegate:self success:^(id responseObject) {
-        if (!QM_IS_DICT_NIL(responseObject)) {
-            // 显示当前余额
-            available = [[responseObject objectForKey:@"available"] doubleValue];
-        }
-        [myCollectionView reloadData];
-    } failure:^(NSError *error) {
-        [CMMUtility showNoteWithError:error];
-    }];
+//    [[NetServiceManager sharedInstance] getAvailableMoneyWithDelegate:self success:^(id responseObject) {
+//        if (!QM_IS_DICT_NIL(responseObject)) {
+//            // 显示当前余额
+//            available = [[responseObject objectForKey:@"available"] doubleValue];
+//        }
+//        [myCollectionView reloadData];
+//    } failure:^(NSError *error) {
+//        [CMMUtility showNoteWithError:error];
+//    }];
 }
 
 //- (void)handleTapGesture:(UITapGestureRecognizer *)gesture {
@@ -261,7 +273,6 @@
     responWebView.delegate = self;
     [self.view addSubview:responWebView];
     [responWebView loadHTMLString:response baseURL:[NSURL URLWithString:URL_BASE]];
-    
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType

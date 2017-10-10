@@ -262,6 +262,9 @@
 //新提现接口
 #define kNewWithDraw            @"chinapnr/withdraw"
 
+//获取提现限额
+#define kGetWithDrawPermitAmt   @"chinapnr/withdraw/getPermitAmt"
+
 /**
  网络访问的服务类
  */
@@ -839,4 +842,9 @@ typedef enum {
            paypassword:(NSString *)password
                success:(void (^)(id responseObject))success
                failure:(void(^)(NSError *error))failure;
+
+//获取提现限额
+- (void)PersonWithDrawPermitAmt:(id)delegate
+                        success:(void (^)(id responseObject))success
+                        failure:(void (^)(NSError *error))failure;
 @end

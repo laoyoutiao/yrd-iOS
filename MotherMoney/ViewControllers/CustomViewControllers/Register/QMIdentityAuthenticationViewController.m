@@ -159,17 +159,15 @@
     
     containerView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
     containerView.alwaysBounceVertical = YES;
-    if (self.view.frame.size.height < 600) {
-        if (_isOpenAccount)
-        {
-            [containerView setContentSize:CGSizeMake(0, 750)];
-        }else if (_isActivationAccount)
-        {
-            [containerView setContentSize:CGSizeMake(0, 650)];
-        }else if (_isChangeBandCard)
-        {
-            [containerView setContentSize:CGSizeMake(0, 870)];
-        }
+    if (_isOpenAccount)
+    {
+        [containerView setContentSize:CGSizeMake(0, 800)];
+    }else if (_isActivationAccount)
+    {
+        [containerView setContentSize:CGSizeMake(0, 700)];
+    }else if (_isChangeBandCard)
+    {
+        [containerView setContentSize:CGSizeMake(0, 950)];
     }
     containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:containerView];
@@ -904,10 +902,16 @@
                                                     Mobile:[self getOldPhoneString]
                                                    SmsType:RebindBankMessageTypeOldCard
                                                    success:^(id responseObject) {
-                                                       oldgetbankMessageCodeBtn.enabled = NO;
-                                                       oldSmsCodeTime = 60;
-                                                       [oldgetbankMessageCodeBtn setTitle:@"60秒后再获取" forState:UIControlStateNormal];
-                                                       oldSmsCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutWithSmsCode:) userInfo:nil repeats:YES];
+                                                       NSString *result = [responseObject objectForKey:@"result"];
+                                                       if (result.integerValue) {
+                                                           oldgetbankMessageCodeBtn.enabled = NO;
+                                                           oldSmsCodeTime = 60;
+                                                           [oldgetbankMessageCodeBtn setTitle:@"60秒后再获取" forState:UIControlStateNormal];
+                                                           oldSmsCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutWithSmsCode:) userInfo:nil repeats:YES];
+                                                       }else
+                                                       {
+                                                           [CMMUtility showSuccessMessage:[responseObject objectForKey:@"message"]];
+                                                       }
                                                    } failure:^(NSError *error) {
                                                        [CMMUtility showNoteWithError:error];
                                                    }];
@@ -927,10 +931,16 @@
                                                     Mobile:[self getPhoneString]
                                                    SmsType:RebindBankMessageTypeNewCard
                                                    success:^(id responseObject) {
-                                                       newgetbankMessageCodeBtn.enabled = NO;
-                                                       newSmsCodeTime = 60;
-                                                       [newgetbankMessageCodeBtn setTitle:@"60秒后再获取" forState:UIControlStateNormal];
-                                                       newSmsCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutWithSmsCode:) userInfo:nil repeats:YES];
+                                                       NSString *result = [responseObject objectForKey:@"result"];
+                                                       if (result.integerValue) {
+                                                           newgetbankMessageCodeBtn.enabled = NO;
+                                                           newSmsCodeTime = 60;
+                                                           [newgetbankMessageCodeBtn setTitle:@"60秒后再获取" forState:UIControlStateNormal];
+                                                           newSmsCodeTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutWithSmsCode:) userInfo:nil repeats:YES];
+                                                       }else
+                                                       {
+                                                           [CMMUtility showSuccessMessage:[responseObject objectForKey:@"message"]];
+                                                       }
                                                    } failure:^(NSError *error) {
                                                        [CMMUtility showNoteWithError:error];
                                                    }];

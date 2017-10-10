@@ -129,29 +129,29 @@
         [itemList addObject:ChangeBandCardItem];
     }
     
-    QMPersonalCenterItemInfo *TestOpenAccountItem = [[QMPersonalCenterItemInfo alloc] init];
-    TestOpenAccountItem.iconImageName = @"real_name_authentication.png";
-    TestOpenAccountItem.itemName = @"测试开户";
-    TestOpenAccountItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    TestOpenAccountItem.selectorName = @"gotoTestOpenAccountViewController";
-    TestOpenAccountItem.selectionStyle = UITableViewCellSelectionStyleDefault;
-    [itemList addObject:TestOpenAccountItem];
-
-    QMPersonalCenterItemInfo *TestActivationItem = [[QMPersonalCenterItemInfo alloc] init];
-    TestActivationItem.iconImageName = @"real_name_authentication.png";
-    TestActivationItem.itemName = @"测试激活";
-    TestActivationItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    TestActivationItem.selectorName = @"gotoTestActivationViewController";
-    TestActivationItem.selectionStyle = UITableViewCellSelectionStyleDefault;
-    [itemList addObject:TestActivationItem];
-
-    QMPersonalCenterItemInfo *TestChangeBandCardItem = [[QMPersonalCenterItemInfo alloc] init];
-    TestChangeBandCardItem.iconImageName = @"real_name_authentication.png";
-    TestChangeBandCardItem.itemName = @"测试绑卡";
-    TestChangeBandCardItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    TestChangeBandCardItem.selectorName = @"gotoTestChangeBandCardViewController";
-    TestChangeBandCardItem.selectionStyle = UITableViewCellSelectionStyleDefault;
-    [itemList addObject:TestChangeBandCardItem];
+//    QMPersonalCenterItemInfo *TestOpenAccountItem = [[QMPersonalCenterItemInfo alloc] init];
+//    TestOpenAccountItem.iconImageName = @"real_name_authentication.png";
+//    TestOpenAccountItem.itemName = @"测试开户";
+//    TestOpenAccountItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    TestOpenAccountItem.selectorName = @"gotoTestOpenAccountViewController";
+//    TestOpenAccountItem.selectionStyle = UITableViewCellSelectionStyleDefault;
+//    [itemList addObject:TestOpenAccountItem];
+//
+//    QMPersonalCenterItemInfo *TestActivationItem = [[QMPersonalCenterItemInfo alloc] init];
+//    TestActivationItem.iconImageName = @"real_name_authentication.png";
+//    TestActivationItem.itemName = @"测试激活";
+//    TestActivationItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    TestActivationItem.selectorName = @"gotoTestActivationViewController";
+//    TestActivationItem.selectionStyle = UITableViewCellSelectionStyleDefault;
+//    [itemList addObject:TestActivationItem];
+//
+//    QMPersonalCenterItemInfo *TestChangeBandCardItem = [[QMPersonalCenterItemInfo alloc] init];
+//    TestChangeBandCardItem.iconImageName = @"real_name_authentication.png";
+//    TestChangeBandCardItem.itemName = @"测试绑卡";
+//    TestChangeBandCardItem.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    TestChangeBandCardItem.selectorName = @"gotoTestChangeBandCardViewController";
+//    TestChangeBandCardItem.selectionStyle = UITableViewCellSelectionStyleDefault;
+//    [itemList addObject:TestChangeBandCardItem];
 
     
     // 交易密码
@@ -283,29 +283,29 @@
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }
 
-- (void)gotoTestOpenAccountViewController {
-    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
-    con.isOpenAccount = YES;
-    con.isModel = YES;
-    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
-}
-
-- (void)gotoTestActivationViewController {
-    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
-    con.isActivationAccount = YES;
-    con.isModel = YES;
-    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
-}
-
-- (void)gotoTestChangeBandCardViewController {
-    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
-    con.isChangeBandCard = YES;
-    con.isModel = YES;
-    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
-}
+//- (void)gotoTestOpenAccountViewController {
+//    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
+//    con.isOpenAccount = YES;
+//    con.isModel = YES;
+//    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+//    [self.navigationController presentViewController:nav animated:YES completion:nil];
+//}
+//
+//- (void)gotoTestActivationViewController {
+//    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
+//    con.isActivationAccount = YES;
+//    con.isModel = YES;
+//    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+//    [self.navigationController presentViewController:nav animated:YES completion:nil];
+//}
+//
+//- (void)gotoTestChangeBandCardViewController {
+//    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
+//    con.isChangeBandCard = YES;
+//    con.isModel = YES;
+//    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+//    [self.navigationController presentViewController:nav animated:YES completion:nil];
+//}
 
 //我的银行卡
 - (void)gotoBankCardViewController {
