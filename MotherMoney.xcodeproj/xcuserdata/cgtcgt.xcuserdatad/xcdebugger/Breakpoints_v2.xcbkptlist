@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/ViewControllers/CustomViewControllers/Finance/QMProductInfoViewController.m"
-            timestampString = "526988268.559914"
+            timestampString = "529493502.231366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "377"
-            endingLineNumber = "377"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
             landmarkName = "-gotoGetProductPage"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/ViewControllers/CustomViewControllers/Finance/QMProductInfoViewController.m"
-            timestampString = "526988268.559914"
+            timestampString = "529493502.231944"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "381"
-            endingLineNumber = "381"
+            startingLineNumber = "372"
+            endingLineNumber = "372"
             landmarkName = "-gotoGetProductPage"
             landmarkType = "7">
          </BreakpointContent>
@@ -326,7 +326,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
@@ -339,36 +339,52 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  shouldBeEnabled = "No"
+                  shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "-[MyFundViewController gotoRechargeController]"
                   moduleName = "&#x7ca4;&#x878d;&#x8d37;"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
-                  timestampString = "529208756.275344"
+                  timestampString = "529549549.697589"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "180"
                   endingLineNumber = "180"
-                  offsetFromSymbolStart = "41">
+                  offsetFromSymbolStart = "58">
                </Location>
                <Location
-                  shouldBeEnabled = "No"
+                  shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "__46-[MyFundViewController gotoRechargeController]_block_invoke"
                   moduleName = "&#x7ca4;&#x878d;&#x8d37;"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/cgtcgt/Desktop/%E7%B2%A4%E8%9E%8D%E8%B4%B7/MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
-                  timestampString = "529208756.278111"
+                  timestampString = "529549549.7017"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "181"
                   endingLineNumber = "181"
-                  offsetFromSymbolStart = "24">
+                  offsetFromSymbolStart = "18">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MotherMoney/ViewControllers/CustomViewControllers/MyFund/MyFundViewController.m"
+            timestampString = "529549584.548609"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
+            landmarkName = "-gotoAccountWithPerson:"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
