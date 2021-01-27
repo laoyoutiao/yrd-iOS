@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "QMProductInfo.h"
+#import "QMCreditorsInfo.h"
 
 @interface QMProductInfoItemCell : UICollectionViewCell
 @property (nonatomic, strong) UILabel *itemTitleLabel;
@@ -15,5 +16,7 @@
 @property (nonatomic, assign) BOOL showsIndicator;
 
 + (CGFloat)getCellHeightForProductInfo:(QMProductInfo *)info;
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info;
 
 @end

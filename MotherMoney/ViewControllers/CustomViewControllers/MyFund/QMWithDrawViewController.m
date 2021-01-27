@@ -10,7 +10,7 @@
 #import "QMWithDrawRecordListViewController.h"
 #import "QMSingleLineCollectionCell.h"
 #import "QMTextFieldCollectionCell.h"
-#import "QMMoreInfoTableFooterView.h"
+#import "QMMoreInfoBankTableFooterView.h"
 #import "QMSingleLineTextCell.h"
 #import "QMBankCardModel.h"
 #import "QMSelectBankViewControllerV2.h"
@@ -23,7 +23,7 @@
 #define QMTEXTFIELDCOLLECTIONCELLIDENTIFIER2 @"QMTEXTFIELDCOLLECTIONCELLIDENTIFIER"
 #define MORE_ITEM_TABLE_FOOTER_IDENTIFIER2 @"MORE_ITEM_TABLE_FOOTER_IDENTIFIER"
 
-@interface QMWithDrawViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, QMSelectBankViewControllerV2Delegate>
+@interface QMWithDrawViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITextFieldDelegate, UIAlertViewDelegate, UIWebViewDelegate>
 
 @end
 
@@ -31,54 +31,62 @@
     UICollectionView *myCollectionView;
     QMSingleLineTextCell *amountCell;
     QMBankCardModel *cardModel;
+    NSArray *cardArrayModel;
+    QMMoreInfoBankTableFooterView *footerView;
     QMTextFieldCollectionCell *pwdCell;
+    UICollectionViewCell *lastclickcell;
+    UIWebView *responWebView;
     double available;
+    bool isWithDrawCardNow;
+    BOOL isShowWebNow;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    isShowWebNow = NO;
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     [self setUpCollectionView];
+    isWithDrawCardNow = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    // 获取剩余金额
-    [[NetServiceManager sharedInstance] getAvailableMoneyWithDelegate:self success:^(id responseObject) {
-        if (!QM_IS_DICT_NIL(responseObject)) {
-            // 显示当前余额
-            available = [[responseObject objectForKey:@"available"] doubleValue];
-        }
-        [myCollectionView reloadData];
-    } failure:^(NSError *error) {
-        [CMMUtility showNoteWithError:error];
-    }];
-    
-    // 获取银行卡信息
-    [[NetServiceManager sharedInstance] getBankCardListByChannelId:@"2" delegate:self success:^(id responseObject) {
-        if (![responseObject isKindOfClass:[NSDictionary class]]) {
-            return;
-        }
-        
-        NSArray *cardList = [responseObject objectForKey:kNetWorkList];
-        if (cardList && [cardList isKindOfClass:[NSArray class]]) {
-            
-            for (NSDictionary *dict in cardList) {
-                QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
-                
-                cardModel = model;
-                break;
-            }
-            
-            [myCollectionView reloadData];
-        }
-    } failure:^(NSError *error) {
-        [CMMUtility showNoteWithError:error];
-    }];
+    [self netupdateCardInformation];
 }
 
-- (void)handleTapGesture:(UITapGestureRecognizer *)gesture {
+- (void)netupdateCardInformation
+{
+
+    [[NetServiceManager sharedInstance] PersonWithDrawPermitAmt:self
+                                                        success:^(id responseObject) {
+                                                            if (!QM_IS_DICT_NIL(responseObject)) {
+                                                                        // 显示当前余额
+                                                                available = [[responseObject objectForKey:@"permitAmt"] doubleValue];
+                                                            }
+                                                            [myCollectionView reloadData];
+                                                        } failure:^(NSError *error) {
+                                                            [CMMUtility showNoteWithError:error];
+                                                        }];
+    
+    // 获取剩余金额
+//    [[NetServiceManager sharedInstance] getAvailableMoneyWithDelegate:self success:^(id responseObject) {
+//        if (!QM_IS_DICT_NIL(responseObject)) {
+//            // 显示当前余额
+//            available = [[responseObject objectForKey:@"available"] doubleValue];
+//        }
+//        [myCollectionView reloadData];
+//    } failure:^(NSError *error) {
+//        [CMMUtility showNoteWithError:error];
+//    }];
+}
+
+//- (void)handleTapGesture:(UITapGestureRecognizer *)gesture {
+//    [amountCell.detailField resignFirstResponder];
+//    [pwdCell.textField resignFirstResponder];
+//}
+
+- (void)handleTapGesture{
     [amountCell.detailField resignFirstResponder];
     [pwdCell.textField resignFirstResponder];
 }
@@ -89,19 +97,14 @@
     
     myCollectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:flowLayout];
     myCollectionView.alwaysBounceVertical = YES;
-    [myCollectionView registerClass:[QMBankInfoCell class] forCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER2];
     [myCollectionView registerClass:[QMSingleLineTextCell class] forCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER3];
-    
     [myCollectionView registerClass:[QMTextFieldCollectionCell class] forCellWithReuseIdentifier:QMTEXTFIELDCOLLECTIONCELLIDENTIFIER2];
-    [myCollectionView registerClass:[QMMoreInfoTableFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2];
+    [myCollectionView registerClass:[QMMoreInfoBankTableFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2];
     
     myCollectionView.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     myCollectionView.dataSource = self;
     myCollectionView.delegate = self;
     [self.view addSubview:myCollectionView];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-    [myCollectionView addGestureRecognizer:tap];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -109,15 +112,25 @@
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 4;
+    return 3;
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [self handleTapGesture];
+}
 
 - (void)onBack {
-    if (self.isModel) {
-        [self.navigationController dismissViewControllerAnimated:YES completion:^{
-            
-        }];
+    if (isShowWebNow) {
+        isShowWebNow = NO;
+        [responWebView removeFromSuperview];
+    }else
+    {
+        if (self.isModel) {
+            [self.navigationController dismissViewControllerAnimated:YES completion:^{
+                
+            }];
+        }
     }
 }
 
@@ -138,13 +151,6 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        QMBankInfoCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER2 forIndexPath:indexPath];
-        cell.withDraw = YES;
-        [cell.actionBtn addTarget:self action:@selector(gotoAddBankCardViewController) forControlEvents:UIControlEventTouchUpInside];
-        [cell configureCellWithBankCardModel:cardModel];
-        
-        return cell;
-    }else if (indexPath.section == 1) {
         QMSingleLineTextCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER3 forIndexPath:indexPath];
         UIImageView *backgroundView = (UIImageView *)cell.backgroundView;
         backgroundView.image = [QMImageFactory commonBackgroundImage];
@@ -154,7 +160,7 @@
         cell.detailField.rightViewMode = UITextFieldViewModeNever;
         
         return cell;
-    }else if (indexPath.section == 2) {
+    }else if (indexPath.section == 1) {
         QMSingleLineTextCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMSINGLELINECOLLECTIONCELLIDENTIFIER3 forIndexPath:indexPath];
         UIImageView *backgroundView = (UIImageView *)cell.backgroundView;
         backgroundView.image = [QMImageFactory commonBackgroundImage];
@@ -179,7 +185,7 @@
         amountCell = cell;
         
         return cell;
-    }else if (indexPath.section == 3) {
+    }else if (indexPath.section == 2) {
         QMTextFieldCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:QMTEXTFIELDCOLLECTIONCELLIDENTIFIER2 forIndexPath:indexPath];
         UIImageView *backgroundView = (UIImageView *)cell.backgroundView;
         backgroundView.image = [QMImageFactory commonBackgroundImage];
@@ -197,13 +203,7 @@
 
 - (void)allMoney {
     amountCell.detailField.text = [NSString stringWithFormat:@"%.2f", available];
-}
-
-- (void)gotoAddBankCardViewController {
-    QMAddBankCardViewControllerV2 *con = [[QMAddBankCardViewControllerV2 alloc] init];
-    con.isModel = YES;
-    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
+    [self handleTapGesture];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -211,10 +211,6 @@
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0 && indexPath.section == 0) {
-        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:cardModel]);
-    }
-    
     return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, 44);
 }
 
@@ -223,32 +219,29 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    QMMoreInfoTableFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2 forIndexPath:indexPath];
+    footerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:MORE_ITEM_TABLE_FOOTER_IDENTIFIER2 forIndexPath:indexPath];
     [footerView.actionBtn setTitle:@"提交" forState:UIControlStateNormal];
     [footerView.actionBtn addTarget:self action:@selector(commitBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    
+    footerView.actionBtn.frame = CGRectMake(10, 24, CGRectGetWidth([UIScreen mainScreen].bounds) - 2 * 10, 40);
+    footerView.actionBtn.enabled = YES;
+
     return footerView;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
- 
-    
 }
 
 // 提现申请
 - (void)commitBtnClicked:(id)sender {
-    NSString *channelId = @"2";
-    NSString *bankCardId = cardModel.bankCardId;
+    [self handleTapGesture];
+    cardModel = [cardArrayModel objectAtIndex:0];
     NSString *pwd = [pwdCell.textField text];
     NSString *amount = [amountCell.detailField text];
+    [pwdCell.textField resignFirstResponder];
+    [amountCell.textLabel resignFirstResponder];
     UIButton *btn = (UIButton *)sender;
     btn.enabled = NO;
-    if (QM_IS_STR_NIL(bankCardId)) {
-        [CMMUtility showNote:@"请选择银行卡"];
-        btn.enabled = YES;
-        return;
-    }
     
     if ([amount doubleValue] <= 0) {
         [CMMUtility showNote:@"请输入提现金额"];
@@ -256,45 +249,53 @@
         return;
     }
     
-    [[NetServiceManager sharedInstance] withWithDrawApplyWithChannelId:channelId
-                                                                   pwd:pwd
-                                                            bankCardId:bankCardId
-                                                                amount:amount
-                                                              delegate:self
-                                                               success:^(id responseObject) {
-                                                                   NSLog(@"response:%@", responseObject);
-                                                                   // 提现成功
-                                                                   if (self.isModel) {
-                                                                       [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-                                                                   }else {
-                                                                       [self.navigationController popViewControllerAnimated:YES];
-                                                                   }
-                                                                   [CMMUtility showNote:@"提现申请提交成功"];
-                                                                   btn.enabled = YES;
-                                                               } failure:^(NSError *error) {
-                                                                   [CMMUtility showNoteWithError:error];
-                                                                   btn.enabled = YES;
-                                                               }];
+    if ([pwd doubleValue] <= 0) {
+        [CMMUtility showNote:@"请输入交易密码"];
+        btn.enabled = YES;
+        return;
+    }
+    
+    [[NetServiceManager sharedInstance] PersonWithDraw:self
+                                                Amount:amount
+                                           paypassword:pwd
+                                               success:^(id responseObject) {
+                                                   [self handleResponseSuccess:responseObject];
+                                               } failure:^(NSError *error) {
+                                                   [self handleResponseFailure:error];
+                                               }];
+    
+}
+
+- (void)handleResponseSuccess:(id)response {
+    isShowWebNow = YES;
+    footerView.actionBtn.enabled = YES;
+    responWebView = [[UIWebView alloc] initWithFrame:self.view.bounds];
+    responWebView.delegate = self;
+    [self.view addSubview:responWebView];
+    [responWebView loadHTMLString:response baseURL:[NSURL URLWithString:URL_BASE]];
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *url = [[request URL] absoluteString];
+    NSLog(@"%@",url);
+    if ([url rangeOfString:[NSString stringWithFormat:@"/wap/myaccount"]].location != NSNotFound) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return NO;
+    }
+    return YES;
+}
+
+- (void)handleResponseFailure:(NSError *)error {
+    footerView.actionBtn.enabled = YES;
+    [CMMUtility showNoteWithError:error];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    if (section == 3) {
-        // 最后一个
+    if (section == 2) {
         return CGSizeMake(CGRectGetWidth(collectionView.frame), 200);
-    }else {
-        return CGSizeZero;
     }
-}
-
-- (void)selectBankViewController:(QMSelectBankViewControllerV2 *)con didSelectBank:(QMBankCardModel *)model {
-    cardModel = model;
-    [myCollectionView reloadData];
-    
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)selectBankViewControllerDidCancel:(QMSelectBankViewControllerV2 *)con {
-    [self.navigationController popViewControllerAnimated:YES];
+    return CGSizeZero;
 }
 
 // 提现记录

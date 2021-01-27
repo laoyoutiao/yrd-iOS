@@ -14,6 +14,7 @@
 #import "QMCouponViewController.h"
 #import "QMWebViewController3.h"
 #import "NetServiceManager.h"
+#import "QMPanicBuyViewController.h"
 #define CELL_GOODLIST_IDENTIFIER @"cell_goodList_identifier"
 #define CELL_PACKET_IDENTIFIER @"cell_packet_identifier"
 #define CELL_COUPON_IDENTIFIER @"cell_coupon_identifier"
@@ -22,9 +23,9 @@
 @end
 typedef enum {
     
-    QMPrizeTableSection_goodList=0,
-//    QMPrizeTableSection_packet,
-    QMPrizeTableSection_coupon,
+    QMPrizeTableSection_goodList = 0,
+//    QMPrizeTableSection_packet = 2,
+    QMPrizeTableSection_coupon = 1,
     QMPrizeTableSection_Count
 }QMPrizeTableSection;
 @implementation QMPrizeViewController{
@@ -144,10 +145,10 @@ typedef enum {
 //        
 //        NSURL* url1=[NSURL URLWithString:packetUrl];
 //        NSURLRequest* request=[NSURLRequest requestWithURL:url1];
-//        
-//        [QMWebViewController showWebViewWithRequest:request navTitle:@"我的红包" isModel:NO from:self];
-//
-//
+//        [QMWebViewController showWebViewWithRequest:request navTitle:@"我的抢购" isModel:NO from:self];
+
+//        QMPanicBuyViewController *panicBuyViewController = [[QMPanicBuyViewController alloc] init];
+//        [self.navigationController pushViewController:panicBuyViewController animated:YES];
 //    }
 }
 - (void)didReceiveMemoryWarning {

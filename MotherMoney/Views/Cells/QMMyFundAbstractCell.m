@@ -52,8 +52,8 @@
         
         totalFundValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(totalFundTitleLabel.frame) + 8, CGRectGetWidth(totalFundTitleLabel.frame), 44)];
         
-        totalFundValueLabel.text=@"财富积累从今天开始";
-        totalFundValueLabel.font = [UIFont boldSystemFontOfSize:20];
+//        totalFundValueLabel.text=@"财富积累从今天开始";
+        totalFundValueLabel.font = [UIFont boldSystemFontOfSize:35];
         totalFundValueLabel.textColor = [UIColor whiteColor];
         totalFundValueLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:totalFundValueLabel];
@@ -181,27 +181,27 @@
 
 -(void)startTimer:(NSString*)string
 {
-//    todayEarningNumber=[NSString stringWithString:string];
-//    timer=[NSTimer scheduledTimerWithTimeInterval:0.02 target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
-//         [timer setFireDate:[NSDate date]];
+    todayEarningNumber=[NSString stringWithString:string];
+    timer=[NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
+         [timer setFireDate:[NSDate date]];
 }
 
 -(void)timerAction
 {
-//    float dayEarningValue=[todayEarningNumber floatValue];
-//    static float number=0.05;
-//    if (number>dayEarningValue) {
-//        [timer invalidate];
-//        totalFundValueLabel.text=[NSString stringWithFormat:@"%.2f",dayEarningValue];
-//        
-//    }else
-//    {
-//        [UIView beginAnimations:nil context:nil];
-//        [UIView setAnimationDuration:0.01];
-//        totalFundValueLabel.text=[NSString stringWithFormat:@"%.2f",number];
-//        [UIView commitAnimations];
-//        number=number+0.55;
-//    }
+    float dayEarningValue=[todayEarningNumber floatValue];
+    static float number=0.05;
+    if (number>dayEarningValue) {
+        [timer invalidate];
+        totalFundValueLabel.text=[NSString stringWithFormat:@"%.2f",dayEarningValue];
+        
+    }else
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationDuration:0.01];
+        totalFundValueLabel.text=[NSString stringWithFormat:@"%.2f",number];
+        [UIView commitAnimations];
+        number += 10.00;
+    }
 
 }
 

@@ -10,6 +10,7 @@
 #import "QMBankInfo.h"
 #import "QMNumberFormatPromptView.h"
 #import "QMSelectLocationViewControllerV2.h"
+#import "QMProvinceInfo.h"
 
 @interface QMAddBankCardViewController () <UITextFieldDelegate, QMSelectItemViewControllerDelegate>
 
@@ -30,6 +31,8 @@
     UIButton *nextStepBtn;
     
     NSArray *locationInfo;
+    NSArray *cityInfo;
+    NSArray *provinceInfo;
     
     NSInteger provinceIndex;
     NSInteger cityIndex;
@@ -424,6 +427,7 @@
         QMSearchItem *item = [[QMSearchItem alloc] initWithTitle:state subTitle:nil];
         [array addObject:item];
     }
+//    NSArray *provincearray = [[QMProvinceInfo sharedInstance] getProvinceName];
     QMSelectLocationViewController *con = [[QMSelectLocationViewController alloc] initViewControllerWithItems:array type:QMSelectLocationType_Province];
     con.isModel = YES;
     con.delegate = self;
@@ -453,6 +457,8 @@
             [array addObject:item];
         }
     }
+    
+//    NSArray *cityarray = [[QMProvinceInfo sharedInstance] getCityNameWithProvinceName:state];
     
     QMSelectLocationViewController *con = [[QMSelectLocationViewController alloc] initViewControllerWithItems:array type:QMSelectLocationType_City];
     con.isModel = YES;

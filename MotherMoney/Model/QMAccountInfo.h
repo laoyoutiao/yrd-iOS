@@ -37,6 +37,11 @@
 @property (nonatomic, assign) BOOL hasRealName;
 @property (nonatomic, strong) NSString *realName;
 @property (nonatomic, strong) NSString *identifierCardId;
+@property (nonatomic, assign) BOOL salesman;
+@property (nonatomic, strong) NSString *channelID;
+@property (nonatomic, strong) NSString *customerCount;
+@property (nonatomic, strong) NSString *openAccountStatus;
+
 
 - (id)initWithDictionary:(NSDictionary *)dict;
 

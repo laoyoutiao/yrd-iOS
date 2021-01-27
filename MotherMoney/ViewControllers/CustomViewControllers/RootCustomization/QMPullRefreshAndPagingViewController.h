@@ -14,8 +14,12 @@
     UIScrollView *mScrollView;
     BOOL mIsLoading; // 正在下拉刷新或正在分页
     QMPageFootViewState footerLoadingState;
+    UIButton *productListButton;
+    UIButton *creditorsListBUtton;
 }
 @property (nonatomic, strong) UIScrollView *scrollView;
+
+- (void)productListViewChangeFrame;
 
 - (UIScrollView *)customScrollView;
 - (void)reloadData;

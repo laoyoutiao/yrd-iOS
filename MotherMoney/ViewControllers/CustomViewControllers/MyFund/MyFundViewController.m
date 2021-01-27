@@ -29,6 +29,7 @@
 #import "QMWithDrawViewController.h"
 #import "QMDealDetailViewController.h"
 #import "QMPrizeViewController.h"
+#import "QMProvinceInfo.h"
 #define myFundAbstractCellIdentifier @"myFundAbstractCellIdentifier"
 #define buyedProductInfoCellIdentifier @"buyedProductInfoCellIdentifier"
 #define totalEarningsCellIdentifier @"totalEarningsCellIdentifier"
@@ -61,7 +62,7 @@ typedef enum {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
-
+    [self.navigationController setNavigationBarHidden:NO];
     [self initDataSource];
 }
 
@@ -95,6 +96,13 @@ typedef enum {
                                                                 // 获取失败
                                                                 [self handleFetchMyAssertFailure:error];
                                                             }];
+    
+    [[NetServiceManager sharedInstance] getProvinceInfo:nil success:^(id responseObject) {
+        NSDictionary *dic = (NSDictionary *)[responseObject objectFromJSONData];
+        [[QMProvinceInfo sharedInstance] cutupProvince:dic];
+    } failure:^(NSError *error) {
+//        [SVProgressHUD showErrorWithStatus:@"城市信息获取失败"];
+    }];
 }
 
 - (void)handleFetchMyAssertSuccess:(id)responseObject {
@@ -134,7 +142,6 @@ typedef enum {
     
 }
 
-
 - (void)initDataSource {
     [self asyncFetchMyAssertFromServer];
 }
@@ -167,69 +174,41 @@ typedef enum {
     self.tabBarController.selectedIndex = 1;
 }
 
-- (void)gotoAmountViewController {
-    if (myFundInfo.realNameAuthed) {
-        // 已经实名认证
-        //进入账户余额界面，包括充值和体现
-        QMAccountOpViewController *con = [[QMAccountOpViewController alloc] init];
-        [self.navigationController pushViewController:con animated:YES];
-    }else {
-        // 还没有实名认证，需要进行实名认证
-        [self gotoRealNameAuthenticateViewController];
-    }
-}
 //充值
 -(void)gotoRechargeController
 {
-//    [self gotoRealNameAuthenticateViewController];
-    
-    if (myFundInfo.realNameAuthed) {
-        QMRechargeViewController *con = [[QMRechargeViewController alloc] init];
-        con.isModel = YES;
-        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-        [self.navigationController presentViewController:nav animated:YES completion:nil];
-    }else
-    {
-        [self gotoRealNameAuthenticateViewController];
-    }
-    
+    [self gotoAccountWithPerson:^(bool hasOpen) {
+        if (hasOpen) {
+            QMRechargeViewController *con = [[QMRechargeViewController alloc] init];
+            con.isModel = YES;
+            QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+            [self.navigationController presentViewController:nav animated:YES completion:nil];
+        }
+    }];
 }
+
 //体现
 -(void)gotoWithDrawController
 {
-    if (myFundInfo.realNameAuthed) {
-        QMWithDrawViewController *con = [[QMWithDrawViewController alloc] init];
-        con.isModel = YES;
-        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-        [self.navigationController presentViewController:nav animated:YES completion:nil];
-    }else
-    {
-        [self gotoRealNameAuthenticateViewController];
-    }
-}
--(void)gotoDealDetailController
-{
-//    QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
-//        [con configureRealName:myFundInfo.realName];
-//        [self.navigationController pushViewController:con animated:YES];
-    
-    if (myFundInfo.realNameAuthed) {
-    QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
-    [con configureRealName:myFundInfo.realName];
-    [self.navigationController pushViewController:con animated:YES];
-    }else{
-        [self gotoRealNameAuthenticateViewController];
-    }
+    [self gotoAccountWithPerson:^(bool hasOpen) {
+        if (hasOpen) {
+            QMWithDrawViewController *con = [[QMWithDrawViewController alloc] init];
+            con.isModel = YES;
+            QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+            [self.navigationController presentViewController:nav animated:YES completion:nil];
+        }
+    }];
 }
 
-- (void)gotoRealNameAuthenticateViewController {
-    // 打点
-    [QMUMTookKitManager event:USER_AUTH_REAL_NAME_KEY label:@"用户实名认证"];
-    //进入实名验证界面
-    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
-    con.isModel = YES;
-    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
-    [self.navigationController presentViewController:nav animated:YES completion:nil];
+-(void)gotoDealDetailController
+{
+    [self gotoAccountWithPerson:^(bool hasOpen) {
+        if (hasOpen) {
+            QMDealDetailViewController* con=[[QMDealDetailViewController alloc] init];
+            [con configureRealName:myFundInfo.realName];
+            [self.navigationController pushViewController:con animated:YES];
+        }
+    }];
 }
 
 -(void)gotoPersonalCenterViewController
@@ -242,19 +221,18 @@ typedef enum {
     info.realName = myFundInfo.realName;
     info.identifierCardId = myFundInfo.idCardNumber;
     info.hasRealName = myFundInfo.realNameAuthed;
+    info.salesman = myFundInfo.salesman;
+    info.channelID = myFundInfo.channelId;
+    info.customerCount = myFundInfo.customerCount;
+    info.openAccountStatus = myFundInfo.openAccountStatus;
     QMPersonalCenterViewController *con = [[QMPersonalCenterViewController alloc] initViewControllerWithAccountInf:info];
-    con.currentAvailabelScore=myFundInfo.availableScore;
+    con.currentAvailabelScore = myFundInfo.availableScore;
     [self.navigationController pushViewController:con
                                          animated:YES];
 }
 //我的奖励
 - (void)gotoGoodsListViewController{
-    
-//    QMGoodsListViewController *con = [[QMGoodsListViewController alloc] init];
-//    con.currentScoreValue=myFundInfo.availableScore;
-    
     QMPrizeViewController *con = [[QMPrizeViewController alloc] init];
-    
     [self.navigationController pushViewController:con animated:YES];
 }
 
@@ -270,16 +248,39 @@ typedef enum {
     QMWithDrawRecordListViewController *con = [[QMWithDrawRecordListViewController alloc] init];
     [self.navigationController pushViewController:con animated:YES];
 }
+
 //投资记录
 - (void)gotoHistoryListViewController {
-    if (myFundInfo.realNameAuthed) {
-        NSString *url = [NSString stringWithFormat:@"%@/mycurrPlan?showNav=0",URL_BASE];
-        NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [QMWebViewController showWebViewWithRequest:request navTitle:@"投资记录" isModel:NO from:self];
-    }else{
-        [self gotoRealNameAuthenticateViewController];
+    [self gotoAccountWithPerson:^(bool hasOpen) {
+        if (hasOpen) {
+            NSString *url = [NSString stringWithFormat:@"%@/mycurrPlan?showNav=0",URL_BASE];
+            NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+            [QMWebViewController showWebViewWithRequest:request navTitle:@"投资记录" isModel:NO from:self];
+        }
+    }];
+}
+
+- (void)gotoAccountWithPerson:(void (^)(bool hasOpen))accountnow
+{
+    if ([myFundInfo.openAccountStatus isEqualToString:@"1"]) {
+        accountnow(YES);
+    }else if ([myFundInfo.openAccountStatus isEqualToString:@"-1"])
+    {
+        QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
+        con.isOpenAccount = YES;
+        con.isModel = YES;
+        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
+    }else if ([myFundInfo.openAccountStatus isEqualToString:@"0"])
+    {
+        QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
+        con.isActivationAccount = YES;
+        con.isModel = YES;
+        QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
+        [self.navigationController presentViewController:nav animated:YES completion:nil];
     }
 }
+
 #pragma mark -
 #pragma mark UITableViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

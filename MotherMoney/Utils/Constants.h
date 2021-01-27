@@ -6,8 +6,13 @@
 #ifndef MotherMoney_Constants_h
 #define MotherMoney_Constants_h
 
-//#define UMKey  @"564467a567e58e6e9d003500"
-#define UMKey  @"575e520e67e58ece650023af"
+#define KAppKey @"23334189"
+
+//易道验证码(测试)
+#define YiDaoCaptchaid @"0b193ca5423b417e8e5cf28cff33a49e"
+
+#define UMKey  @"564467a567e58e6e9d003500"    //正式环境
+//#define UMKey  @"575e520e67e58ece650023af"  //测试环境
 
 // 网络访问baseURL
 
@@ -20,16 +25,20 @@
 #define ON_LINE 1
 
 #if ON_LINE
-//#define URL_BASE @"http://www.yrdloan.com/mobile"
+#define URL_BASE @"https://www.yrdloan.com/mobile"
 
-#define URL_BASE @"http://192.168.11.32:7080/mobile"
+//#define URL_BASE @"http://192.168.11.78:7080/mobile"
 
-//#define URL_BASE @"http://112.124.113.236/mobile/"
+//#define URL_BASE @"http://192.168.11.81:7080/mobile"
+
+//#define URL_BASE @"http://112.124.113.236/mobile"
+
+//#define URL_BASE @"http://114.215.194.1/mobile"
 
 //#define URL_BASE @"http://cgt.vicp.net:7080/mobile"
 #else
 //#define URL_BASE @"http://cgt.vicp.net:7080/mobile"
-#define URL_BASE @"http://www.yrdloan.com/mobile"
+#define URL_BASE @"https://www.yrdloan.com/mobile"
 //#define URL_BASE @"http://192.168.168.163:8081/mobile"
 ////http://123.57.51.29:7080/mobile
 //http://121.43.159.168:7080/mobile
@@ -72,7 +81,7 @@
 #define kErrorCMMDomain      @"kNetWorkErrorDomain"
 
 // 手机号的正则
-//#define kPhoneReg            @"^[1][3,4,5,8][0-9]{9}$"
+//#define kPhoneReg            @"^[1][3,4,5,7,8][0-9]{9}$"
 #define kPhoneReg            @"^[1][0-9][0-9]{9}$"
 
 // 邮箱正则
@@ -87,4 +96,7 @@
 
 // 用户分享的标示
 #define kShareInWebView @"appshareInWebview"
+
+#define noticeLoginPeopleMessage @"noticeLoginPeopleMessage"
+
 #endif

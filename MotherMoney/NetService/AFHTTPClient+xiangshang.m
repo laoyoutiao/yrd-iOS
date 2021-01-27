@@ -4,6 +4,16 @@
 
 #import "AFHTTPClient+xiangshang.h"
 #import "AFURLConnectionOperation.h"
+
+@implementation NSURLRequest (NSURLRequestWithIgnoreSSL)
+
++ (BOOL)allowsAnyHTTPSCertificateForHost:(NSString *)host
+{
+    return YES;
+}
+
+@end
+
 @implementation AFHTTPClient (xiangshang)
 
 
@@ -45,3 +55,5 @@
 }
 
 @end
+
+

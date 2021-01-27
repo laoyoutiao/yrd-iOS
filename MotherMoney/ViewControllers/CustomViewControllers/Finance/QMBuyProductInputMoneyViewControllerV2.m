@@ -7,6 +7,7 @@
 //
 
 #import "QMBuyProductInputMoneyViewControllerV2.h"
+#import "QMCreditorsInfo.h"
 #import "QMSingleLineCollectionCell.h"
 #import "QMTwoLineCollectionCell.h"
 #import "QMTextFieldCollectionCell.h"
@@ -27,7 +28,7 @@
 
 #define QMSECTIONFOOTERVIEWIDENTIFIER @"qmsectionfooterviewIdentifier"
 
-@interface QMBuyProductInputMoneyViewControllerV2 ()<UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate, QMAlertViewDelegate, QMConfirmPayPwdViewControllerDelegate,QMProductCouponViewControllerDelegate>
+@interface QMBuyProductInputMoneyViewControllerV2 ()<UICollectionViewDataSource, UICollectionViewDelegate, UITextFieldDelegate, QMAlertViewDelegate, QMConfirmPayPwdViewControllerDelegate,QMProductCouponViewControllerDelegate,UIWebViewDelegate>
 @property (nonatomic, strong) QMAlertView *payAlertView;
 @property (nonatomic, strong)QMProductCouponViewController *couponView;
 
@@ -36,7 +37,7 @@
 @implementation QMBuyProductInputMoneyViewControllerV2 {
     UICollectionView *myCollectionView;
     QMProductInfo *myProductInfo;
-    
+    QMCreditorsInfo *myCreditorsInfo;
     NSInteger rateMoney;
     
     QMOrderModel *myOrderModel;
@@ -46,6 +47,7 @@
     int buyNumber;
     NSNumber *userDjqTicketCount;
     QMBuyProductBottomView *footer;
+    BOOL isProduct;
 }
 
 - (id)initViewControllerWithProductInfo:(QMProductInfo *)info {
@@ -53,9 +55,20 @@
         myProductInfo = info;
         //?????????????
         rateMoney = [info.baseAmount integerValue];
-        
+        isProduct = YES;
         
             }
+    
+    return self;
+}
+
+- (id)initViewControllerWithCreditorsInfo:(QMCreditorsInfo *)info {
+    if (self = [super init]) {
+        myCreditorsInfo = info;
+        //?????????????
+        rateMoney = [info.baseAmount integerValue];
+        isProduct = NO;
+    }
     
     return self;
 }
@@ -78,7 +91,7 @@
     // Do any additional setup after loading the view.
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
     
-    rateMoney = [myProductInfo.baseAmount integerValue];
+    rateMoney = isProduct? [myProductInfo.baseAmount integerValue]:[myCreditorsInfo.baseAmount integerValue];
     
     self.payAlertView = [[QMAlertView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 180)];
     self.payAlertView.delegate = self;
@@ -89,10 +102,19 @@
     
         QMTextFieldCollectionCell *cell = (QMTextFieldCollectionCell *)[myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
     buyNumber = [cell.textField.text doubleValue];
-    if (buyNumber>[myProductInfo.remainingAmount doubleValue]) {
-        [CMMUtility showNote:[NSString stringWithFormat:@"最多购买%@份",myProductInfo.remainingAmount]];
-        cell.textField.text = myProductInfo.remainingAmount;
-        buyNumber=[myProductInfo.remainingAmount doubleValue];
+    if (isProduct) {
+        if (buyNumber>[myProductInfo.remainingAmount doubleValue]) {
+            [CMMUtility showNote:[NSString stringWithFormat:@"最多购买%@份",myProductInfo.remainingAmount]];
+            cell.textField.text = myProductInfo.remainingAmount;
+            buyNumber=[myProductInfo.remainingAmount doubleValue];
+        }
+    }else
+    {
+        if (buyNumber>[myCreditorsInfo.remainingNum doubleValue]) {
+            [CMMUtility showNote:[NSString stringWithFormat:@"最多购买%@份",myCreditorsInfo.remainingNum]];
+            cell.textField.text = myCreditorsInfo.remainingNum;
+            buyNumber=[myCreditorsInfo.remainingNum doubleValue];
+        }
     }
 //    [self updateBuyNumberPromptForNumber:cell.textField.text value:_value];
     [self getBuyMoney];
@@ -107,8 +129,12 @@
 //}
 - (void)getBuyMoney{
 
-    buyMoney = buyNumber *[myProductInfo.baseAmount doubleValue]-_value;
-
+    if (isProduct) {
+        buyMoney = buyNumber *[myProductInfo.baseAmount doubleValue]-_value;
+    }else
+    {
+        buyMoney = buyNumber *[myCreditorsInfo.baseAmount doubleValue]-_value;
+    }
     if (buyMoney>=0) {
         
         footer.money.hidden=NO;
@@ -142,17 +168,28 @@
 //        [CMMUtility showNoteWithError:error];
 //    }];
 
-    
-    
-    [[NetServiceManager sharedInstance] getBuyProductDetailWithProductId:myProductInfo.product_id ChannelId:@"2" delegate:self success:^(id responseObject) {
-        
-    available = [[responseObject objectForKey:@"available"] doubleValue];
-    userDjqTicketCount = [responseObject objectForKey:@"userDjqTicketCount"];
-        
-    [myCollectionView reloadData];
-    } failure:^(NSError *error) {
-        [CMMUtility showNoteWithError:error];
-    }];
+    if (isProduct) {
+        [[NetServiceManager sharedInstance] getBuyProductDetailWithProductId:myProductInfo.product_id ChannelId:@"2" delegate:self success:^(id responseObject) {
+            
+            available = [[responseObject objectForKey:@"available"] doubleValue];
+            userDjqTicketCount = [responseObject objectForKey:@"userDjqTicketCount"];
+            
+            [myCollectionView reloadData];
+        } failure:^(NSError *error) {
+            [CMMUtility showNoteWithError:error];
+        }];
+    }else
+    {
+        [[NetServiceManager sharedInstance] getBuyProductDetailWithProductId:myCreditorsInfo.product_id_real ChannelId:@"2" delegate:self success:^(id responseObject) {
+            
+            available = [[responseObject objectForKey:@"available"] doubleValue];
+            userDjqTicketCount = [responseObject objectForKey:@"userDjqTicketCount"];
+            
+            [myCollectionView reloadData];
+        } failure:^(NSError *error) {
+            [CMMUtility showNoteWithError:error];
+        }];
+    }
     
 }
 - (void)viewWillDisappear:(BOOL)animated {
@@ -191,7 +228,7 @@
             UIImageView *backgroundView = (UIImageView *)cell.backgroundView;
             backgroundView.image = [QMImageFactory commonBackgroundImageTopPart];
             
-            cell.textLabel.text = myProductInfo.productName;
+            cell.textLabel.text = isProduct? myProductInfo.productName:myCreditorsInfo.productName;
             cell.detailTextLabel.text = @"";
             
             return cell;
@@ -208,16 +245,16 @@
             cell.detailLabel.text = @"";
             cell.detailLabel.hidden = YES;
             if (indexPath.row == 1) {
-                cell.textLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_min_copy_format", @"起购份额:%d份"), [myProductInfo.minAmount integerValue]];
+                cell.textLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_min_copy_format", @"起购份额:%d份"),  isProduct ?[myProductInfo.minAmount integerValue]:1];
             }else if (indexPath.row == 2) {
-                cell.textLabel.text = [NSString stringWithFormat:@"每份金额:%@元", [CMMUtility formatterNumberWithComma:myProductInfo.baseAmount]];
+                cell.textLabel.text = [NSString stringWithFormat:@"每份金额:%@元", [CMMUtility formatterNumberWithComma: isProduct? myProductInfo.baseAmount:myCreditorsInfo.baseAmount]];
             }
             else if (indexPath.row == 3) {
                 cell.textLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_remaining_copy_format", @"剩余份额:%d份"), [myProductInfo.remainingAmount integerValue]];
             }else if (indexPath.row == 4) {
                 cell.textLabel.text = @"手续费:无";
             }else if (indexPath.row == 5) {
-                cell.textLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_product_infO_page_investmentPeriod_format", @"理财期限:%@"), myProductInfo.maturityDuration];
+                cell.textLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_product_infO_page_investmentPeriod_format", @"理财期限:%@"), isProduct? myProductInfo.maturityDuration:myCreditorsInfo.maturity_duration];
                 backgroundView.image = [QMImageFactory commonBackgroundImageCenterPart];
             }else if (indexPath.row == 6) {
 
@@ -234,7 +271,7 @@
                 cell.detailLabel.text = @"点击充值";
             }else if (indexPath.row == 7) {
 
-                cell.textLabel.text = [NSString stringWithFormat:@"使用代金券"];
+                cell.textLabel.text = [NSString stringWithFormat:@"使用礼券"];
                 selectedBackgroundView.image = [QMImageFactory commonBackgroundImageBottomPartPressed];
                 backgroundView.image = [QMImageFactory commonBackgroundImageBottomPart];
                 cell.textLabel.highlightedTextColor = QM_COMMON_CELL_HIGHLIGHTED_COLOR;
@@ -321,7 +358,12 @@
         footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:QMSECTIONFOOTERVIEWIDENTIFIER forIndexPath:indexPath];
         
         // TODO ZGH
-        footer.infoLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_product_rate_copy_format", @"起购份额:%@份,每份%@元"), myProductInfo.minAmount, myProductInfo.baseAmount];
+        if (isProduct) {
+            footer.infoLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_product_rate_copy_format", @"起购份额:%@份,每份%@元"), myProductInfo.minAmount, myProductInfo.baseAmount];
+        }else
+        {
+            footer.infoLabel.text = [NSString stringWithFormat:QMLocalizedString(@"qm_product_rate_copy_format", @"起购份额:%@份,每份%@元"), @"1", myCreditorsInfo.baseAmount];
+        }
 //        footer.money.hidden = YES;
         [footer.actionBtn addTarget:self action:@selector(nextStepBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -363,22 +405,44 @@
     QMTextFieldCollectionCell *cell = (QMTextFieldCollectionCell *)[myCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:1]];
     NSString *moneyText = cell.textField.text;
     NSInteger money = [moneyText integerValue];
-    if (money <= 0) {
-        
-        [CMMUtility showNote:@"请输入购买份额"];
-        
-        return;
-    }else if (money < [myProductInfo.minAmount integerValue]) { // 购买份额太小了
-        [CMMUtility showNote:[NSString stringWithFormat:@"您至少要购买%@份", [NSNumber numberWithInteger:[myProductInfo.minAmount integerValue]]]];
-        
-        return;
-    }else if (money > [myProductInfo.remainingAmount integerValue]) {
-        [CMMUtility showNote:[NSString stringWithFormat:@"您当前最多只能购买:%@份", myProductInfo.remainingAmount]];
-        return;
-    }
-    if (buyMoney+_value<self.useLimit&&self.value>0) {
-        [CMMUtility showNote:[NSString stringWithFormat:@"当前购买金额不足以使用代金券"]];
-        return;
+    if (isProduct)
+    {
+        if (money <= 0) {
+            
+            [CMMUtility showNote:@"请输入购买份额"];
+            
+            return;
+        }else if (money < [myProductInfo.minAmount integerValue]) { // 购买份额太小了
+            [CMMUtility showNote:[NSString stringWithFormat:@"您至少要购买%@份", [NSNumber numberWithInteger:[myProductInfo.minAmount integerValue]]]];
+            
+            return;
+        }else if (money > [myProductInfo.remainingAmount integerValue]) {
+            [CMMUtility showNote:[NSString stringWithFormat:@"您当前最多只能购买:%@份", myProductInfo.remainingAmount]];
+            return;
+        }
+        if (buyMoney+_value<self.useLimit&&self.value>0) {
+            [CMMUtility showNote:[NSString stringWithFormat:@"当前购买金额不足以使用礼券"]];
+            return;
+        }
+    }else
+    {
+        if (money <= 0) {
+            
+            [CMMUtility showNote:@"请输入购买份额"];
+            
+            return;
+        }else if (money < 1) { // 购买份额太小了
+            [CMMUtility showNote:[NSString stringWithFormat:@"您至少要购买%@份", [NSNumber numberWithInteger:1]]];
+            
+            return;
+        }else if (money > [myCreditorsInfo.remainingNum integerValue]) {
+            [CMMUtility showNote:[NSString stringWithFormat:@"您当前最多只能购买:%@份", myCreditorsInfo.remainingNum]];
+            return;
+        }
+        if (buyMoney+_value<self.useLimit&&self.value>0) {
+            [CMMUtility showNote:[NSString stringWithFormat:@"当前购买金额不足以使用礼券"]];
+            return;
+        }
     }
     
     // 提示用户购买金额
@@ -411,9 +475,17 @@
         }else { // 余额充足，输入支付密码进行购买
             // 执行购买操作
             myOrderModel = [[QMOrderModel alloc] init];
-            myOrderModel.productId = myProductInfo.product_id;
-            myOrderModel.productName = myProductInfo.productName;
-            myOrderModel.productChannelId = myProductInfo.productChannelId;
+            if (isProduct)
+            {
+                myOrderModel.productId = myProductInfo.product_id;
+                myOrderModel.productName = myProductInfo.productName;
+                myOrderModel.productChannelId = myProductInfo.productChannelId;
+            }else
+            {
+                myOrderModel.productId = myCreditorsInfo.product_id_real;
+                myOrderModel.productName = myCreditorsInfo.productName;
+                myOrderModel.productChannelId = myCreditorsInfo.productChannelId;
+            }
             //代金券界面的申购价格
 //            NSInteger piece = money-_value;
 //            double baseAmount = [myProductInfo.baseAmount doubleValue];
@@ -449,7 +521,7 @@
 - (void)gotoCouponViewController{
     QMProductCouponViewController *con = [[QMProductCouponViewController alloc] init];
     con.delegate = self;
-    con.productId = myProductInfo.product_id;
+    con.productId = isProduct? myProductInfo.product_id:myCreditorsInfo.product_id_real;
     con.ticketCode = self.useCode;
 //    QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
 //    [self.navigationController presentViewController:nav animated:YES completion:nil];
@@ -530,28 +602,45 @@
 //    NSLog(@"----------%@--------",amount);
 //    NSLog(@"------------%@---------",self.useCode);
     
+    
+    
     [[NetServiceManager sharedInstance] getButTicketwithProductId:productId share:[amount integerValue] payPassword:pwd ticketCode:self.useCode delegate:self success:^(id responseObject){
         
+        UIWebView *webview = [[UIWebView alloc] initWithFrame:self.view.bounds];
+        webview.delegate = self;
+        [self.view addSubview:webview];
+        [webview loadHTMLString:responseObject baseURL:[NSURL URLWithString:URL_BASE]];
         
-        
-        [QMUMTookKitManager event:USER_BUY_SUCCESS_KEY label:@"用户购买成功"];
-        
-        // 购买成功
-        [SVProgressHUD showSuccessWithStatus:QMLocalizedString(@"qm_buy_produt_success", @"购买成功")];
-        
-        QMProductBuyResultViewController *con = [[QMProductBuyResultViewController alloc] initViewControllerWithOrder:myOrderModel result:nil];
-        
-        [self.navigationController pushViewController:con animated:YES];
+//        [QMUMTookKitManager event:USER_BUY_SUCCESS_KEY label:@"用户购买成功"];
+//        
+//        // 购买成功
+//        [SVProgressHUD showSuccessWithStatus:QMLocalizedString(@"qm_buy_produt_success", @"购买成功")];
+//        
+//        QMProductBuyResultViewController *con = [[QMProductBuyResultViewController alloc] initViewControllerWithOrder:myOrderModel result:nil];
+//        
+//        [self.navigationController pushViewController:con animated:YES];
 
     } failure:^(NSError *error) {
-        [SVProgressHUD showErrorWithStatus:QMLocalizedString(@"qm_buy_produt_failure", @"购买失败")];
         
-        // 产品购买失败
-        QMProductBuyResultViewController *con = [[QMProductBuyResultViewController alloc] initViewControllerWithOrder:myOrderModel result:error];
-        [self.navigationController pushViewController:con animated:YES];
+//        [SVProgressHUD showErrorWithStatus:QMLocalizedString(@"qm_buy_produt_failure", @"购买失败")];
+//        
+//        // 产品购买失败
+//        QMProductBuyResultViewController *con = [[QMProductBuyResultViewController alloc] initViewControllerWithOrder:myOrderModel result:error];
+//        [self.navigationController pushViewController:con animated:YES];
 
     }];
     
+}
+
+- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    NSString *url = [[request URL] absoluteString];
+    NSLog(@"%@",url);
+    if ([url rangeOfString:[NSString stringWithFormat:@"/wap/myaccount"]].location != NSNotFound) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return NO;
+    }
+    return YES;
 }
 
 // 重置支付密码

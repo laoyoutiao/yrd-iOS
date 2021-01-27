@@ -38,6 +38,7 @@
 @property (nonatomic, strong) NSString *startInterestDate;
 @property (nonatomic, strong) NSString *cornerType;
 @property (nonatomic, strong) NSString *descriptionTitle;
+@property (nonatomic, strong) NSString *isMonthlySettlement;
 // 计算起购金额
 @property (nonatomic, strong) NSString *calculateMinAmount;
 

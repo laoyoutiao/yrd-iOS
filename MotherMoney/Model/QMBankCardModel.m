@@ -106,9 +106,27 @@
         if ([CMMUtility isStringOk:bankCardId]) {
             self.bankCardId = bankCardId;
         }
+        
+        NSString *isWithdrawCard = [NSString stringWithFormat:@"%@", [dict objectForKey:@"isWithdrawCard"]];
+        if ([CMMUtility isStringOk:isWithdrawCard]) {
+            self.isWithdrawCard = isWithdrawCard;
+        }
     }
     
     return self;
+}
+
+
++ (NSArray *)getArrayModel:(NSArray *)array
+{
+    NSMutableArray *modelarray = [[NSMutableArray alloc] init];
+    if (array && [array isKindOfClass:[NSArray class]]) {
+        for (NSDictionary *dict in array) {
+            QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
+            [modelarray addObject:model];
+        }
+    }
+    return modelarray;
 }
 
 @end

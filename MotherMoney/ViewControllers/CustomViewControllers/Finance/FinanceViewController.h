@@ -8,6 +8,7 @@
 
 #import "QMViewController.h"
 #import "QMProductInfoViewController.h"
+#import "QMCreditorsInfoViewController.h"
 #import "QMPullRefreshAndPagingViewController.h"
 
 // 理财产品

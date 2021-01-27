@@ -32,7 +32,7 @@
         
         UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(bgImage.frame)/4, CGRectGetWidth(bgImage.frame)/10.0f*3.2f, 20)];
         
-        title.text = @"代金券";
+        title.text = @"现金券";
         
         title.font = [UIFont systemFontOfSize:12];
         

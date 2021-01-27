@@ -70,7 +70,7 @@
             make.right.equalTo(self.contentView.mas_right).offset(-15.0f);
             make.top.equalTo(productNameLabel.mas_top);
             make.bottom.equalTo(productNameLabel.mas_bottom);
-            make.width.equalTo(40);
+            make.width.equalTo(60);
         }];
         
         // 时间图标
@@ -148,6 +148,34 @@
     
     // 产品描述
     productDescriptionLabel.text = info.productDescription;
+}
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info {
+    CGFloat height = 10.0f + 15; // 图标
+    height += 10; // 分割线上下的间距
+    
+    // 计算描述的高度
+    CGSize size = [info.activity_desc boundingRectWithSize:CGSizeMake(CGRectGetWidth([UIScreen mainScreen].bounds) - 2 * 15 - 2 * 8, 10000) options:NSStringDrawingUsesLineFragmentOrigin attributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:12.0f], NSFontAttributeName, nil] context:nil].size;
+    height += size.height;
+    
+    height += 5;
+    
+    height += 3;
+    
+    return height;
+}
+
+- (void)configureCellWithCreditorsInfo:(QMCreditorsInfo *)info {
+    // 理财期限
+    timeTextLabel.text = [NSString stringWithFormat:@"%@天", info.maturity_duration];
+
+    // 车辆质押
+    productNameLabel.text = info.desciption_title;
+
+    productdetailedTextLabel.text = info.remark;
+
+    // 产品描述
+    productDescriptionLabel.text = info.activity_desc;
 }
 
 @end

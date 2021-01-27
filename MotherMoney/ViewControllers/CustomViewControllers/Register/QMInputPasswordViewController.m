@@ -8,12 +8,16 @@
 #import "QMGestureWindow.h"
 #import "QMResetPwdForPhoneViewController.h"
 #import "QMTokenInfo.h"
+#import "UIImageView+WebCache.h"
 
 @implementation QMInputPasswordViewController {
     QMAccountInfo *accountInfo;
     UITextField *passwordField;
     UIButton *loginBtn;
     BOOL mShouldSwitchAccount;
+    UIView *graybackView;
+    UIImageView *imageView;
+    UIButton *cancleBtn;
 }
 
 - (id)initViewControllerWithAccountInfo:(QMAccountInfo *)info
@@ -151,7 +155,7 @@
     if (QM_IS_STR_NIL(accountInfo.phoneNumber) || QM_IS_STR_NIL([self getPassword])) {
         return;
     }
-    
+    [passwordField resignFirstResponder];
     // 用户登录
     [[NetServiceManager sharedInstance] userLoginWithPhoneNumber:accountInfo.phoneNumber
                                                              pwd:[self getPassword]
@@ -187,9 +191,62 @@
             [[AppDelegate appDelegate] tryHideGesturePwdWindow:YES];
         }else {
             // 普通登录成功
+            NSLog(@"%@",responseObject);
+            if ([[responseObject objectForKey:@"popup"] integerValue])
+            {
+                graybackView = [[UIView alloc] initWithFrame:[[UIApplication sharedApplication].keyWindow bounds]];
+                graybackView.backgroundColor = [UIColor blackColor];
+                graybackView.alpha = 0.3;
+                [[UIApplication sharedApplication].keyWindow addSubview:graybackView];
+                
+                imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [[UIApplication sharedApplication].keyWindow bounds].size.width * 2.75 / 4, [[UIApplication sharedApplication].keyWindow bounds].size.height / 2)];
+                imageView.center = CGPointMake([[UIApplication sharedApplication].keyWindow bounds].size.width / 2, [[UIApplication sharedApplication].keyWindow bounds].size.height / 2);
+                [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"popuplink"]]]];
+                [[UIApplication sharedApplication].keyWindow addSubview:imageView];
+                
+                cancleBtn = [[UIButton alloc] initWithFrame:[[UIApplication sharedApplication].keyWindow bounds]];
+                cancleBtn.backgroundColor = [UIColor clearColor];
+                [cancleBtn addTarget:self action:@selector(clickCancle) forControlEvents:UIControlEventTouchUpInside];
+                [self.view addSubview:cancleBtn];
+                
+//                NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[[responseObject objectForKey:@"time"] integerValue] repeats:NO block:^(NSTimer * _Nonnull timer) {
+//                    [graybackView removeFromSuperview];
+//                    [imageView removeFromSuperview];
+//                    [cancleBtn removeFromSuperview];
+//                    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:noticeLoginPeopleMessage object:nil];
+//                }];
+                NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[[responseObject objectForKey:@"time"] integerValue] target:self selector:@selector(removeView) userInfo:nil repeats:NO];
+                NSLog(@"%@",timer);
+            }
             [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:noticeLoginPeopleMessage object:nil];
+//            else
+//            {
+//                [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:noticeLoginPeopleMessage object:nil];
+//            }
         }
     }
+}
+
+- (void)removeView
+{
+    [graybackView removeFromSuperview];
+    [imageView removeFromSuperview];
+    [cancleBtn removeFromSuperview];
+//    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:noticeLoginPeopleMessage object:nil];
+}
+
+-(void)clickCancle
+{
+    //处理单击操作
+    [graybackView removeFromSuperview];
+    [imageView removeFromSuperview];
+    [cancleBtn removeFromSuperview];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:noticeLoginPeopleMessage object:nil];
 }
 
 // 登录失败

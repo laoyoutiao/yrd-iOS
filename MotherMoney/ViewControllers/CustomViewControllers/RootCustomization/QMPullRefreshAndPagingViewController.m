@@ -16,12 +16,39 @@
     
     self.scrollView = [self customScrollView];
     [self.view addSubview:self.scrollView];
-    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(UIEdgeInsetsZero);
-    }];
+//    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(UIEdgeInsetsZero);
+//    }];
+
+    [self.scrollView setFrame:self.view.bounds];
     
     [self setUpRefreshHeaderView];
     [self setUppageFooterView];
+}
+
+- (void)productListViewChangeFrame
+{
+    [self.scrollView setFrame:CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y + 50, self.scrollView.frame.size.width, self.scrollView.frame.size.height - 100)];
+    
+    self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
+    
+    productListButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 10, (self.view.frame.size.width - 25) / 2, 40)];
+    productListButton.backgroundColor = QM_COMMON_HEADBUTTON_COLOR;
+    [productListButton setTitle:@"投资精选" forState:UIControlStateNormal];
+    [productListButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    productListButton.layer.cornerRadius = 3;
+    [self.view addSubview:productListButton];
+//
+    creditorsListBUtton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width + 5) / 2, 10, (self.view.frame.size.width - 25) / 2, 40)];
+    creditorsListBUtton.backgroundColor = [UIColor whiteColor];
+    [creditorsListBUtton setTitle:@"债权转让" forState:UIControlStateNormal];
+    [creditorsListBUtton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    creditorsListBUtton.layer.cornerRadius = 3;
+    [self.view addSubview:creditorsListBUtton];
+    
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10, 49, self.view.frame.size.width - 20, 2)];
+    line.backgroundColor = QM_COMMON_HEADBUTTON_COLOR;
+    [self.view addSubview:line];
 }
 
 - (void)setUpRefreshHeaderView {

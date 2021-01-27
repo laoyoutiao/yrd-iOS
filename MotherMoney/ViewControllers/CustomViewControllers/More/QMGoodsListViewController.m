@@ -28,7 +28,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = QM_COMMON_BACKGROUND_COLOR;
-    
+    [self.navigationController setNavigationBarHidden:NO];
     [self initDataSource];
 //    [self setUpBottomBar];
 //    if ([goodsList count] == 0) {
@@ -49,16 +49,26 @@
     NSInteger pageNumber = [goodsList count] / QM_FETCH_PAGE_SIZE + 1;
     NSNumber *pageSize = [NSNumber numberWithInteger:pageNumber];
     
-    [[NetServiceManager sharedInstance] getGoodsListWithPageSize:[NSNumber numberWithInteger:QM_FETCH_PAGE_SIZE]
-                                                      pageNumber:pageSize
-                                                        delegate:self
-                                                         success:^(id responseObject) {
-                                                             // 获取成功
-                                                             [self handleFetchGoodsListSuccess:responseObject];
-                                                         } failure:^(NSError *error) {
-                                                             // 获取失败
-                                                             [self handleFetchGoodListFailure:error];
-                                                         }];
+
+    
+    QMAccountInfo *info = [[QMAccountUtil sharedInstance] currentAccount];
+    [[NetServiceManager sharedInstance] getWillTimeOutScore:info.phoneNumber Delegate:self success:^(id responseObject) {
+        NSLog(@"%@",responseObject);
+        self.currentWillTimeOutScoreValue = [responseObject objectForKey:@"point"];
+        self.willEndTime = [responseObject objectForKey:@"endDate"];
+        [[NetServiceManager sharedInstance] getGoodsListWithPageSize:[NSNumber numberWithInteger:QM_FETCH_PAGE_SIZE]
+                                                          pageNumber:pageSize
+                                                            delegate:self
+                                                             success:^(id responseObject) {
+                                                                 // 获取成功
+                                                                 [self handleFetchGoodsListSuccess:responseObject];
+                                                             } failure:^(NSError *error) {
+                                                                 // 获取失败
+                                                                 [self handleFetchGoodListFailure:error];
+                                                             }];
+    } failure:^(NSError *error) {
+        [self handleFetchGoodListFailure:error];
+    }];
 }
 
 - (void)handleFetchGoodsListSuccess:(id)responseObject {
@@ -202,7 +212,14 @@
                     [[NetServiceManager sharedInstance] addIntegralExchangeWithGoodId:selectedItem.prizeId
                                                                              delegate:self
                                                                               success:^(id responseObject) {
-                                                                                  [CMMUtility showNote:QMLocalizedString(@"qm_exchange_success_title", @"兑换成功礼品将于两个工作日内发放。")];
+                                                                                  NSDictionary *dict = [responseObject safeDictForKey:@"winnersRecord"];
+                                                                                  if([dict safeStringForKey:@"prizeId"].integerValue > 0 && [dict safeStringForKey:@"prizeId"].integerValue < 5)
+                                                                                  {
+                                                                                      [CMMUtility showNote:QMLocalizedString(@"qm_exchange_successL_title", @"兑换成功")];
+                                                                                  }else
+                                                                                  {
+                                                                                      [CMMUtility showNote:QMLocalizedString(@"qm_exchange_success_title", @"兑换成功礼品将于两个工作日内发放。")];
+                                                                                  }
                                                                                   
                                                                                   [self reloadData];
                                                                               } failure:^(NSError *error) {
@@ -266,7 +283,7 @@
 
         [headerView.tapGes addTarget:self action:@selector(tapGesAction)];
         
-        [headerView configCurrentScoreValue:self.currentScoreValue];
+        [headerView configCurrentScoreValue:self.currentScoreValue :self.currentWillTimeOutScoreValue :self.willEndTime];
         
         return headerView;
     }
@@ -275,7 +292,7 @@
 }
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    return CGSizeMake(self.view.frame.size.width, 52);
+    return CGSizeMake(self.view.frame.size.width, 92);
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{

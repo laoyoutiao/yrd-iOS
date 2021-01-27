@@ -2,7 +2,6 @@
 #import "LLPayUtil.h"
 
 
-
 @interface LLViewController () <LLPaySdkDelegate, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 @property (nonatomic, retain) LLPaySdk *sdk;
 @property (nonatomic,retain)  NSDictionary * param;
@@ -429,14 +428,14 @@
     [LLPaySdk setVerifyPayState:self.bVerifyPayState];
     */
     
-    //认证支付、快捷支付、预授权切换，0快捷 1认证 2预授权。假如不需要切换，可以不调用这个方法
-    [LLPaySdk setLLsdkPayState:1];
+    //认证支付、快捷支付、预授权切换，0快捷 1认证 2预授权。假如不需要切换，可以不调用这个方法（此方法为老版本使用）
+//  [LLPaySdk setLLsdkPayState:1];
+//  [self.sdk presentPaySdkInViewController:self withTraderInfo:signedOrder];
+//  [self.sdk presentPaySdkInViewController:self withTraderInfo:self.param];
     
     
-//    [self.sdk presentPaySdkInViewController:self withTraderInfo:signedOrder];
-    
-    
-        [self.sdk presentPaySdkInViewController:self withTraderInfo:self.param];
+    //认证支付
+    [self.sdk presentLLPaySDKInViewController:self withPayType:LLPayTypeVerify andTraderInfo:self.param];
 }
 
 - (NSString*)partnerKey:(NSString*)oid_partner{

@@ -175,6 +175,11 @@
         if ([CMMUtility isStringOk:descriptionTitle]) {
             self.descriptionTitle = descriptionTitle;
         }
+        NSString *isMonthlySettlement = [NSString stringWithFormat:@"%@",[dictionary objectForKey:@"isMonthlySettlement"]];
+        
+        if ([CMMUtility isStringOk:isMonthlySettlement]) {
+            self.isMonthlySettlement = isMonthlySettlement;
+        }
     }
     
     return self;

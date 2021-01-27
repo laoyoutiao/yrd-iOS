@@ -22,7 +22,8 @@
 #import "QMProductDescriptionCell.h"
 #import "QMBuyProductInputMoneyViewControllerV2.h"
 #import "BlockActionSheet.h"
-#import "UMSocialSnsPlatformManager.h"
+#import <UMSocialCore/UMSocialCore.h>
+//#import "UMSocialSnsPlatformManager.h"
 
 #define QMProductInfoItemCellIdentifier @"QMProductInfoItemCellIdentifier"
 #define QMProductInfoActionCellIdentifier @"QMProductInfoActionCellIdentifier"
@@ -56,7 +57,7 @@ typedef enum {
 @implementation QMProductInfoViewController {
     QMProductInfo *mProductInfo;
     UICollectionView *productInfoTable;
-    UIToolbar *bottomBar;
+    UIView *bottomBar;
 }
 
 - (id)initViewControllerWithProductInfo:(QMProductInfo *)product {
@@ -74,6 +75,7 @@ typedef enum {
     [self setUpBottomBar];
     [self setUpProductInfoTable];
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -155,39 +157,38 @@ typedef enum {
     NSString* shareStr2=[shareStr1 stringByAppendingString:mProductInfo.product_id];
     __block NSString *shareUrl = shareStr2;
     __block NSString *shareContent =@"这个产品棒棒哒，一块来买吧！";
-    __block NSString *platform = nil;
+    __block UMSocialPlatformType platform = nil;
     UIImage *shareImage = nil;
     BlockActionSheet *sheet = [BlockActionSheet sheetWithTitle:@"分享到"];
+
     // 短信
     [sheet addButtonWithTitle:@"短信" imageName:@"message_icon.png" block:^{
-        platform = UMShareToSms;
-//        [self shareTo:platform content:shareContent image:shareImage];
-        
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_Sms;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // 微信好友
     [sheet addButtonWithTitle:@"微信好友" imageName:@"wechat_icon.png" block:^{
-        platform = UMShareToWechatSession;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_WechatSession;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // 微信朋友圈
     [sheet addButtonWithTitle:@"微信朋友圈" imageName:@"wechat_favirate_icon.png" block:^{
-        platform = UMShareToWechatTimeline;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_WechatTimeLine;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
-
+    
     // 新浪微博
     [sheet addButtonWithTitle:@"新浪微博" imageName:@"sina_icon.png" block:^{
-        platform = UMShareToSina;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_Sina;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // QQ
     [sheet addButtonWithTitle:@"QQ" imageName:@"qq_icon.png" block:^{
-        platform = UMShareToQQ;
-        [self shareTo:platform content:shareContent image:shareImage shareUrl:shareUrl];
+        platform = UMSocialPlatformType_QQ;
+        [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     [sheet setDestructiveButtonWithTitle:@"取消" block:^{
@@ -197,18 +198,24 @@ typedef enum {
     [sheet showInView:self.tabBarController.view];
 }
 
-- (void)shareTo:(NSString *)platform
+- (void)shareTo:(UMSocialPlatformType)platform
         content:(NSString *)content
           image:(UIImage *)image
-       shareUrl:(NSString *)shareUrl
 {
     
 //    [QMUMTookKitManager shareTo:platform title:nil content:content image:image presentedController:self  completion:^(UMSocialResponseEntity *response) {
 //        // 提示用户分享成功
 //    }];
-    [QMUMTookKitManager shareTo:platform title:nil content:content image:image shareUrl:shareUrl presentedController:self completion:^(UMSocialResponseEntity *response) {
-        
-    }];
+    QMAccountInfo *info = [[QMAccountUtil sharedInstance] currentAccount];
+    if (!info.phoneNumber) {
+        [QMLoginManagerUtil showLoginViewControllerFromViewController:self completion:^{
+            NSString *shareurl = [NSString stringWithFormat:@"http://m.yrdloan.com/wap/register?recommend=%@",info.phoneNumber];
+            [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:shareurl presentedController:self];        }];
+    }else
+    {
+        NSString *shareurl = [NSString stringWithFormat:@"http://m.yrdloan.com/wap/register?recommend=%@",info.phoneNumber];
+        [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:shareurl presentedController:self];
+    }
 }
 
 
@@ -218,26 +225,21 @@ typedef enum {
     }
     
     CGFloat bottomBarHeight = 50;
-    bottomBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - bottomBarHeight, CGRectGetWidth(self.view.frame), bottomBarHeight)];
-    bottomBar.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-    
-    UIBarButtonItem *leftFixedSpaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    leftFixedSpaceItem.width = -16;
+    bottomBar = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.frame) - bottomBarHeight, CGRectGetWidth(self.view.frame), bottomBarHeight)];
     
     // 计算按钮
-    UIButton *calculateBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *calculateBtn = [[UIButton alloc] init];
     calculateBtn.backgroundColor = [UIColor greenColor];
     [calculateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [calculateBtn setBackgroundImage:[[UIImage imageNamed:@"products_computer_bg.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:25] forState:UIControlStateNormal];
     [calculateBtn setImage:[UIImage imageNamed:@"products_computer.png"] forState:UIControlStateNormal];
     [calculateBtn setImage:[UIImage imageNamed:@"products_computer_pressed.png"] forState:UIControlStateHighlighted];
-    calculateBtn.frame = CGRectMake(0, 0, 54, CGRectGetHeight(bottomBar.frame));
+    calculateBtn.frame = CGRectMake(bottomBar.frame.size.width - 54, 0, 54, CGRectGetHeight(bottomBar.frame));
     [calculateBtn addTarget:self action:@selector(calculateEarningsBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *calculateItem = [[UIBarButtonItem alloc] initWithCustomView:calculateBtn];
     
     
     // 购买按钮
-    UIButton *buyBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *buyBtn = [[UIButton alloc] init];
     buyBtn.backgroundColor = [UIColor redColor];
     if ([mProductInfo.productChannelId isEqualToString:QM_DEFAULT_CHANNEL_ID]) { // 钱宝宝
         [buyBtn setTitle:QMLocalizedString(@"qm_recommendation_buy_btn_title", @"购买") forState:UIControlStateNormal];
@@ -259,36 +261,32 @@ typedef enum {
     }else if([mProductInfo.productChannelId isEqualToString:@"1"]) { // 钱生钱
         [buyBtn setTitle:QMLocalizedString(@"qm_recommendation_buy_btn_title", @"购买") forState:UIControlStateNormal];
     }
-    buyBtn.frame = CGRectMake(0, 0, 250, CGRectGetHeight(bottomBar.frame));
+    buyBtn.frame = CGRectMake(0, 0, bottomBar.frame.size.width - 54, CGRectGetHeight(bottomBar.frame));
     buyBtn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
     [buyBtn setBackgroundImage:[[UIImage imageNamed:@"products_buy_bg.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:25] forState:UIControlStateNormal];
     [buyBtn setBackgroundImage:[[UIImage imageNamed:@"products_buy_bg_pressed.png"] stretchableImageWithLeftCapWidth:10 topCapHeight:25] forState:UIControlStateHighlighted];
     //点击即使购买按钮
     [buyBtn addTarget:self action:@selector(buyProductBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *buyItem = [[UIBarButtonItem alloc] initWithCustomView:buyBtn];
+
     
-    //
-    UIBarButtonItem *rightFixedSpaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    rightFixedSpaceItem.width = -15;
-    
-    NSArray *items = [[NSArray alloc] initWithObjects:leftFixedSpaceItem, buyItem, calculateItem, rightFixedSpaceItem, nil];
-    [bottomBar setItems:items];
+    [bottomBar addSubview:buyBtn];
+    [bottomBar addSubview:calculateBtn];
     
     [self.view addSubview:bottomBar];
     
-    [calculateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(54.0f);
-        make.top.equalTo(bottomBar.mas_top);
-        make.bottom.equalTo(bottomBar.mas_bottom);
-        make.right.equalTo(bottomBar.mas_right);
-    }];
-    
-    [buyBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(bottomBar.mas_left);
-        make.top.equalTo(bottomBar.mas_top);
-        make.bottom.equalTo(bottomBar.mas_bottom);
-        make.right.equalTo(bottomBar.mas_right).offset(-54);
-    }];
+//    [calculateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.width.equalTo(54.0f);
+//        make.top.equalTo(bottomBar.mas_top);
+//        make.bottom.equalTo(bottomBar.mas_bottom);
+//        make.right.equalTo(bottomBar.mas_right);
+//    }];
+//
+//    [buyBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(bottomBar.mas_left);
+//        make.top.equalTo(bottomBar.mas_top);
+//        make.bottom.equalTo(bottomBar.mas_bottom);
+//        make.right.equalTo(bottomBar.mas_right).offset(-54);
+//    }];
 }
 
 #pragma mark -
@@ -297,18 +295,17 @@ typedef enum {
     // 打点
     btn.enabled = NO;
     [QMUMTookKitManager event:USER_CLICK_BUY_INDETAILVIEW_KEY label:@"用户在详情点击购买"];
-
     [[NetServiceManager sharedInstance] checkProductCanBuyWithProductId:mProductInfo.product_id
-                                                               delegate:self
-                                                                success:^(id responseObject) {
-                                                                    // 可以购买
-                                                                    [self handleCheckResult:responseObject];
-                                                                    btn.enabled = YES;
-                                                                } failure:^(NSError *error) {
-                                                                    // 不可以购买
-                                                                    [CMMUtility showNoteWithError:error];
-                                                                    btn.enabled = YES;
-                                                                }];
+                                                                   delegate:self
+                                                                    success:^(id responseObject) {
+                                                                        // 可以购买
+                                                                        [self handleCheckResult:responseObject];
+                                                                        btn.enabled = YES;
+                                                                    } failure:^(NSError *error) {
+                                                                        // 不可以购买
+                                                                        [CMMUtility showNoteWithError:error];
+                                                                        btn.enabled = YES;
+                                                                    }];
 }
 
 - (void)handleCheckResult:(id)response {

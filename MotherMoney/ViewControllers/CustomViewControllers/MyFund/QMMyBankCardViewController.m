@@ -1,4 +1,4 @@
-//
+   //
 //  QMMyBankCardViewController.m
 //  MotherMoney
 //
@@ -12,6 +12,7 @@
 #import "QMBankInfoCell.h"
 #import "QMBankCardModel.h"
 #import "QMAddBankCardViewControllerV2.h"
+#import "QMIdentityAuthenticationViewController.h"
 
 #define QMSINGLELINECOLLECTIONCELLIDENTIFIER2 @"QMSINGLELINECOLLECTIONCELLIDENTIFIER"
 
@@ -22,6 +23,7 @@
 @implementation QMMyBankCardViewController {
     UICollectionView *myCollectionView;
     QMBankCardModel *cardModel;
+    NSArray *cardModelArray;
 }
 
 - (void)viewDidLoad {
@@ -43,17 +45,9 @@
         }
         
         NSArray *cardList = [responseObject objectForKey:kNetWorkList];
-        if (cardList && [cardList isKindOfClass:[NSArray class]]) {
-            
-            for (NSDictionary *dict in cardList) {
-                QMBankCardModel *model = [[QMBankCardModel alloc] initWithDictionary:dict];
-                
-                cardModel = model;
-                break;
-            }
-            
-            [myCollectionView reloadData];
-        }
+        cardModelArray = [QMBankCardModel getArrayModel:cardList];
+        [myCollectionView reloadData];
+        
     } failure:^(NSError *error) {
         [CMMUtility showNoteWithError:error];
     }];
@@ -78,20 +72,40 @@
     cell.withDraw = YES;
     
     [cell.actionBtn addTarget:self action:@selector(gotoAddBankCardViewController) forControlEvents:UIControlEventTouchUpInside];
-    [cell configureCellWithBankCardModel:cardModel];
+    QMBankCardModel *model;
+//    [cell configureCellWithBankCardModel:model];
     
-    cell.mPromptLabel.text = @"我的充值提现银行卡";
+    if (indexPath.row < [cardModelArray count])
+    {
+        model = [cardModelArray objectAtIndex:indexPath.row];
+        [cell configureCellWithBankCardModel:model];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 0.5, cell.frame.size.width, 0.5)];
+        line.backgroundColor = [UIColor grayColor];
+        [cell addSubview:line];
+    }else
+    {
+        [cell configureCellWithBankCardModel:nil];
+    }
+    
+    cell.mPromptLabel.text = @"我的银行卡";
     
     return cell;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 1;
+    if ([cardModelArray count] < 3)
+    {
+        return [cardModelArray count] + 1;
+    }else
+    {
+        return [cardModelArray count];
+    }
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 0 && indexPath.section == 0) {
-        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:cardModel]);
+    if (indexPath.row < [cardModelArray count] && indexPath.section == 0) {
+        QMBankCardModel *model = [cardModelArray objectAtIndex:indexPath.row];
+        return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, [QMBankInfoCell getCellHeightWithBankCardModel:model]);
     }
     
     return CGSizeMake(CGRectGetWidth(collectionView.frame) - 2 * 8, 44);
@@ -118,8 +132,13 @@
 }
 
 - (void)gotoAddBankCardViewController {
-    QMAddBankCardViewControllerV2 *con = [[QMAddBankCardViewControllerV2 alloc] init];
+    QMIdentityAuthenticationViewController *con = [[QMIdentityAuthenticationViewController alloc] init];
     con.isModel = YES;
+    QMAccountInfo *info = [[QMAccountUtil sharedInstance] currentAccount];
+    con.isModel = YES;
+    con.userIdCard = info.identifierCardId;
+    con.userRealName = info.realName;
+    con.haveDefaultMessage = YES;
     QMNavigationController *nav = [[QMNavigationController alloc] initWithRootViewController:con];
     [self.navigationController presentViewController:nav animated:YES completion:nil];
 }

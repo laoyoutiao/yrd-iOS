@@ -16,4 +16,7 @@
 @property(nonatomic,strong)NSString *useCode;
 @property(nonatomic,strong)NSNumber *useLimit;
 @property(nonatomic,assign)NSNumber *expire;
+@property (nonatomic, strong)NSString *extraInterest;
+@property (nonatomic, strong)NSString *explanation;
+
 @end

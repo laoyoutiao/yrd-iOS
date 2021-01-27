@@ -27,6 +27,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self initDataSource];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 - (void)initDataSource {

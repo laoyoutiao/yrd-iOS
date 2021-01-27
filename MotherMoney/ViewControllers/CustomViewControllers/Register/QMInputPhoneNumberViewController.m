@@ -10,10 +10,11 @@
 #import "QMInputPasswordViewController.h"
 #import "QMNumberPromptView.h"
 #import "QMWebViewController3.h"
+#import "NTESVerifyCodeManager.h"
 #define CHECKBOX_SELECTED_ALERT_VIEW_TAG 5001
 
-@interface QMInputPhoneNumberViewController ()<UITextFieldDelegate>
-
+@interface QMInputPhoneNumberViewController ()<UITextFieldDelegate,NTESVerifyCodeManagerDelegate>
+@property(nonatomic,strong) NTESVerifyCodeManager *manager;
 @end
 
 @implementation QMInputPhoneNumberViewController {
@@ -156,13 +157,22 @@
         make.height.equalTo(principleBtn1.mas_height);
     }];
     
+    UIButton *riskAgreementBtn = [QMControlFactory commonTextButtonWithTitle:QMLocalizedString(@"qm_register_phone_number_riskAgreement", @"<<粤融贷风险提示>>") target:self selector:@selector(gotoRiskAgreement)];
+    [self.view addSubview:riskAgreementBtn];
+    [riskAgreementBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(principleBtn2.mas_left);
+        make.top.equalTo(principleBtn2.mas_bottom).offset(5);
+        make.width.equalTo(principleBtn2.mas_width);
+        make.height.equalTo(principleBtn2.mas_height);
+    }];
+    
     // 下一步
     nextStepBtn = [QMControlFactory commonBorderedButtonWithSize:CGSizeZero title:QMLocalizedString(@"qm_next_action_btn_title", @"下一步") target:self selector:@selector(nextStepBtnClicked:)];
     nextStepBtn.titleLabel.textColor = [UIColor colorWithRed:246.0f/255.0f green:144.0f/255.0f blue:52.0f/255.0f alpha:1];
     nextStepBtn.enabled = NO;
     [self.view addSubview:nextStepBtn];
     [nextStepBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(principleBtn2.mas_bottom).offset(25);
+        make.top.equalTo(riskAgreementBtn.mas_bottom).offset(25);
         make.left.equalTo(checkBox.mas_left);
         make.right.equalTo(superView.mas_right).offset(-20);
         make.height.equalTo(40);
@@ -188,6 +198,16 @@
                                                                 } failure:^(NSError *error) {
                                                                     [CMMUtility showNoteWithError:error];
                                                                 }];
+}
+
+- (void)gotoRiskAgreement
+{
+    [[NetServiceManager sharedInstance] getRiskAgreementWithDelegate:self
+                                                             success:^(id responseObject) {
+                                                                 [self gotoPrincipleViewControllerWithResponse:responseObject optionTitle:QMLocalizedString(@"qm_privacy_riskAgreement_nav_title", @"粤融贷风险提示")];
+                                                             } failure:^(NSError *error) {
+                                                                 [CMMUtility showNoteWithError:error];
+                                                             }];
 }
 
 - (void)gotoPrincipleViewControllerWithResponse:(NSDictionary *)respoinse optionTitle:(NSString *)title {
@@ -246,16 +266,27 @@
     }
     
     // 暂时用发送验证码来代替了
-    [[NetServiceManager sharedInstance] sendUserRegisterMsgCodeWithPhoneNumber:phoneNumberField.text
-                                                                      delegate:self
-                                                                       success:^(id responseObject) {
-                                                                           // 没有注册
-                                                                           [self gotoGetPassCodeViewController];
-                                                                       } failure:^(NSError *error) {
-                                                                           // 已经注册
-                                                                           
-                                                                           [self executeGetPassCode:error];
-                                                                       }];
+//    [[NetServiceManager sharedInstance] sendUserRegisterMsgCodeWithPhoneNumber:phoneNumberField.text
+//                                                                      delegate:self
+//                                                                       success:^(id responseObject) {
+//                                                                           // 没有注册
+//                                                                           [self gotoGetPassCodeViewController];
+//                                                                       } failure:^(NSError *error) {
+//                                                                           // 已经注册
+//                                                                           [self executeGetPassCode:error];
+//                                                                       }];
+    
+    [[NetServiceManager sharedInstance] getMobileResgist:phoneNumberField.text Delegate:self success:^(id responseObject) {
+        NSString *registed = [responseObject objectForKey:@"registered"];
+        if (registed.integerValue == 1) {
+            [self gotoLoginViewController];
+        }else
+        {
+            [self gotoGetPassCodeViewController];
+        }
+    } failure:^(NSError *error) {
+        [AlertMessageShow showAlertViewOnlyChoiceWithTitle:@"网络错误" Message:@"请检查网络"];
+    }];
 }
 
 - (NSString *)getPhoneNumber {
@@ -286,9 +317,22 @@
 }
 
 - (void)gotoGetPassCodeViewController {
-    QMGetPassCodeViewController *con = [[QMGetPassCodeViewController alloc] initViewControllerWithAccountInfo:[self getAccountInfo]];
-    
-    [self.navigationController pushViewController:con animated:YES];
+    //添加验证码验证(易道)
+    [phoneNumberField resignFirstResponder];
+    nextStepBtn.enabled = NO;
+    self.manager =  [NTESVerifyCodeManager sharedInstance];
+    if (self.manager) {
+        
+        // 如果需要了解组件的执行情况,则实现回调
+        self.manager.delegate = self;
+        
+        // captchaid的值是每个产品从后台生成的
+//        NSString *captchaid = @"0b193ca5423b417e8e5cf28cff33a49e";
+        [self.manager configureVerifyCode:YiDaoCaptchaid timeout:10.0];
+        
+        [self.manager openVerifyCodeView];
+        
+    }
 }
 
 - (void)onBack {
@@ -311,6 +355,70 @@
     }else {
         return nil;
     }
+}
+
+#pragma mark - NTESVerifyCodeManagerDelegate
+/**
+ * 验证码组件初始化完成
+ */
+- (void)verifyCodeInitFinish{
+    NSLog(@"收到初始化完成的回调");
+}
+
+/**
+ * 验证码组件初始化出错
+ *
+ * @param message 错误信息
+ */
+- (void)verifyCodeInitFailed:(NSString *)message{
+    NSLog(@"收到初始化失败的回调:%@",message);
+}
+
+/**
+ * 完成验证之后的回调
+ *
+ * @param result 验证结果 BOOL:YES/NO
+ * @param validate 二次校验数据，如果验证结果为false，validate返回空
+ * @param message 结果描述信息
+ *
+ */
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *)validate message:(NSString *)message{
+    nextStepBtn.enabled = YES;
+    NSLog(@"收到验证结果的回调:(%d,%@,%@)", result, validate, message);
+    [[NetServiceManager sharedInstance] sendVerifyCodeMessage:validate Mobile:phoneNumberField.text Delegate:self success:^(id responseObject) {
+        NSString *success = [responseObject objectForKey:@"success"];
+        if(success.integerValue == 1)
+        {
+            QMGetPassCodeViewController *con = [[QMGetPassCodeViewController alloc] initViewControllerWithAccountInfo:[self getAccountInfo]];
+            [self.navigationController pushViewController:con animated:YES];
+        }else
+        {
+            [AlertMessageShow showAlertViewOnlyChoiceWithTitle:@"验证失败" Message:@"请再次验证"];
+        }
+    } failure:^(NSError *error) {
+        [AlertMessageShow showAlertViewOnlyChoiceWithTitle:@"验证失败" Message:@"请再次验证"];
+    }];
+
+}
+
+/**
+ * 关闭验证码窗口后的回调
+ */
+- (void)verifyCodeCloseWindow{
+    //用户关闭验证后执行的方法
+    nextStepBtn.enabled = YES;
+    NSLog(@"收到关闭验证码视图的回调");
+}
+
+/**
+ * 网络错误
+ *
+ * @param error 网络错误信息
+ */
+- (void)verifyCodeNetError:(NSError *)error{
+    //用户关闭验证后执行的方法
+    nextStepBtn.enabled = YES;
+    NSLog(@"收到网络错误的回调:%@(%ld)", [error localizedDescription], (long)error.code);
 }
 
 #pragma mark -

@@ -15,5 +15,6 @@
 @property (nonatomic, strong) NSString *bankCardId;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
++(NSDictionary *)getBankInfoWithGuiZhou;
 
 @end

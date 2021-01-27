@@ -8,6 +8,7 @@
 
 #import "QMViewController.h"
 #import "QMProductInfo.h"
+#import "QMCreditorsInfo.h"
 //钱宝宝产品，点击购买之后跳入的界面，申购
 @interface QMBuyProductInputMoneyViewControllerV2 : QMViewController
 @property(nonatomic,strong)NSString *couponName;
@@ -15,6 +16,7 @@
 @property(nonatomic,assign)float value;
 @property(nonatomic,assign)float useLimit;
 - (id)initViewControllerWithProductInfo:(QMProductInfo *)info;
+- (id)initViewControllerWithCreditorsInfo:(QMCreditorsInfo *)info;
 
 @end
 

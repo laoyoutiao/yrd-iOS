@@ -10,14 +10,19 @@
 #define MotherMoney_QMCoreMacros_h
 
 // 判断对象是否为空
+
 // 字符串
 #define QM_IS_STR_NIL(objStr) (![objStr isKindOfClass:[NSString class]] || objStr == nil || [objStr length] <= 0)
+
 // 字典
 #define QM_IS_DICT_NIL(objDict) (![objDict isKindOfClass:[NSDictionary class]] || objDict == nil || [objDict count] <= 0)
+
 // 数组
 #define QM_IS_ARRAY_NIL(objArray) (![objArray isKindOfClass:[NSArray class]] || objArray == nil || [objArray count] <= 0)
+
 // float
 #define QM_IS_FLOAT_NIL(objFloat) (objFloat == nil)
+
 // 判断delegate是否响应某个selector
 #define QM_IS_DELEGATE_RSP_SEL(iDel, iSel) (iDel != nil && [iDel respondsToSelector:@selector(iSel)])
 
@@ -30,6 +35,9 @@
 
 
 #define QM_COMMON_BACKGROUND_COLOR [UIColor colorWithRed:218.0f / 255.0f green:218.0f / 255.0f blue:218.0f / 255.0f alpha:1.0f]
+
+#define QM_COMMON_HEADBUTTON_COLOR [UIColor colorWithRed:202.0f / 255.0f green:148.0f / 255.0f blue:82.0f / 255.0f alpha:1.0f]
+
 //颜色标记
 #define QM_COMMON_TEXT_COLOR [UIColor colorWithRed:52.0f / 255.0f green:52.0f / 255.0f blue:52.0f / 255.0f alpha:1.0f]
 
@@ -37,12 +45,13 @@
 
 #define QM_COMMON_CELL_HIGHLIGHTED_COLOR [UIColor whiteColor]
 
-#define    kBGTimeKey   @"kBGTimeKey"
+#define kBGTimeKey @"kBGTimeKey"
 
 #define QM_OFFICIAL_SITE @"http://www.yrdloan.com"
 #define QM_OFFICIAL_PHONE_NUMBER @"400-097-3073"
 
 // 手机号已经注册
+
 //#define QM_PHONE_NUMBER_REGISTERED 0
 #define QM_PHONE_NUMBER_REGISTERED 30008
 
@@ -59,6 +68,6 @@
 
 #define QM_FETCH_PAGE_SIZE 10
 
-#define QM_DEFAULT_CHANNEL_ID @"2"//钱宝宝channelId
+#define QM_DEFAULT_CHANNEL_ID @"2"//channelId
 
 #endif

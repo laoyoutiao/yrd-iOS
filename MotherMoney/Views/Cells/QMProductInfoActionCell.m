@@ -39,4 +39,8 @@
     return 100.0f;
 }
 
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info {
+    return 100.0f;
+}
+
 @end

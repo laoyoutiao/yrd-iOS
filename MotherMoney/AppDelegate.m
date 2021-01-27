@@ -19,18 +19,30 @@
 #import "NetServiceManager.h"
 #import "QMTokenInfo.h"
 #import "QMDealDetailViewController.h"
+#import "QMInputPasswordViewController.h"
+#import <objc/runtime.h>
+#import <UserNotifications/UserNotifications.h>
+#import "QMProvinceInfo.h"
+#import "QMAdvertisementModel.h"
+#import "QMAdvertisementViewController.h"
 
 #define SHOW_RECT_PWD_MIN_TIME_INTERVAL 30
+
+@interface AppDelegate ()<UNUserNotificationCenterDelegate>
+
+@end
 
 @implementation AppDelegate {
     QMGestureWindow *gesWindow;
     NSDictionary *pushUserInfo;
     NSDate *appEnterBackgroundTime;
+
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    [NSThread sleepForTimeInterval:2.0];
+//    [NSThread sleepForTimeInterval:0.1];
+    
     if (![QMFrameUtil hasShownWelcomPage]) {
         // 第一次使用app，需要清除LockBox中的设置
         [[QMAccountUtil sharedInstance] clearCurrentAccountInfo];
@@ -44,11 +56,12 @@
     window.backgroundColor = [UIColor whiteColor];
     self.window = window;
     
-    // configure tabs
     QMTabBarController *tabbarController = [QMTabBarConfigure configuredTabBarController];
     tabbarController.delegate = self;
     self.window.rootViewController = tabbarController;
     [self.window makeKeyAndVisible];
+    
+    // configure tabs
     
 //    QMTestImageViewViewController *testview = [[QMTestImageViewViewController alloc] init];
 //    self.window.rootViewController = testview;
@@ -70,6 +83,10 @@
     if (![QMFrameUtil hasShownWelcomPage]) {
         QMWelcomeViewController *con = [[QMWelcomeViewController alloc] initWithStart:YES];
         [self.window.rootViewController presentViewController:con animated:YES completion:nil];
+    }else
+    {
+//        QMAdvertisementViewController *con = [[QMAdvertisementViewController alloc] init];
+//        [self.window.rootViewController presentViewController:con animated:YES completion:nil];
     }
     
     [QMUMTookKitManager UMShareConfigure:nil];
@@ -117,6 +134,19 @@
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil];
         
         [UMessage registerRemoteNotificationAndUserNotificationSettings:settings];
+        
+        UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+        center.delegate=self;
+        UNAuthorizationOptions types10=UNAuthorizationOptionBadge|UNAuthorizationOptionAlert|UNAuthorizationOptionSound;
+        [center requestAuthorizationWithOptions:types10 completionHandler:^(BOOL granted, NSError * _Nullable error) {
+            if (granted) {
+                //点击允许
+                
+            } else {
+                //点击不允许
+                
+            }
+        }];
     }else {
         //register remoteNotification types (iOS 8.0以下)
         [UMessage registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge
@@ -186,6 +216,35 @@
 }
 
 // push相关
+
+//iOS10新增：处理前台收到通知的代理方法
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
+    NSDictionary * userInfo = notification.request.content.userInfo;
+    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        //应用处于前台时的远程推送接受
+        //必须加这句代码
+        [UMessage didReceiveRemoteNotification:userInfo];
+        
+    }else{
+        //应用处于前台时的本地推送接受
+    }
+    
+}
+
+//iOS10新增：处理后台点击通知的代理方法
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler{
+    NSDictionary * userInfo = response.notification.request.content.userInfo;
+    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        //应用处于后台时的远程推送接受
+        //必须加这句代码
+        [UMessage didReceiveRemoteNotification:userInfo];
+        
+    }else{
+        //应用处于后台时的本地推送接受
+    }
+    
+}
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
     NSLog(@"%@",deviceToken);
@@ -235,15 +294,37 @@
     return nil;
 }
 
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return  [UMSocialSnsService handleOpenURL:url];
+//#define __IPHONE_10_0    100000
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > 100000
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
+{
+    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响。
+    BOOL result = [[UMSocialManager defaultManager]  handleOpenURL:url options:options];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
 }
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    return  [UMSocialSnsService handleOpenURL:url];
+#endif
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    //6.3的新的API调用，是为了兼容国外平台(例如:新版facebookSDK,VK等)的调用[如果用6.2的api调用会没有回调],对国内平台没有影响
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url sourceApplication:sourceApplication annotation:annotation];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    BOOL result = [[UMSocialManager defaultManager] handleOpenURL:url];
+    if (!result) {
+        // 其他如支付等SDK的回调
+    }
+    return result;
 }
 
 /////
@@ -298,10 +379,10 @@
 #pragma mark RDVTabBarDelegate
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     
-    if (viewController == [[tabBarController viewControllers] objectAtIndex:2] && ![[QMAccountUtil sharedInstance] userHasLogin]) {
-        [QMLoginManagerUtil showLoginViewControllerFromViewController:tabBarController.selectedViewController];
-        return NO;
-    }
+//    if (viewController == [[tabBarController viewControllers] objectAtIndex:2] && ![[QMAccountUtil sharedInstance] userHasLogin]) {
+//        [QMLoginManagerUtil showLoginViewControllerFromViewController:tabBarController.selectedViewController];
+//        return NO;
+//    }
     
     return YES;
 }
@@ -311,7 +392,28 @@
         // 有手势密码
         [self tryShowGesturePwdWindow];
     }else {
-        [QMLoginManagerUtil showLoginViewControllerFromViewController:self.window.rootViewController];
+        NSLog(@"%@ %@",self.window.rootViewController,[self topViewControllerWithRootViewController:self.window.rootViewController]);
+        
+        
+        if (object_getClassName([self topViewControllerWithRootViewController:self.window.rootViewController]) != object_getClassName([QMInputPasswordViewController class])) {
+            [QMLoginManagerUtil showLoginViewControllerFromViewController:[self topViewControllerWithRootViewController:self.window.rootViewController]];
+        }
+    }
+}
+
+- (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController
+{
+    if ([rootViewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabBarController = (UITabBarController *)rootViewController;
+        return [self topViewControllerWithRootViewController:tabBarController.selectedViewController];
+    } else if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)rootViewController;
+        return [self topViewControllerWithRootViewController:navigationController.visibleViewController];
+    } else if (rootViewController.presentedViewController) {
+        UIViewController* presentedViewController = rootViewController.presentedViewController;
+        return [self topViewControllerWithRootViewController:presentedViewController];
+    } else {
+        return rootViewController;
     }
 }
 

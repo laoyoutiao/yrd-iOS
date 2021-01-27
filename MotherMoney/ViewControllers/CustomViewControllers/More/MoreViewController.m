@@ -14,15 +14,13 @@
 #import "QMActivityCenterViewController.h"
 #import "QMAssistCenterViewController.h"
 #import "QMAboutViewController.h"
-#import "UMFeedbackViewController.h"
 #import "QMUMTookKitManager.h"
 #import "QMGoodsListViewController.h"
 #import "BlockActionSheet.h"
-#import "UMSocialDataService.h"
-#import "UMSocialSnsPlatformManager.h"
-#import "UMSocialConfig.h"
-#import "WXApi.h"
-#import "UMSocialAccountManager.h"
+#import <UMSocialCore/UMSocialCore.h>
+#import <BCHybridWebViewFMWK/BCHybridWebView.h>
+#import <YWFeedbackFMWK/YWFeedbackKit.h>
+#import <YWFeedbackFMWK/YWFeedbackViewController.h>
 
 #import "QMWebViewController.h"
 #define MORE_ITEM_CELL_IDENTIFIER @"more_item_cell_identifier"
@@ -35,12 +33,13 @@
 #define UM_SINA_ALREADY_FOLLOWED_KEY @"UM_SINA_ALREADY_FOLLOWED_KEY"
 
 @interface MoreViewController ()<UICollectionViewDataSource, UICollectionViewDelegate, UIAlertViewDelegate>
-
+@property (nonatomic, strong) YWFeedbackKit *feedbackKit;
 @end
 
 @implementation MoreViewController {
     NSMutableArray *arrMoreItems;
     UICollectionView *moreInfoTable;
+    UILabel *versionLabel;
 }
 
 - (void)viewDidLoad {
@@ -88,8 +87,6 @@
             
             // 处理关于的情况
             if ([item.itemTitle isEqualToString:QMLocalizedString(@"qm_more_about_us_title", nil)]) {
-                NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-                item.itemSubTitle = [NSString stringWithFormat:@"V%@", version];
             }
         }
         [arrMoreItems addObject:tmpArray];
@@ -138,7 +135,6 @@
     if (section < [arrMoreItems count]) {
         return [[arrMoreItems objectAtIndex:section] count];
     }
-    
     return 0;
 }
 
@@ -198,6 +194,21 @@
                                               otherButtonTitles:QMLocalizedString(@"qm_alertview_ok_title", @"确定"), nil];
     alertView.tag = CONFIRM_LOGOUT_ALERT_VIEW_TAG;
     [alertView show];
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"确定退出登录" preferredStyle:UIAlertControllerStyleAlert];
+//    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+//    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        [[NetServiceManager sharedInstance] userLogoutWithWithDelegate:self
+//                                                               success:^(id responseObject) {
+//                                                                   // 登出成功
+//                                                                   [self handleLogoutSuccess:responseObject];
+//                                                               } failure:^(NSError *error) {
+//                                                                   // 登出失败
+//                                                                   [self handleLogoutFailure:error];
+//                                                               }];
+//    }];
+//    [alertController addAction:cancelAction];
+//    [alertController addAction:okAction];
+//     [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)postLogoutNotification {
@@ -224,37 +235,37 @@
 // 转发好友
 - (void)gotoForwardBtnClicked {
     __block NSString *shareContent = @"";
-    __block NSString *platform = nil;
+    __block UMSocialPlatformType platform = 1000;
     UIImage *shareImage = nil;
     
     BlockActionSheet *sheet = [BlockActionSheet sheetWithTitle:@"分享到"];
     // 短信
     [sheet addButtonWithTitle:@"短信" imageName:@"message_icon.png" block:^{
-        platform = UMShareToSms;
+        platform = UMSocialPlatformType_Sms;
         [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // 微信好友
     [sheet addButtonWithTitle:@"微信好友" imageName:@"wechat_icon.png" block:^{
-        platform = UMShareToWechatSession;
+        platform = UMSocialPlatformType_WechatSession;
         [self shareTo:platform content:shareContent image:shareImage];
     }];
-    
+
     // 微信朋友圈
     [sheet addButtonWithTitle:@"微信朋友圈" imageName:@"wechat_favirate_icon.png" block:^{
-        platform = UMShareToWechatTimeline;
+        platform = UMSocialPlatformType_WechatTimeLine;
         [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // 新浪微博
     [sheet addButtonWithTitle:@"新浪微博" imageName:@"sina_icon.png" block:^{
-        platform = UMShareToSina;
+        platform = UMSocialPlatformType_Sina;
         [self shareTo:platform content:shareContent image:shareImage];
     }];
     
     // QQ
     [sheet addButtonWithTitle:@"QQ" imageName:@"qq_icon.png" block:^{
-        platform = UMShareToQQ;
+        platform = UMSocialPlatformType_QQ;
         [self shareTo:platform content:shareContent image:shareImage];
     }];
     
@@ -265,15 +276,22 @@
     [sheet showInView:self.tabBarController.view];
 }
 
-- (void)shareTo:(NSString *)platform
+- (void)shareTo:(UMSocialPlatformType)platform
         content:(NSString *)content
           image:(UIImage *)image {
 //    [QMUMTookKitManager shareTo:platform title:nil content:nil image:image presentedController:self completion:^(UMSocialResponseEntity *response) {
 //        // 提示用户分享成功
 //    }];
-    [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:nil presentedController:self completion:^(UMSocialResponseEntity *response) {
-        
-    }];
+    QMAccountInfo *info = [[QMAccountUtil sharedInstance] currentAccount];
+    if (!info.phoneNumber) {
+        [QMLoginManagerUtil showLoginViewControllerFromViewController:self completion:^{
+            NSString *shareurl = [NSString stringWithFormat:@"http://m.yrdloan.com/wap/register?recommend=%@",info.phoneNumber];
+            [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:shareurl presentedController:self];        }];
+    }else
+    {
+        NSString *shareurl = [NSString stringWithFormat:@"http://m.yrdloan.com/wap/register?recommend=%@",info.phoneNumber];
+        [QMUMTookKitManager shareTo:platform title:nil content:nil image:image shareUrl:shareurl presentedController:self];
+    }
 }
 
 // 关注我们
@@ -328,23 +346,50 @@
 }
 
 - (void)executeFollowOperation {
-    [[UMSocialDataService defaultDataService] requestAddFollow:UMShareToSina followedUsid:@[@"1970132703"] completion:^(UMSocialResponseEntity *response) {
-        
-        if (response.responseCode == UMSResponseCodeSuccess) {
-            // 提示关注微博成功
-            [CMMUtility showNote:@"关注微博成功"];
+//    [[UMSocialDataService defaultDataService] requestAddFollow:UMShareToSina followedUsid:@[@"1970132703"] completion:^(UMSocialResponseEntity *response) {
+//        
+//        if (response.responseCode == UMSResponseCodeSuccess) {
+//            // 提示关注微博成功
+//            [CMMUtility showNote:@"关注微博成功"];
+//            
+//            // 存储纪录
+//            [QMPreferenceUtil setGlobalBoolKey:UM_SINA_ALREADY_FOLLOWED_KEY value:YES syncWrite:YES];
+//        }
+//    }];
+}
+
+- (void)showNativeFeedbackWithAppkey:(NSString *)appkey {
+    //阿里百川
+    self.feedbackKit.extInfo = @{@"loginTime":[[NSDate date] description],
+                                 @"visitPath":@"登陆->关于->反馈",
+                                 @"userid":@"yourid",
+                                 @"应用自定义扩展信息":@"开发者可以根据需要设置不同的自定义信息，方便在反馈系统中查看"};
+    
+    __weak typeof(self) weakSelf = self;
+    [self.feedbackKit makeFeedbackViewControllerWithCompletionBlock:^(YWFeedbackViewController *viewController, NSError *error) {
+        if (viewController != nil) {
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:viewController];
+            [weakSelf presentViewController:nav animated:YES completion:nil];
             
-            // 存储纪录
-            [QMPreferenceUtil setGlobalBoolKey:UM_SINA_ALREADY_FOLLOWED_KEY value:YES syncWrite:YES];
+            [viewController setCloseBlock:^(UIViewController *aParentController){
+                [aParentController dismissViewControllerAnimated:YES completion:nil];
+            }];
+        } else {
+            UIViewController *viewcontroller = [UIApplication sharedApplication].keyWindow.rootViewController;
+            UIAlertController *alertviewcontroller = [UIAlertController alertControllerWithTitle:@"反馈功能维护中" message:@"如有需要请联系工作人员" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+            [alertviewcontroller addAction:cancelAction];
+            [viewcontroller presentViewController:alertviewcontroller animated:YES completion:nil];
         }
     }];
 }
 
-- (void)showNativeFeedbackWithAppkey:(NSString *)appkey {
-    UMFeedbackViewController *feedbackViewController = [[UMFeedbackViewController alloc] initWithNibName:@"UMFeedbackViewController" bundle:nil];
-    feedbackViewController.hidesBottomBarWhenPushed = YES;
-    feedbackViewController.appkey = appkey;
-    [self.navigationController pushViewController:feedbackViewController animated:YES];
+#pragma mark getter
+- (YWFeedbackKit *)feedbackKit {
+    if (!_feedbackKit) {
+        _feedbackKit = [[YWFeedbackKit alloc] initWithAppKey:KAppKey];
+    }
+    return _feedbackKit;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -468,7 +513,7 @@
         case GOTO_WECHAT_ALERT_VIEW_TAG: {
             if (buttonIndex == 1) {
                 // 进入微信
-                [WXApi openWXApp];
+//                [WXApi openWXApp];
             }
         }
         default:

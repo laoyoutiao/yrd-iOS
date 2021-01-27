@@ -3,87 +3,93 @@
 #import "QMAccountInfo.h"
 
 //@new 活动中心
-#define kMsgList @"activity/list"
+#define kMsgList                @"activity/list"
 
 //@new 消息中心
-#define kMessageList @"message/list"
+#define kMessageList            @"message/list"
 
 //@new 帮助中心
-#define kHelpList @"help/list"
+#define kHelpList               @"help/list"
 
 //@new 精品推荐
-#define kRecommend @"recommend"
+#define kRecommend              @"recommend"
 
 //@new 产品列表
-#define kProductList @"product/list"
+#define kProductList            @"product/list"
+
+// 债权转让产品列表
+#define kCreditorsList          @"trproduct/list"
 
 //@new 注册验证码
 #define kSendRegisterCode       @"registerCode"
 
 //@new 设置登录密码
-#define kResetPwdKey @"account/resetLoginPassword"
+#define kResetPwdKey            @"account/resetLoginPassword"
 
 //@new 用户登录
 #define kUserLogin              @"login"
 
 //@new 用户登出
-#define kUserLogOut @"logout"
+#define kUserLogOut             @"logout"
 
 //@new 检查更新
-#define kUPdate @"version/check"
+#define kUPdate                 @"version/check"
 
 // 积分相关
 //@new 得到我的积分
-#define kGetMyScore @"customerScore/score"
+#define kGetMyScore             @"customerScore/score"
 
 //@new 得到兑换礼品列表信息
-#define kGoodsList @"prize/listNew"
+#define kGoodsList              @"prize/listNew"
 
 //@new 使用积分兑换礼品
-#define kAddIntegralExchange @"winners/exchange"
+#define kAddIntegralExchange    @"winners/exchange"
 
 //@new 得到我的礼品兑换记录
 #define kMyIntegralExchangeList @"winners/list"
 
 // @new 是否可以购买
-#define kProductCanBuy @"product/isCanBuy"
+#define kProductCanBuy          @"product/isCanBuy"
 
 //@new 获得产品详情
-#define kProductDetail @"product/productInfo"
+#define kProductDetail          @"product/productInfo"
+
+//债权转让产品详情
+#define kCreditorsDetail        @"trproduct/productInfo"
 
 //@new 重置密码
-#define kResetPassword @"account/updateLoginPassword"
+#define kResetPassword          @"account/updateLoginPassword"
 
 //@new 我的资产
-#define kMyAssert @"account/indexNew"
+#define kMyAssert               @"account/indexNew"
 
 //@new 设置支付密码
-#define kSetPayPass @"account/addPayPassword"
+#define kSetPayPass             @"account/addPayPassword"
 
 //@new 实名认证
 //#define kRealNameAuthenticate @"account/identityVerification"
-#define kRealNameAuthenticate @"account/identityVerification2"
+#define kRealNameAuthenticate   @"account/identityVerification2"
 
 //@new 我的银行卡
-#define kMyBankCard @"userBankCard/list"
+#define kMyBankCard             @"userBankCard/list"
 
 //@new 可用银行列表
-#define kAvailableCardList @"bank/listByProductChannel"
+#define kAvailableCardList      @"bank/listByProductChannel"
 
 //@new 发送忘记密码验证码
-#define kSendBackPassCode @"resetLoginPasswordCode"
+#define kSendBackPassCode       @"resetLoginPasswordCode"
 
 //@new 发送支付密码验证码
-#define kSendBackPayPassCode @"account/resetPayPasswordCode"
+#define kSendBackPayPassCode    @"account/resetPayPasswordCode"
 
 //@new 重置支付密码
-#define kSetNewPayPass @"account/resetPayPassword"
+#define kSetNewPayPass          @"account/resetPayPassword"
 
 //@new 修改支付密码
-#define kModifyPayPass @"account/updatePayPassword"
+#define kModifyPayPass          @"account/updatePayPassword"
 
 //@new 已购产品详情
-#define kOrderResolve @"account/productAccount"
+#define kOrderResolve           @"account/productAccount"
 
 // @new 合同模版
 #define kProductAgreementTemplate @"product/productAgreementTemplate"
@@ -92,40 +98,43 @@
 #define kBuyedProductAgreementTemplate @"account/productAgreement"
 
 //@new 风险控制
-#define kProductWindControl @"product/productRisk"
+#define kProductWindControl     @"product/productRisk"
 
 //@new 项目介绍
-#define kProductIntroduction @"product/productDesc"
+#define kProductIntroduction    @"product/productDesc"
 
 //@new 查看产品详细信息
-#define kDetailProduct @"product/detailProduct"
+#define kDetailProduct          @"product/detailProduct"
 
 //@new 购买产品
-#define kBuyProduct @"product/buy"
+#define kBuyProduct             @"product/buy"
 
 //@new 绑定银行卡
-#define kBindBankCard @"userBankCard/bindBankCard"
+#define kBindBankCard           @"userBankCard/bindBankCard"
 
 //@new 注册账号
-#define kRegister @"registerForIos" 
+#define kRegister               @"registerForIos"
 
 //@new 开通渠道账户
-#define kOpenProductAccount @"account/openProductAccount"
+#define kOpenProductAccount     @"account/openProductAccount"
 
 //@new 注册服务协议
-#define kRegisterAgreement @"agreement/registerAgreement"
+#define kRegisterAgreement      @"agreement/registerAgreement"
 
 //@new 隐私条款
-#define kPrivacyAgreement @"agreement/privacyAgreement"
+#define kPrivacyAgreement       @"agreement/privacyAgreement"
+
+//@new 风险提示
+#define KRiskAgreement          @"agreement/riskAgreement"
 
 //@new 安全
-#define kSecurityTemplate @"template/securityTemplate"
+#define kSecurityTemplate       @"template/securityTemplate"
 
 //@new 支付
-#define kSequestrateAgreement @"agreement/sequestrateAgreement"
+#define kSequestrateAgreement   @"agreement/sequestrateAgreement"
 
 
-#define kAvailableMoney           @"account/available"
+#define kAvailableMoney         @"account/available"
 
 
 ////////////////////
@@ -136,71 +145,135 @@
 #define kMsgActivityLastUpdateTime @"more/dot"
 
 // 省份列表
-#define kProvinceList @"province/list"
+#define kProvinceList           @"province/list"
 
 // 城市
-#define kCityList @"city/list"
+#define kCityList               @"city/list"
 
 // 查询支行信息
-#define kBankBranchInfo @"bank/branchQuery"
+#define kBankBranchInfo         @"bank/branchQuery"
 
 // 支付充值发起
-#define kRechargeRequest @"account/rechargeRequest"
+#define kRechargeRequest        @"account/rechargeRequest"
 
 // SDK 充值结果回传
-#define kRechargeResult @"account/rechargeResult"
+#define kRechargeResult         @"account/rechargeResult"
 
 // 充值记录查询
-#define kListRechargeRecord   @"account/listRechargeRecord"
+#define kListRechargeRecord     @"account/listRechargeRecord"
 
 // 提现申请
-#define kWithdrawApply   @"account/withdrawApply"
+#define kWithdrawApply          @"account/withdrawApply"
 
 // 提现记录
 #define kListWithdrawalRecord   @"account/listWithdrawalRecord"
 
 // 添加银行卡
-#define kBankCardAdd   @"bankCard/addWithoutPrcptcd"
+#define kBankCardAdd            @"bankCard/addWithoutPrcptcd"
 
 // 投资记录
-#define kProductAccountList @"account/productAccountList"
+#define kProductAccountList     @"account/productAccountList"
 
 // 获取银行卡列表
 #define kUserBankCardListByChannelId @"userBankCard/listByChannelId"
 
 // 利率计算
-#define kCountInterest @"product/countInterest"
+#define kCountInterest          @"product/countInterest"
 
 // 交易明细
-#define kDealDetail @"account/customerPointHistory"
+#define kDealDetail             @"account/customerPointHistory"
+
 //钱豆明细
-#define kGoodListDetail @"customerScore/scoreRecordlist"
+#define kGoodListDetail         @"customerScore/scoreRecordlist"
+
 //ticket/usableDJQ
 //用户可用于购买某个产品的代金券
-#define kUsableDJQ @"ticket/usableDJQ"
+#define kUsableDJQ              @"ticket/usableDJQ"
+
 //使用代金券进行购买
-#define kBuyTicket @"product/buyWithTicket"
+#define kBuyTicket              @"product/buyWithTicket"
+
 //我的可用代金券
-#define kCanUseCoupon @"ticket/listAllUsableDJQ"
+#define kCanUseCoupon           @"ticket/listAllUsableDJQ"
+
 //我的已使用代金券列表
-#define kDidUseCoupon @"ticket/listAllOverDJQ"
+#define kDidUseCoupon           @"ticket/listAllOverDJQ"
+
 //我的奖励列表
-#define kMyAward @"customer/listMyAward"
+#define kMyAward                @"customer/listMyAward"
+
 //购买产品详情
-#define kBuyProductDetail @"product/availableAndDjqCount"
+#define kBuyProductDetail       @"product/availableAndDjqCount"
+
 // 获取支付方式
-#define kRechargeRounte @"pay/rechargeRounte"
+#define kRechargeRounte         @"pay/rechargeRounte"
+
 //about
-#define kAbout @"rest/qianmamabout"
+#define kAbout                  @"rest/qianmamabout"
+
 //广告图片获取
-#define kAdvertisement @"V2/activity/recommend"
+#define kAdvertisement          @"V2/activity/recommend"
+
 //上传token
-#define kPostToken @"V2/updateCustomerMobileToken"
+#define kPostToken              @"V2/updateCustomerMobileToken"
+
+//获取首页运行数据
+#define kGetHomedata            @"index/yunyingdata"
+
+//首页中心活动图
+#define kHomeMiddleLink         @"index/middlelink"
+
+//设置绑定银行卡
+#define kSetWithDrawCard        @"bankCard/setWithdrawCard"
+
+//验证码回调数据
+#define kSendVerifyCodeMessage  @"checkImageCode"
+
+//检验手机是否注册
+#define kMobileRegisted         @"mobileRegistered"
+
+//即将过期的积分
+#define kWillTimeOutScore       @"customerScore/cleanScore"
+
+//获取银行卡限额
+#define kGetBankQuota           @"bank/bankInfo"
+
+//业务员佣金详情
+#define kGetBusinessAmount      @"inviter/mydata"
+
+//省份信息列表
+#define kGetProvinceInfo        @"theme/assets/json/city.json"
+
+//贵州银行存管短信验证码
+#define kGetBankMessageCode     @"chinapnr/sendsms"
+
+//用户开户接口
+#define kOpenAccount            @"chinapnr/openAcctForm"
+
+//用户激活接口
+#define kActivationAccount      @"chinapnr/acctActivation"
+
+//用户换绑卡接口
+#define kChangeBankCard         @"chinapnr/changeCard"
+
+//新充值接口
+#define kNewRecharge            @"chinapnr/recharge"
+
+//新提现接口
+#define kNewWithDraw            @"chinapnr/withdraw"
+
+//获取提现限额
+#define kGetWithDrawPermitAmt   @"chinapnr/withdraw/getPermitAmt"
 
 /**
  网络访问的服务类
  */
 @interface NetServiceManager : NSObject
+
+typedef enum {
+    RebindBankMessageTypeOldCard     = 0,
+    RebindBankMessageTypeNewCard     = 1,
+} RebindBankMessageType;
 
 +(NetServiceManager *)sharedInstance;
 
@@ -276,6 +349,14 @@
                                 success:(void (^)(id responseObject))success
                                 failure:(void(^)(NSError *error))failure;
 
+//债权转让产品列表
+- (void)getCreditorsListWithWithChannelId:(NSString *)channelId
+                                   offset:(NSInteger)offset
+                                 pageSize:(NSInteger)pageSize
+                                 delegate:(id)delegate
+                                  success:(void (^)(id responseObject))success
+                                  failure:(void(^)(NSError *error))failure;
+
 // 设置支付密码
 - (void)setPayPassword:(NSString *)payPassword
               delegate:(id)delegate
@@ -300,6 +381,12 @@
                               success:(void (^)(id responseObject))success
                               failure:(void(^)(NSError *error))failure;
 
+// 获得债权转让产品详情
+- (void)getCreditorsDetailWithProductId:(NSString *)productId
+                               delegate:(id)delegate
+                                success:(void (^)(id responseObject))success
+                                failure:(void(^)(NSError *error))failure;
+
 // 注册账号
 - (void)registerAccountWithPhoneNumber:(NSString *)phoneNumber
                               password:(NSString *)password
@@ -318,22 +405,22 @@
 
 // 帮助中心
 - (void)helpCenterListWithPageSize:(NSNumber *)pageSize
-                            pageNumber:(NSNumber *)pageNumber
-                              delegate:(id)delegate
-                               success:(void (^)(id responseObject))success
-                               failure:(void(^)(NSError *error))failure;
+                        pageNumber:(NSNumber *)pageNumber
+                          delegate:(id)delegate
+                           success:(void (^)(id responseObject))success
+                           failure:(void(^)(NSError *error))failure;
 
 // 实名认证
 - (void)authDictionary:(NSDictionary *)dict
-            delegate:(id)delegate
-             success:(void (^)(id responseObject))success
-             failure:(void(^)(NSError *error))failure;
+              delegate:(id)delegate
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure;
 
 // 我的银行卡
 - (void)getMyBankCardWithProductId:(NSString *)productId
                           delegate:(id)delegate
-                          success:(void (^)(id responseObject))success
-                          failure:(void(^)(NSError *error))failure;
+                           success:(void (^)(id responseObject))success
+                           failure:(void(^)(NSError *error))failure;
 
 // 可用银行列表
 - (void)getAvailableBankListWithProductChannelId:(NSString *)channelId
@@ -376,8 +463,8 @@
 
 // 发送支付密码验证码
 - (void)getResetPayPwdPassCodeWithDelegate:(id)delegate
-                       success:(void (^)(id responseObject))success
-                       failure:(void(^)(NSError *error))failure;
+                                   success:(void (^)(id responseObject))success
+                                   failure:(void(^)(NSError *error))failure;
 
 // 设置新的支付密码
 - (void)setNewPayPasswordWithNewPayPassword:(NSString *)newPayPassword
@@ -403,8 +490,8 @@
 // 使用积分兑换礼品
 - (void)addIntegralExchangeWithGoodId:(NSString *)goodId
                              delegate:(id)delegate
-                                success:(void (^)(id responseObject))success
-                                failure:(void(^)(NSError *error))failure;
+                              success:(void (^)(id responseObject))success
+                              failure:(void(^)(NSError *error))failure;
 
 // 得到我的礼品兑换记录
 - (void)myIntegralExchangeListWithPageSize:(NSNumber *)pageSize
@@ -479,6 +566,11 @@
                                 success:(void (^)(id responseObject))success
                                 failure:(void(^)(NSError *error))failure;
 
+// 风险提示
+- (void)getRiskAgreementWithDelegate:(id)delegate
+                                success:(void (^)(id responseObject))success
+                                failure:(void(^)(NSError *error))failure;
+
 //@new 安全
 - (void)getSecurityTemplateWithDelegate:(id)delegate
                                 success:(void (^)(id responseObject))success
@@ -502,8 +594,8 @@
 // 获取城市列表
 - (void)getCityListWithProvinceCode:(NSString *)code
                            delegate:(id)delegate
-                        success:(void (^)(id responseObject))success
-                        failure:(void(^)(NSError *error))failure;
+                            success:(void (^)(id responseObject))success
+                            failure:(void(^)(NSError *error))failure;
 
 // 获取支行信息
 - (void)getBankBranchInfoWithCardNumber:(NSString *)cardNumber
@@ -617,13 +709,13 @@
 
 //我的已使用代金券列表
 - (void)getDidUseCouponListWithdelegate:(id)delegate
-                               success:(void (^)(id responseObject))success
-                               failure:(void(^)(NSError *error))failure;
+                                success:(void (^)(id responseObject))success
+                                failure:(void(^)(NSError *error))failure;
 
 //我的奖励列表
 - (void)getMyAwardListWithdelegate:(id)delegate
-                               success:(void (^)(id responseObject))success
-                               failure:(void(^)(NSError *error))failure;
+                           success:(void (^)(id responseObject))success
+                           failure:(void(^)(NSError *error))failure;
 
 //购买产品详情
 - (void)getBuyProductDetailWithProductId:(NSString *)productId
@@ -643,4 +735,116 @@
 - (void)getAboutMessageWithdelegate:(id)delegate
                             success:(void (^)(id responseObject))success
                             failure:(void(^)(NSError *error))failure;
+
+//获取首页运行数据
+- (void)getHomeDataWithDelegate:(id)delegate
+                        success:(void (^)(id responseObject))success
+                        failure:(void(^)(NSError *error))failure;
+
+//首页中心活动图
+- (void)getHomeMiddleLinkDelegate:(id)delegate
+                          success:(void (^)(id responseObject))success
+                          failure:(void(^)(NSError *error))failure;
+
+//设置绑定提现银行卡
+- (void)setWithDrawCardWithCardID:(NSString *)cardid
+                         Delegate:(id)delegate
+                          success:(void (^)(id responseObject))success
+                          failure:(void(^)(NSError *error))failure;
+
+//发送验证码回调信息
+- (void)sendVerifyCodeMessage:(NSString *)verify
+                       Mobile:(NSString *)mobile
+                     Delegate:(id)delegate
+                      success:(void (^)(id responseObject))success
+                      failure:(void(^)(NSError *error))failure;
+
+//检验手机是否注册
+- (void)getMobileResgist:(NSString *)mobile
+                Delegate:(id)delegate
+                 success:(void (^)(id responseObject))success
+                 failure:(void(^)(NSError *error))failure;
+
+//即将过期的积分
+- (void)getWillTimeOutScore:(NSString *)mobile
+               Delegate:(id)delegate
+                success:(void (^)(id responseObject))success
+                failure:(void(^)(NSError *error))failure;
+
+//获取银行卡限额
+- (void)getBankQuotaDelegate:(id)delegate
+                     success:(void (^)(id responseObject))success
+                     failure:(void(^)(NSError *error))failure;
+//业务员佣金详情
+- (void)getBusinessAmount:(id)delegate
+                  success:(void (^)(id responseObject))success
+                  failure:(void(^)(NSError *error))failure;
+
+//获得省份信息
+- (void)getProvinceInfo:(id)delegate
+                success:(void (^)(id responseObject))success
+                failure:(void(^)(NSError *error))failure;
+
+//贵州银行存管短信验证码
+- (void)getBankMessageCode:(id)delegate
+                    BankCardID:(NSString *)bankcardid
+                    Mobile:(NSString *)mobile
+                   SmsType:(RebindBankMessageType)smstype
+                   success:(void (^)(id responseObject))success
+                   failure:(void(^)(NSError *error))failure;
+
+//用户开户接口
+- (void)PersonOpenAccount:(id)delegate
+                 RealName:(NSString *)realname
+                   IdCard:(NSString *)idcard
+               BankCardID:(NSString *)bankcardid
+                   Mobile:(NSString *)mobile
+                 BankCode:(NSString *)bankcode
+             ProvinceCode:(NSString *)provincecode
+                 CityCode:(NSString *)citycode
+                  success:(void (^)(id responseObject))success
+                  failure:(void(^)(NSError *error))failure;
+
+//用户激活接口
+- (void)PersonActivationAccount:(id)delegate
+               BankCardID:(NSString *)bankcardid
+                   Mobile:(NSString *)mobile
+                 BankCode:(NSString *)bankcode
+             ProvinceCode:(NSString *)provincecode
+                 CityCode:(NSString *)citycode
+                  success:(void (^)(id responseObject))success
+                  failure:(void(^)(NSError *error))failure;
+
+//用户换绑卡接口
+- (void)PersonChangeBankCard:(id)delegate
+               OldBankCardID:(NSString *)oldbankcardid
+                   OldMobile:(NSString *)oldmobile
+                  OldSmsCode:(NSString *)oldsmscode
+               NewBankCardID:(NSString *)newbankcardid
+                   NewMobile:(NSString *)newmobile
+                  NewSmsCode:(NSString *)newsmscode
+                    BankCode:(NSString *)bankcode
+                ProvinceCode:(NSString *)provincecode
+                    CityCode:(NSString *)citycode
+                     success:(void (^)(id responseObject))success
+                     failure:(void(^)(NSError *error))failure;
+
+//用户充值接口(新)
+- (void)PersonRecharge:(id)delegate
+                Amount:(NSString *)amount
+              BankCode:(NSString *)bankcode
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure;
+
+//用户提现接口(新)
+- (void)PersonWithDraw:(id)delegate
+                Amount:(NSString *)amount
+           paypassword:(NSString *)password
+               success:(void (^)(id responseObject))success
+               failure:(void(^)(NSError *error))failure;
+
+//获取提现限额
+- (void)PersonWithDrawPermitAmt:(id)delegate
+                        success:(void (^)(id responseObject))success
+                        failure:(void (^)(NSError *error))failure;
 @end

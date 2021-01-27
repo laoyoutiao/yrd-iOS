@@ -170,7 +170,7 @@
 
 - (NSString *)title{
     
-    return @"可用的代金券";
+    return @"可用的礼券";
     
 }
 

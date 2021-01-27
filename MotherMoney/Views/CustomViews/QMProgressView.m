@@ -36,20 +36,20 @@
         currentProgressView = [[UIImageView alloc] initWithFrame:CGRectZero];
         [backgroundImageView addSubview:currentProgressView];
         
-        anchorPointView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_bar_mark.png"]];
-        anchorPointView.frame = CGRectMake(0, -40, 55, 40);
-        [self addSubview:anchorPointView];
+//        anchorPointView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"progress_bar_mark.png"]];
+//        anchorPointView.frame = CGRectMake(0, -40, 55, 40);
+//        [self addSubview:anchorPointView];
         
-        progressValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 8, CGRectGetWidth(anchorPointView.frame), 16)];
-        progressValueLabel.font = [UIFont boldSystemFontOfSize:14];
-        progressValueLabel.textColor = QM_THEME_COLOR;
-        progressValueLabel.textAlignment = NSTextAlignmentCenter;
-        [anchorPointView addSubview:progressValueLabel];
-        [anchorPointView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(currentProgressView.mas_right);
-            make.centerY.equalTo(-20.0f);
-            make.size.equalTo(CGSizeMake(55, 40));
-        }];
+//        progressValueLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 8, CGRectGetWidth(anchorPointView.frame), 16)];
+//        progressValueLabel.font = [UIFont boldSystemFontOfSize:14];
+//        progressValueLabel.textColor = QM_THEME_COLOR;
+//        progressValueLabel.textAlignment = NSTextAlignmentCenter;
+//        [anchorPointView addSubview:progressValueLabel];
+//        [anchorPointView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.centerX.equalTo(currentProgressView.mas_right);
+//            make.centerY.equalTo(-20.0f);
+//            make.size.equalTo(CGSizeMake(55, 40));
+//        }];
     }
     
     return self;
@@ -66,7 +66,12 @@
 
     currentProgressView.image = [UIImage gradientImageFromColors:[NSArray arrayWithObjects:[UIColor colorWithRed:255.0f / 255.0f green:145.0f / 255.0f blue:50.0f / 255.0f alpha:1.0f], [UIColor colorWithRed:251.0f green:118.0f / 255.0f blue:62.0f/255.0f alpha:1.0f], nil] withSize:CGSizeMake(size.width * progress, size.height)];
     
-    progressValueLabel.text = [NSString stringWithFormat:@"%.1f%%", progress * 100];
+//    progressValueLabel.text = [NSString stringWithFormat:@"%.1f%%", progress * 100];
+}
+
+- (void)overCurrentProgress:(CGFloat)progress
+{
+    currentProgressView.image = [UIImage gradientImageFromColors:[NSArray arrayWithObjects:[UIColor colorWithRed:255.0f / 255.0f green:145.0f / 255.0f blue:50.0f / 255.0f alpha:1.0f], [UIColor grayColor], nil] withSize:CGSizeMake(size.width * progress, size.height)];
 }
 
 @end

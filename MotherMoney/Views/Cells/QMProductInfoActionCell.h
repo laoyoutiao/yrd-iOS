@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "QMProductInfo.h"
+#import "QMCreditorsInfo.h"
 
 @interface QMProductInfoActionCell : UICollectionViewCell
 @property (nonatomic, strong) UIButton *viewProductDetailBtn;
 @property (nonatomic, strong) UIButton *productSecureBtn;
 
 + (CGFloat)getCellHeightForProductInfo:(QMProductInfo *)info;
+
++ (CGFloat)getCellHeightForCreditorsInfo:(QMCreditorsInfo *)info;
 
 @end

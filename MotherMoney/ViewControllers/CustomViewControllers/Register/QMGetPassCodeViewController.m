@@ -7,9 +7,11 @@
 #import "UIImage+Gradient.h"
 #import "QMGestureWindow.h"
 #import "QMTokenInfo.h"
+#import "NTESVerifyCodeManager.h"
+#import "UIImageView+WebCache.h"
 
-@interface QMGetPassCodeViewController ()
-
+@interface QMGetPassCodeViewController ()<NTESVerifyCodeManagerDelegate>
+@property(nonatomic,strong) NTESVerifyCodeManager *manager;
 @end
 
 @implementation QMGetPassCodeViewController {
@@ -32,6 +34,10 @@
     NSInteger timeLimit;
     
     QMAccountInfo *mAccountInfo;
+    
+    UIView *graybackView;
+    UIImageView *imageView;
+    UIButton *cancleBtn;
 }
 
 - (id)initViewControllerWithAccountInfo:(QMAccountInfo *)info {
@@ -196,13 +202,90 @@
     // 打点
     [QMUMTookKitManager event:USEROBTAIN_REGISTERCODE_KEY label:@"用户获取注册验证吗"];
     
-    [[NetServiceManager sharedInstance] sendUserRegisterMsgCodeWithPhoneNumber:mAccountInfo.phoneNumber
-                                                                      delegate:self
-                                                                       success:^(id responseObject) {
-                                                                          [self setUpTimer];
-                                                                       } failure:^(NSError *error) {
-                                                                           
-                                                                       }];
+//    [[NetServiceManager sharedInstance] sendUserRegisterMsgCodeWithPhoneNumber:mAccountInfo.phoneNumber
+//                                                                      delegate:self
+//                                                                       success:^(id responseObject) {
+//                                                                          [self setUpTimer];
+//                                                                       } failure:^(NSError *error) {
+//                                                                           
+//                                                                       }];
+    [passCodeField resignFirstResponder];
+    [passwordField resignFirstResponder];
+    [confirmPassCodeField resignFirstResponder];
+    self.manager =  [NTESVerifyCodeManager sharedInstance];
+    if (self.manager) {
+        
+        // 如果需要了解组件的执行情况,则实现回调
+        self.manager.delegate = self;
+        
+        // captchaid的值是每个产品从后台生成的
+        NSString *captchaid = @"0b193ca5423b417e8e5cf28cff33a49e";
+        [self.manager configureVerifyCode:captchaid timeout:10.0];
+        
+        [self.manager openVerifyCodeView];
+        
+    }
+
+}
+
+#pragma mark - NTESVerifyCodeManagerDelegate
+/**
+ * 验证码组件初始化完成
+ */
+- (void)verifyCodeInitFinish{
+    NSLog(@"收到初始化完成的回调");
+}
+
+/**
+ * 验证码组件初始化出错
+ *
+ * @param message 错误信息
+ */
+- (void)verifyCodeInitFailed:(NSString *)message{
+    NSLog(@"收到初始化失败的回调:%@",message);
+}
+
+/**
+ * 完成验证之后的回调
+ *
+ * @param result 验证结果 BOOL:YES/NO
+ * @param validate 二次校验数据，如果验证结果为false，validate返回空
+ * @param message 结果描述信息
+ *
+ */
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *)validate message:(NSString *)message{
+    NSLog(@"收到验证结果的回调:(%d,%@,%@)", result, validate, message);
+    [[NetServiceManager sharedInstance] sendVerifyCodeMessage:validate Mobile:mAccountInfo.phoneNumber Delegate:self success:^(id responseObject) {
+        NSString *success = [responseObject objectForKey:@"success"];
+        if(success.integerValue == 1)
+        {
+            [self setUpTimer];
+        }else
+        {
+            [AlertMessageShow showAlertViewOnlyChoiceWithTitle:@"验证失败" Message:@"请再次验证"];
+        }
+    } failure:^(NSError *error) {
+        [AlertMessageShow showActionTitle:@"验证失败" handler:nil];
+    }];
+    
+}
+
+/**
+ * 关闭验证码窗口后的回调
+ */
+- (void)verifyCodeCloseWindow{
+    //用户关闭验证后执行的方法
+    NSLog(@"收到关闭验证码视图的回调");
+}
+
+/**
+ * 网络错误
+ *
+ * @param error 网络错误信息
+ */
+- (void)verifyCodeNetError:(NSError *)error{
+    //用户关闭验证后执行的方法
+    NSLog(@"收到网络错误的回调:%@(%ld)", [error localizedDescription], (long)error.code);
 }
 
 - (void)finishBtnClicked:(UIButton*)btn {
@@ -221,7 +304,8 @@
 - (void)registerFinished {
     // 打点
     [QMUMTookKitManager event:USER_REGISTER_KEY label:@"用户注册"];
-    
+    [passwordField resignFirstResponder];
+    [passCodeField resignFirstResponder];
     // 根据注册信息进行注册
     NSString *phoneNumber = mAccountInfo.phoneNumber;
     NSString *password = [self passwordText];
@@ -261,6 +345,7 @@
                                                          success:^(id responseObject) {
                                                              QMTokenInfo *tokeninfo = [QMTokenInfo sharedInstance];
                                                              [tokeninfo setPhoneNumber:mAccountInfo.phoneNumber];
+                                                             [self handleLoginSuccess:responseObject];
                                                              NSLog(@"登录成功");
                                                          } failure:^(NSError *error) {
                                                              NSLog(@"登录失败");
@@ -277,6 +362,53 @@
         [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     }
 }
+
+- (void)handleLoginSuccess:(id)responseObject {
+    NSLog(@"%@",responseObject);
+    if ([[responseObject objectForKey:@"popup"] integerValue])
+    {
+        graybackView = [[UIView alloc] initWithFrame:[[UIApplication sharedApplication].keyWindow bounds]];
+        graybackView.backgroundColor = [UIColor blackColor];
+        graybackView.alpha = 0.3;
+        [[UIApplication sharedApplication].keyWindow addSubview:graybackView];
+        
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [[UIApplication sharedApplication].keyWindow bounds].size.width * 2.75 / 4, [[UIApplication sharedApplication].keyWindow bounds].size.height / 2)];
+        imageView.center = CGPointMake([[UIApplication sharedApplication].keyWindow bounds].size.width / 2, [[UIApplication sharedApplication].keyWindow bounds].size.height / 2);
+        [imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"popuplink"]]]];
+        [[UIApplication sharedApplication].keyWindow addSubview:imageView];
+        
+        cancleBtn = [[UIButton alloc] initWithFrame:[[UIApplication sharedApplication].keyWindow bounds]];
+        cancleBtn.backgroundColor = [UIColor clearColor];
+        [cancleBtn addTarget:self action:@selector(clickCancle) forControlEvents:UIControlEventTouchUpInside];
+        [[UIApplication sharedApplication].keyWindow addSubview:cancleBtn];
+        
+        
+//        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[[responseObject objectForKey:@"time"] integerValue] repeats:NO block:^(NSTimer * _Nonnull timer) {
+//            [graybackView removeFromSuperview];
+//            [imageView removeFromSuperview];
+//            [cancleBtn removeFromSuperview];
+//        }];
+        
+        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:[[responseObject objectForKey:@"time"] integerValue] target:self selector:@selector(removeView) userInfo:nil repeats:NO];
+        NSLog(@"%@",timer);
+    }
+}
+                          
+- (void)removeView
+{
+    [graybackView removeFromSuperview];
+    [imageView removeFromSuperview];
+    [cancleBtn removeFromSuperview];
+}
+
+-(void)clickCancle
+{
+    //处理单击操作
+    [graybackView removeFromSuperview];
+    [imageView removeFromSuperview];
+    [cancleBtn removeFromSuperview];
+}
+
 
 - (void)handleRegisterFailure:(NSError *)error {
     [CMMUtility showNoteWithError:error];

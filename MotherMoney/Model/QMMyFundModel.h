@@ -23,7 +23,11 @@
 @property (nonatomic, strong) NSString *totalEarnings;
 @property (nonatomic, assign) BOOL isBuy;
 @property (nonatomic, strong) NSString *ableWithdrawalAmount;
-
+@property (nonatomic, strong) NSString *ableCardNum;
+@property (nonatomic, assign) BOOL salesman;
+@property (nonatomic, strong) NSString *channelId;
+@property (nonatomic, strong) NSString *customerCount;
+@property (nonatomic, strong) NSString *openAccountStatus;
 
 - (id)initWithDictionary:(NSDictionary *)dict;
 
